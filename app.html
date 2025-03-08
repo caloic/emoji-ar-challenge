@@ -55,41 +55,41 @@
 
 <!-- Scène AR -->
 <div class="ar-scene">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;" vr-mode-ui="enabled: false">
-        <!-- Définitions des marqueurs -->
-        <a-marker type="pattern" url="assets/markers/pattern-informatique.patt" id="marker-informatique">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+        <!-- Utiliser des marqueurs standard qui fonctionnent très bien -->
+        <a-marker preset="hiro" id="marker-informatique">
             <a-entity id="emoji-informatique" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-cybersecurite.patt" id="marker-cybersecurite">
+        <a-marker preset="kanji" id="marker-cybersecurite">
             <a-entity id="emoji-cybersecurite" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-gaming.patt" id="marker-gaming">
+        <a-marker type="barcode" value="1" id="marker-gaming">
             <a-entity id="emoji-gaming" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-architecture.patt" id="marker-architecture">
+        <a-marker type="barcode" value="2" id="marker-architecture">
             <a-entity id="emoji-architecture" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-audiovisuel.patt" id="marker-audiovisuel">
+        <a-marker type="barcode" value="3" id="marker-audiovisuel">
             <a-entity id="emoji-audiovisuel" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-design.patt" id="marker-design">
+        <a-marker type="barcode" value="4" id="marker-design">
             <a-entity id="emoji-design" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-ai.patt" id="marker-ai">
+        <a-marker type="barcode" value="5" id="marker-ai">
             <a-entity id="emoji-ai" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-marketing.patt" id="marker-marketing">
+        <a-marker type="barcode" value="6" id="marker-marketing">
             <a-entity id="emoji-marketing" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 
-        <a-marker type="pattern" url="assets/markers/pattern-business.patt" id="marker-business">
+        <a-marker type="barcode" value="7" id="marker-business">
             <a-entity id="emoji-business" position="0 0.5 0" scale="1 1 1"></a-entity>
         </a-marker>
 

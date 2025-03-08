@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marqueurs AR Standard - Ynov Campus</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #6e8efb;
+            text-align: center;
+        }
+
+        .instructions {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .markers-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .marker-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+
+        .marker-header {
+            background-color: #6e8efb;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .marker-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .marker-image {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+
+        .marker-emoji {
+            font-size: 3rem;
+            margin: 10px 0;
+        }
+
+        .marker-info {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .print-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @media print {
+            .instructions, .print-button {
+                display: none;
+            }
+
+            body {
+                padding: 0;
+            }
+
+            h1 {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>Marqueurs AR Standard - Ynov Campus</h1>
+
+<div class="instructions">
+    <h2>Instructions :</h2>
+    <p>Ces marqueurs AR standard sont optimisés pour une excellente détection avec AR.js. Suivez ces conseils pour de meilleurs résultats :</p>
+    <ol>
+        <li>Imprimez cette page en couleur sur du papier épais</li>
+        <li>Découpez chaque marqueur le long des bordures</li>
+        <li>Placez les marqueurs sur une surface plane et bien éclairée</li>
+        <li>Évitez les reflets et les ombres sur les marqueurs</li>
+        <li>Tenez votre téléphone à environ 30-50 cm du marqueur</li>
+    </ol>
+</div>
+
+<button class="print-button" onclick="window.print()">Imprimer les marqueurs</button>
+
+<div class="markers-container">
+    <!-- Marqueur HIRO (Informatique) -->
+    <div class="marker-card">
+        <div class="marker-header">Informatique 💻</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" alt="Marqueur HIRO" class="marker-image">
+            <div class="marker-emoji">💻</div>
+            <div class="marker-info">Marqueur HIRO - Informatique</div>
+        </div>
+    </div>
+
+    <!-- Marqueur KANJI (Cybersécurité) -->
+    <div class="marker-card">
+        <div class="marker-header">Cybersécurité 🔒</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/kanji.png" alt="Marqueur KANJI" class="marker-image">
+            <div class="marker-emoji">🔒</div>
+            <div class="marker-info">Marqueur KANJI - Cybersécurité</div>
+        </div>
+    </div>
+
+    <!-- Marqueur Barcode 1 (Gaming) -->
+    <div class="marker-card">
+        <div class="marker-header">3D, Animation & Jeux Vidéo 🎮</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/barcode/1.png" alt="Marqueur Barcode 1" class="marker-image">
+            <div class="marker-emoji">🎮</div>
+            <div class="marker-info">Marqueur Barcode 1 - Gaming</div>
+        </div>
+    </div>
+
+    <!-- Marqueur Barcode 2 (Architecture) -->
+    <div class="marker-card">
+        <div class="marker-header">Architecture d'intérieur 🏠</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/barcode/2.png" alt="Marqueur Barcode 2" class="marker-image">
+            <div class="marker-emoji">🏠</div>
+            <div class="marker-info">Marqueur Barcode 2 - Architecture</div>
+        </div>
+    </div>
+
+    <!-- Marqueur Barcode 3 (Audiovisuel) -->
+    <div class="marker-card">
+        <div class="marker-header">Audiovisuel 🎬</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/barcode/3.png" alt="Marqueur Barcode 3" class="marker-image">
+            <div class="marker-emoji">🎬</div>
+            <div class="marker-info">Marqueur Barcode 3 - Audiovisuel</div>
+        </div>
+    </div>
+
+    <!-- Marqueur Barcode 4 (Design) -->
+    <div class="marker-card">
+        <div class="marker-header">Création & Digital Design 🎨</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/barcode/4.png" alt="Marqueur Barcode 4" class="marker-image">
+            <div class="marker-emoji">🎨</div>
+            <div class="marker-info">Marqueur Barcode 4 - Design</div>
+        </div>
+    </div>
+
+    <!-- Marqueur Barcode 5 (IA) -->
+    <div class="marker-card">
+        <div class="marker-header">IA & Data 🤖</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/barcode/5.png" alt="Marqueur Barcode 5" class="marker-image">
+            <div class="marker-emoji">🤖</div>
+            <div class="marker-info">Marqueur Barcode 5 - IA & Data</div>
+        </div>
+    </div>
+
+    <!-- Marqueur Barcode 6 (Marketing) -->
+    <div class="marker-card">
+        <div class="marker-header">Marketing & Communication 📱</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/barcode/6.png" alt="Marqueur Barcode 6" class="marker-image">
+            <div class="marker-emoji">📱</div>
+            <div class="marker-info">Marqueur Barcode 6 - Marketing</div>
+        </div>
+    </div>
+
+    <!-- Marqueur Barcode 7 (Business) -->
+    <div class="marker-card">
+        <div class="marker-header">Tech & Business 💼</div>
+        <div class="marker-content">
+            <img src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/three.js/examples/marker-training/examples/barcode/7.png" alt="Marqueur Barcode 7" class="marker-image">
+            <div class="marker-emoji">💼</div>
+            <div class="marker-info">Marqueur Barcode 7 - Business</div>
+        </div>
+    </div>
+</div>
+
+<button class="print-button" onclick="window.print()">Imprimer les marqueurs</button>
+</body>
+</html>
