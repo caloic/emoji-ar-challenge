@@ -1,0 +1,226 @@
+/* Styles spécifiques pour la carte d'identité digitale */
+
+.digital-id-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+    color: white;
+    margin: 0 auto;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-logo {
+    height: 40px;
+    width: auto;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.card-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #ffcc00;
+    overflow: hidden;
+    margin-right: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-user-details {
+    flex: 1;
+}
+
+.card-user-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.card-date, .card-serial {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.card-emojis-section {
+    margin-bottom: 25px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+.card-section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: #ffcc00;
+}
+
+.card-emojis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.card-emoji-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 5px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s;
+}
+
+.card-emoji-item:hover {
+    transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.card-emoji-icon {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.card-emoji-name {
+    font-size: 0.7rem;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-footer-text {
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.card-badge {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px solid #ffcc00;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Thèmes de carte */
+.card-theme-tech {
+    background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+}
+
+.card-theme-creative {
+    background: linear-gradient(135deg, #ff8c42 0%, #ff3c6f 100%);
+}
+
+.card-theme-business {
+    background: linear-gradient(135deg, #29323c 0%, #485563 100%);
+}
+
+.card-theme-design {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+/* Animation pour la carte */
+.card-appear {
+    animation: cardAppear 0.5s ease-out forwards;
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Responsive design pour la carte */
+@media (max-width: 480px) {
+    .card-emojis-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card-emoji-icon {
+        font-size: 1.3rem;
+    }
+
+    .card-avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+}
+
+/* Styles pour les partages et téléchargements */
+.card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card-action-button {
+    background-color: #a777e3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.card-action-button:hover {
+    background-color: #8a5cd0;
+    transform: translateY(-2px);
+}
+
+.card-action-icon {
+    font-size: 1.2rem;
+}

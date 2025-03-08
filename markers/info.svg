@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+    <!-- Fond blanc -->
+    <rect width="400" height="400" fill="white"/>
+
+    <!-- Bordure extérieure noire -->
+    <rect x="10" y="10" width="380" height="380" fill="none" stroke="black" stroke-width="10"/>
+
+    <!-- Logo simplifié Ynov -->
+    <g transform="translate(80, 80) scale(0.7)">
+        <path d="M120,50 L180,200 L240,50 L270,50 L180,260 L90,50 Z" fill="black"/>
+        <path d="M300,50 L300,200 L270,200 L270,50 Z" fill="black"/>
+        <path d="M150,150 L150,200 L80,200 L80,150 Z" fill="black"/>
+    </g>
+
+    <!-- Icône d'ordinateur pour la filière Informatique -->
+    <g transform="translate(120, 220)">
+        <!-- Écran -->
+        <rect x="0" y="0" width="160" height="120" rx="5" fill="none" stroke="black" stroke-width="8"/>
+
+        <!-- Base -->
+        <rect x="60" y="120" width="40" height="10" fill="black"/>
+        <rect x="50" y="130" width="60" height="10" rx="2" fill="black"/>
+
+        <!-- Écran interne -->
+        <rect x="15" y="15" width="130" height="90" fill="white"/>
+
+        <!-- Symbole "< >" pour le code -->
+        <text x="40" y="75" font-family="monospace" font-size="40" font-weight="bold" fill="black">&lt; &gt;</text>
+    </g>
+
+    <!-- QR code au coin (optionnel - simplifié) -->
+    <g transform="translate(330, 330) scale(0.15)">
+        <rect width="100" height="100" fill="black"/>
+        <rect x="20" y="20" width="60" height="60" fill="white"/>
+        <rect x="30" y="30" width="40" height="40" fill="black"/>
+    </g>
+
+    <!-- Texte identifiant -->
+    <text x="200" y="375" font-family="Arial" font-size="14" text-anchor="middle" fill="black">INFORMATIQUE-AR-01</text>
+</svg>

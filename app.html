@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chasse aux Emoji Secrets - Ynov Campus Montpellier</title>
+    <meta name="description" content="Jeu de chasse aux trésors en réalité augmentée pour les Journées Portes Ouvertes d'Ynov Campus Montpellier">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/card.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#6e8efb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Emoji AR">
+
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/images/icons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./assets/images/icons/icon-192x192.png">
+
+    <!-- Icons for Apple devices -->
+    <link rel="apple-touch-icon" sizes="57x57" href="./assets/images/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./assets/images/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./assets/images/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./assets/images/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./assets/images/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./assets/images/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./assets/images/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./assets/images/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/icons/apple-icon-180x180.png">
+
+    <!-- AR Libraries -->
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+<!-- Écran d'introduction -->
+<div class="intro-overlay" id="intro-screen">
+    <div class="intro-content">
+        <h1 class="intro-title">Chasse aux Emoji Secrets</h1>
+        <div class="emoji-big">🔍</div>
+        <p>Bienvenue à la chasse aux emojis secrets d'Ynov Campus Montpellier!</p>
+        <p>Partez à la découverte de 9 emojis cachés dans l'Atrium, chacun représentant une filière de l'école.</p>
+        <p>Pointez votre caméra sur les marqueurs pour faire apparaître les emojis et découvrir les interactions!</p>
+        <button class="start-button" id="start-button">Commencer l'aventure</button>
+    </div>
+</div>
+
+<!-- Scène AR -->
+<div class="ar-scene">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;" vr-mode-ui="enabled: false">
+        <!-- Définitions des marqueurs -->
+        <a-marker type="pattern" url="assets/markers/pattern-informatique.patt" id="marker-informatique">
+            <a-entity id="emoji-informatique" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-cybersecurite.patt" id="marker-cybersecurite">
+            <a-entity id="emoji-cybersecurite" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-gaming.patt" id="marker-gaming">
+            <a-entity id="emoji-gaming" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-architecture.patt" id="marker-architecture">
+            <a-entity id="emoji-architecture" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-audiovisuel.patt" id="marker-audiovisuel">
+            <a-entity id="emoji-audiovisuel" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-design.patt" id="marker-design">
+            <a-entity id="emoji-design" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-ai.patt" id="marker-ai">
+            <a-entity id="emoji-ai" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-marketing.patt" id="marker-marketing">
+            <a-entity id="emoji-marketing" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-marker type="pattern" url="assets/markers/pattern-business.patt" id="marker-business">
+            <a-entity id="emoji-business" position="0 0.5 0" scale="1 1 1"></a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+</div>
+
+<!-- Interface utilisateur -->
+<div class="ui-container">
+    <!-- Barre de progression -->
+    <div class="progress-bar" id="progress-bar">
+        <div class="emoji-counter"><span id="found-count">0</span>/9</div>
+        <div class="emoji-icons" id="emoji-icons">
+            <div class="emoji-icon" data-emoji="informatique">💻</div>
+            <div class="emoji-icon" data-emoji="cybersecurite">🔒</div>
+            <div class="emoji-icon" data-emoji="gaming">🎮</div>
+            <div class="emoji-icon" data-emoji="architecture">🏠</div>
+            <div class="emoji-icon" data-emoji="audiovisuel">🎬</div>
+            <div class="emoji-icon" data-emoji="design">🎨</div>
+            <div class="emoji-icon" data-emoji="ai">🤖</div>
+            <div class="emoji-icon" data-emoji="marketing">📱</div>
+            <div class="emoji-icon" data-emoji="business">💼</div>
+        </div>
+    </div>
+
+    <!-- Bouton d'aide -->
+    <div class="help-button" id="help-button">?</div>
+</div>
+
+<!-- Conteneur pour les interactions -->
+<div class="interaction-container" id="interaction-container" style="display: none;">
+    <!-- Le contenu sera généré dynamiquement en fonction de l'emoji trouvé -->
+</div>
+
+<!-- Écran de félicitations et carte d'identité digitale -->
+<div class="complete-screen" id="complete-screen" style="display: none;">
+    <h1 class="congrats-title">Félicitations!</h1>
+    <p>Vous avez découvert au moins 5 emojis secrets.</p>
+    <p>Voici votre carte d'identité digitale Ynov!</p>
+
+    <div class="digital-card" id="digital-card">
+        <!-- La carte sera générée dynamiquement -->
+    </div>
+
+    <div class="share-buttons">
+        <button class="button" id="download-button">Télécharger</button>
+        <button class="button" id="share-button">Partager</button>
+    </div>
+
+    <button class="button" id="continue-button">Continuer la chasse</button>
+</div>
+
+<!-- Scripts de l'application -->
+<script src="js/utils.js"></script>
+<script src="js/ar-controller.js"></script>
+<script src="js/emoji-manager.js"></script>
+<script src="js/card-generator.js"></script>
+
+<!-- Scripts des interactions -->
+<script src="js/interactions/computer.js"></script>
+<script src="js/interactions/security.js"></script>
+<script src="js/interactions/gaming.js"></script>
+<script src="js/interactions/architecture.js"></script>
+<script src="js/interactions/video.js"></script>
+<script src="js/interactions/design.js"></script>
+<script src="js/interactions/ai.js"></script>
+<script src="js/interactions/marketing.js"></script>
+<script src="js/interactions/business.js"></script>
+
+<!-- Script principal -->
+<script src="js/main.js"></script>
+
+<!-- Service Worker -->
+<script src="js/sw-register.js"></script>
+
+<!-- No JavaScript Fallback -->
+<noscript>
+    <div style="background-color: #f44336; color: white; padding: 15px; text-align: center; position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;">
+        Cette application nécessite JavaScript pour fonctionner. Veuillez l'activer dans les paramètres de votre navigateur.
+    </div>
+</noscript>
+</body>
+</html>

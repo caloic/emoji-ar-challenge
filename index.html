@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chasse aux Emoji Secrets - Ynov Campus Montpellier</title>
+    <meta name="description" content="Jeu de chasse aux trésors en réalité augmentée pour les Journées Portes Ouvertes d'Ynov Campus Montpellier">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- PWA -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#6e8efb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Emoji AR">
+
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/images/icons/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./assets/images/icons/icon-192x192.png">
+
+    <!-- Icons for Apple devices -->
+    <link rel="apple-touch-icon" sizes="57x57" href="./assets/images/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./assets/images/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="./assets/images/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./assets/images/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./assets/images/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./assets/images/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./assets/images/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./assets/images/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/icons/apple-icon-180x180.png">
+</head>
+<body class="landing-page">
+<div class="container">
+    <div class="logo-container">
+        <img src="assets/images/icons/ynov-logo.svg" alt="Ynov Campus Montpellier" class="logo">
+    </div>
+
+    <h1 class="title">Chasse aux Emoji Secrets</h1>
+    <h2 class="subtitle">Réalité Augmentée Challenge</h2>
+
+    <div class="qr-container">
+        <p class="instructions">Scannez ce QR code pour commencer l'aventure en réalité augmentée!</p>
+        <div class="qr-code">
+            <!-- Le QR code sera généré dynamiquement et pointe vers app.html -->
+            <img id="qrcode" alt="QR Code pour l'expérience AR">
+        </div>
+    </div>
+
+    <div class="description">
+        <h3>Comment jouer?</h3>
+        <ol>
+            <li>Scannez le QR code avec votre smartphone</li>
+            <li>Autorisez l'accès à la caméra</li>
+            <li>Partez à la chasse aux 9 emojis secrets cachés dans l'Atrium!</li>
+            <li>Chaque emoji découvert vous révèlera une filière d'Ynov Campus</li>
+            <li>Trouvez au moins 5 emojis pour obtenir votre carte d'identité digitale personnalisée</li>
+        </ol>
+    </div>
+
+    <div class="emoji-preview">
+        <div class="emoji">💻</div>
+        <div class="emoji">🔒</div>
+        <div class="emoji">🎮</div>
+        <div class="emoji">🏠</div>
+        <div class="emoji">🎬</div>
+        <div class="emoji">🎨</div>
+        <div class="emoji">🤖</div>
+        <div class="emoji">📱</div>
+        <div class="emoji">💼</div>
+    </div>
+
+    <footer>
+        <p>Créé par Loïc CANO - Ynov Campus Montpellier</p>
+    </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+    // Génère le QR code pointant vers app.html
+    window.onload = function() {
+        const qr = qrcode(0, 'M');
+        // URL complète basée sur l'emplacement actuel
+        const appUrl = window.location.href.replace('index.html', '') + 'app.html';
+        qr.addData(appUrl);
+        qr.make();
+        document.getElementById('qrcode').src = qr.createDataURL(10, 0);
+    };
+</script>
+
+<!-- Service Worker -->
+<script src="js/sw-register.js"></script>
+
+<!-- No JavaScript Fallback -->
+<noscript>
+    <div style="background-color: #f44336; color: white; padding: 15px; text-align: center; margin-top: 20px;">
+        Cette application nécessite JavaScript pour fonctionner. Veuillez l'activer dans les paramètres de votre navigateur.
+    </div>
+</noscript>
+</body>
+</html>
