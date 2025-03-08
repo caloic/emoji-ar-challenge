@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mode Test - Chasse aux Emoji Secrets</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/card.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #6e8efb;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .emoji-card {
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .emoji-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .emoji-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .emoji-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .emoji-description {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .test-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .generate-card-button {
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .generate-card-button:hover {
+            background-color: #5d7de9;
+            transform: translateY(-2px);
+        }
+
+        /* Styles pour le conteneur d'interaction (repris de main.css avec quelques ajustements) */
+        .interaction-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        /* Style pour la carte d'identité */
+        .complete-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="test-container">
+    <h1>Mode Test - Chasse aux Emoji Secrets</h1>
+    <p class="description">
+        Ce mode de test vous permet d'essayer toutes les animations et interactions
+        sans avoir besoin de scanner les marqueurs AR.
+        Cliquez simplement sur un emoji pour voir son interaction!
+    </p>
+
+    <div class="emoji-grid" id="emoji-grid">
+        <!-- Les cartes d'emoji seront générées ici par JavaScript -->
+    </div>
+
+    <div class="test-footer">
+        <button class="generate-card-button" id="generate-card-button">Générer la carte d'identité digitale</button>
+    </div>
+</div>
+
+<!-- Conteneur pour les interactions -->
+<div class="interaction-container" id="interaction-container"></div>
+
+<!-- Écran de félicitations et carte d'identité digitale -->
+<div class="complete-screen" id="complete-screen">
+    <h1 class="congrats-title">Félicitations!</h1>
+    <p>Voici votre carte d'identité digitale Ynov!</p>
+
+    <div class="digital-card" id="digital-card">
+        <!-- La carte sera générée dynamiquement -->
+    </div>
+
+    <div class="share-buttons">
+        <button class="button" id="download-button">Télécharger</button>
+        <button class="button" id="share-button">Partager</button>
+    </div>
+
+    <button class="button" id="continue-button">Continuer</button>
+</div>
+
+<!-- Importation des scripts nécessaires -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/emoji-manager.js"></script>
+<script src="js/card-generator.js"></script>
+
+<!-- Scripts des interactions -->
+<script src="js/interactions/computer.js"></script>
+<script src="js/interactions/security.js"></script>
+<script src="js/interactions/gaming.js"></script>
+<script src="js/interactions/architecture.js"></script>
+<script src="js/interactions/video.js"></script>
+<script src="js/interactions/design.js"></script>
+<script src="js/interactions/ai.js"></script>
+<script src="js/interactions/marketing.js"></script>
+<script src="js/interactions/business.js"></script>
+
+<script>
+    // Données des emojis
+    const emojiData = {
+        'informatique': {
+            emoji: '💻',
+            title: 'Informatique',
+            description: 'Concevez et développez des applications et systèmes informatiques innovants.'
+        },
+        'cybersecurite': {
+            emoji: '🔒',
+            title: 'Cybersécurité',
+            description: 'Protégez les systèmes d\'information contre les menaces et attaques.'
+        },
+        'gaming': {
+            emoji: '🎮',
+            title: '3D, Animation & Jeux Vidéo',
+            description: 'Créez des univers virtuels, des personnages et des expériences interactives.'
+        },
+        'architecture': {
+            emoji: '🏠',
+            title: 'Architecture d\'intérieur',
+            description: 'Concevez des espaces fonctionnels, esthétiques et innovants.'
+        },
+        'audiovisuel': {
+            emoji: '🎬',
+            title: 'Audiovisuel',
+            description: 'Réalisez des productions audiovisuelles professionnelles et créatives.'
+        },
+        'design': {
+            emoji: '🎨',
+            title: 'Création & Digital Design',
+            description: 'Créez des expériences utilisateur et des interfaces attractives.'
+        },
+        'ai': {
+            emoji: '🤖',
+            title: 'Intelligence Artificielle & Data',
+            description: 'Exploitez les données et l\'IA pour créer des solutions intelligentes.'
+        },
+        'marketing': {
+            emoji: '📱',
+            title: 'Marketing & Communication Digitale',
+            description: 'Élaborez des stratégies marketing efficaces dans l\'univers numérique.'
+        },
+        'business': {
+            emoji: '💼',
+            title: 'Tech & Business',
+            description: 'Combinez compétences techniques et managériales pour piloter des projets innovants.'
+        }
+    };
+
+    // Gestionnaire d'emojis et générateur de carte
+    let emojiManager, cardGenerator;
+
+    // Interactions associées à chaque emoji
+    const interactions = {
+        'informatique': computerInteraction,
+        'cybersecurite': securityInteraction,
+        'gaming': gamingInteraction,
+        'architecture': architectureInteraction,
+        'audiovisuel': videoInteraction,
+        'design': designInteraction,
+        'ai': aiInteraction,
+        'marketing': marketingInteraction,
+        'business': businessInteraction
+    };
+
+    // Fonction d'initialisation
+    function init() {
+        // Initialiser le gestionnaire d'emojis
+        emojiManager = new EmojiManager(emojiData);
+
+        // Initialiser le générateur de carte
+        cardGenerator = new CardGenerator(emojiManager, {
+            minEmojisRequired: 5,
+            emojiData: emojiData
+        });
+
+        // Générer la grille d'emojis
+        generateEmojiGrid();
+
+        // Configurer les boutons
+        document.getElementById('generate-card-button').addEventListener('click', generateCard);
+        document.getElementById('continue-button').addEventListener('click', hideCard);
+        document.getElementById('download-button').addEventListener('click', downloadCard);
+        document.getElementById('share-button').addEventListener('click', shareCard);
+    }
+
+    // Générer la grille d'emojis
+    function generateEmojiGrid() {
+        const grid = document.getElementById('emoji-grid');
+        grid.innerHTML = '';
+
+        Object.keys(emojiData).forEach(emojiId => {
+            const data = emojiData[emojiId];
+            const card = document.createElement('div');
+            card.className = 'emoji-card';
+            card.innerHTML = `
+                    <div class="emoji-icon">${data.emoji}</div>
+                    <div class="emoji-title">${data.title}</div>
+                    <div class="emoji-description">${data.description}</div>
+                `;
+
+            // Ajouter l'événement de clic
+            card.addEventListener('click', () => {
+                // Marquer l'emoji comme trouvé
+                emojiManager.markAsFound(emojiId);
+
+                // Lancer l'interaction
+                triggerInteraction(emojiId);
+            });
+
+            grid.appendChild(card);
+        });
+    }
+
+    // Déclencher l'interaction pour un emoji
+    function triggerInteraction(emojiId) {
+        const interactionFunction = interactions[emojiId];
+        const emojiData = emojiManager.getEmojiData(emojiId);
+
+        if (interactionFunction && emojiData) {
+            // Montrer le conteneur d'interaction
+            const interactionContainer = document.getElementById('interaction-container');
+            interactionContainer.style.display = 'flex';
+            interactionContainer.classList.add('fade-in');
+
+            // Appeler la fonction d'interaction
+            interactionFunction(interactionContainer, emojiData, () => {
+                // Callback lorsque l'interaction est terminée
+                interactionContainer.classList.add('fade-out');
+
+                // Délai avant de masquer le conteneur
+                setTimeout(() => {
+                    interactionContainer.style.display = 'none';
+                    interactionContainer.classList.remove('fade-out');
+                    interactionContainer.innerHTML = '';
+                }, 500);
+            });
+        }
+    }
+
+    // Générer la carte d'identité
+    function generateCard() {
+        // Générer la carte
+        cardGenerator.generateCard();
+
+        // Afficher l'écran de félicitations
+        const digitalCard = document.getElementById('digital-card');
+        digitalCard.innerHTML = cardGenerator.getCardHTML();
+
+        const completeScreen = document.getElementById('complete-screen');
+        completeScreen.style.display = 'flex';
+        completeScreen.classList.add('fade-in');
+    }
+
+    // Masquer la carte
+    function hideCard() {
+        const completeScreen = document.getElementById('complete-screen');
+        completeScreen.classList.add('fade-out');
+        setTimeout(() => {
+            completeScreen.style.display = 'none';
+            completeScreen.classList.remove('fade-out');
+        }, 500);
+    }
+
+    // Télécharger la carte
+    function downloadCard() {
+        html2canvas(document.getElementById('digital-card')).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'carte-ynov-campus.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    // Partager la carte
+    function shareCard() {
+        html2canvas(document.getElementById('digital-card')).then(canvas => {
+            canvas.toBlob(blob => {
+                // Si l'API Web Share est disponible
+                if (navigator.share) {
+                    const file = new File([blob], 'carte-ynov-campus.png', { type: 'image/png' });
+
+                    navigator.share({
+                        title: 'Ma carte d\'identité digitale Ynov Campus',
+                        text: 'Voici ma carte d\'identité digitale Ynov Campus obtenue lors de la Chasse aux Emoji Secrets!',
+                        files: [file]
+                    }).catch(error => {
+                        console.error('Erreur lors du partage:', error);
+                        // Fallback: ouvrir dans un nouvel onglet
+                        window.open(canvas.toDataURL('image/png'));
+                    });
+                } else {
+                    // Fallback: ouvrir dans un nouvel onglet
+                    window.open(canvas.toDataURL('image/png'));
+                }
+            });
+        });
+    }
+
+    // Initialiser l'application au chargement
+    window.onload = init;
+</script>
+</body>
+</html>
