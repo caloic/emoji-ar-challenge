@@ -2,23 +2,17 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mode Test - Chasse aux Emoji Secrets</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/card.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Styles de base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
-            line-height: 1.6;
         }
 
         .test-container {
@@ -44,15 +38,9 @@
 
         .emoji-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
-        }
-
-        @media (max-width: 600px) {
-            .emoji-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         .emoji-card {
@@ -62,10 +50,6 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .emoji-card:active {
-            transform: scale(0.95);
         }
 
         .emoji-card:hover {
@@ -86,10 +70,6 @@
         .emoji-description {
             font-size: 0.8rem;
             color: #666;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .test-footer {
@@ -103,10 +83,9 @@
             background-color: #6e8efb;
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 10px 20px;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -116,12 +95,8 @@
             transform: translateY(-2px);
         }
 
-        .generate-card-button:active {
-            transform: scale(0.95);
-        }
-
-        /* Styles pour les interactions */
-        .modal-overlay {
+        /* Styles pour le conteneur d'interaction (repris de main.css avec quelques ajustements) */
+        .interaction-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -129,72 +104,15 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.8);
             display: none;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100;
             padding: 20px;
         }
 
-        .modal-content {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .interaction-emoji {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .interaction-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .interaction-description {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .interaction-content {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            min-height: 150px;
-        }
-
-        .close-button {
-            display: block;
-            margin: 0 auto;
-            background-color: #6e8efb;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .close-button:hover {
-            background-color: #5d7de9;
-        }
-
-        .close-button:active {
-            transform: scale(0.95);
-        }
-
-        /* Styles pour la carte */
-        .card-overlay {
+        /* Style pour la carte d'identité */
+        .complete-screen {
             position: fixed;
             top: 0;
             left: 0;
@@ -205,142 +123,10 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 200;
+            z-index: 1000;
             padding: 20px;
             color: white;
-            overflow-y: auto;
-        }
-
-        .card-content {
             text-align: center;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .congrats-title {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        .digital-card {
-            background-color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            color: #333;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .card-user-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 15px;
-            border: 3px solid #ffcc00;
-            font-size: 30px;
-        }
-
-        .card-user-details {
-            flex: 1;
-        }
-
-        .card-user-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .card-date, .card-serial {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        .card-emojis-section {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .card-section-title {
-            color: #6e8efb;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        .card-emojis-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .card-emoji-item {
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .card-emoji-icon {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .card-emoji-name {
-            font-size: 0.7rem;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-footer-text {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        .card-badge {
-            background-color: #f0f0f0;
-            border-radius: 20px;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            border: 2px solid #ffcc00;
-        }
-
-        .card-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
         }
     </style>
 </head>
@@ -350,7 +136,7 @@
     <p class="description">
         Ce mode de test vous permet d'essayer toutes les animations et interactions
         sans avoir besoin de scanner les marqueurs AR.
-        Touchez simplement un emoji pour voir son interaction!
+        Cliquez simplement sur un emoji pour voir son interaction!
     </p>
 
     <div class="emoji-grid" id="emoji-grid">
@@ -363,27 +149,41 @@
 </div>
 
 <!-- Conteneur pour les interactions -->
-<div class="modal-overlay" id="modal-overlay">
-    <div class="modal-content" id="modal-content">
-        <!-- Contenu de l'interaction -->
+<div class="interaction-container" id="interaction-container"></div>
+
+<!-- Écran de félicitations et carte d'identité digitale -->
+<div class="complete-screen" id="complete-screen">
+    <h1 class="congrats-title">Félicitations!</h1>
+    <p>Voici votre carte d'identité digitale Ynov!</p>
+
+    <div class="digital-card" id="digital-card">
+        <!-- La carte sera générée dynamiquement -->
     </div>
+
+    <div class="share-buttons">
+        <button class="button" id="download-button">Télécharger</button>
+        <button class="button" id="share-button">Partager</button>
+    </div>
+
+    <button class="button" id="continue-button">Continuer</button>
 </div>
 
-<!-- Carte d'identité -->
-<div class="card-overlay" id="card-overlay">
-    <div class="card-content">
-        <h1 class="congrats-title">Félicitations!</h1>
-        <p>Vous avez découvert des emojis secrets.<br>Voici votre carte d'identité digitale Ynov!</p>
+<!-- Importation des scripts nécessaires -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/emoji-manager.js"></script>
+<script src="js/card-generator.js"></script>
 
-        <div class="digital-card" id="digital-card">
-            <!-- Contenu de la carte -->
-        </div>
-
-        <div class="card-buttons">
-            <button class="close-button" id="close-card-button">Retour aux émojis</button>
-        </div>
-    </div>
-</div>
+<!-- Scripts des interactions -->
+<script src="js/interactions/computer.js"></script>
+<script src="js/interactions/security.js"></script>
+<script src="js/interactions/gaming.js"></script>
+<script src="js/interactions/architecture.js"></script>
+<script src="js/interactions/video.js"></script>
+<script src="js/interactions/design.js"></script>
+<script src="js/interactions/ai.js"></script>
+<script src="js/interactions/marketing.js"></script>
+<script src="js/interactions/business.js"></script>
 
 <script>
     // Données des emojis
@@ -435,1046 +235,158 @@
         }
     };
 
-    // Interactions simplifiées pour chaque emoji
+    // Gestionnaire d'emojis et générateur de carte
+    let emojiManager, cardGenerator;
+
+    // Interactions associées à chaque emoji
     const interactions = {
-        'informatique': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">💻</div>
-                    <h2 class="interaction-title">Informatique</h2>
-                    <div class="interaction-description">
-                        <p>Concevez et développez des applications et systèmes informatiques innovants.</p>
-                        <p>Voici un mini-jeu de debug!</p>
-                    </div>
-
-                    <div class="interaction-content" style="background-color: #282c34; color: white; font-family: monospace; overflow-x: auto;">
-                        <p>Trouvez l'erreur dans ce code:</p>
-                        <pre style="margin-top: 15px;">function calculerSomme(tableau) {
-  let somme = 0;
-  for (let i = 0; i <= tableau.length; i++) {
-    somme += tableau[i];
-  }
-  return somme;
-}</pre>
-
-                        <div style="margin-top: 20px; background-color: #444; padding: 10px; border-radius: 5px;">
-                            <p>Indice: Vérifiez la condition de la boucle</p>
-                        </div>
-
-                        <div style="margin-top: 20px;">
-                            <p>La solution est:</p>
-                            <pre style="margin-top: 10px; color: #4caf50;">function calculerSomme(tableau) {
-  let somme = 0;
-  for (let i = 0; i < tableau.length; i++) {
-    somme += tableau[i];
-  }
-  return somme;
-}</pre>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'cybersecurite': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">🔒</div>
-                    <h2 class="interaction-title">Cybersécurité</h2>
-                    <div class="interaction-description">
-                        <p>Protégez les systèmes d'information contre les menaces et attaques.</p>
-                        <p>Déchiffrez ce message codé:</p>
-                    </div>
-
-                    <div class="interaction-content" style="background-color: #1a1a2e; color: white; text-align: center;">
-                        <div style="background: #0d1117; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 1.2rem; margin-bottom: 20px;">
-                            ZNPW DBNQVT FTU MB HSBOEF FDPMF EV OVNFSJRVF
-                        </div>
-
-                        <div style="background: #172040; padding: 15px; border-radius: 8px; text-align: left;">
-                            <p><strong>Indice:</strong> Décalage d'une lettre (chiffre de César)</p>
-                        </div>
-
-                        <div style="margin-top: 20px; text-align: left;">
-                            <p>Solution:</p>
-                            <div style="background: #172040; padding: 15px; border-radius: 8px; margin-top: 10px;">
-                                YNOV CAMPUS EST LA GRANDE ECOLE DU NUMERIQUE
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'gaming': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">🎮</div>
-                    <h2 class="interaction-title">3D, Animation & Jeux Vidéo</h2>
-                    <div class="interaction-description">
-                        <p>Créez des univers virtuels, des personnages et des expériences interactives.</p>
-                        <p>Interagissez avec le personnage:</p>
-                    </div>
-
-                    <div class="interaction-content">
-                        <div id="game-character" style="text-align: center; font-size: 5rem; margin: 20px 0;">🧍</div>
-
-                        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                            <button id="jump-btn" style="background: #4a69bd; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">Sauter</button>
-                            <button id="dance-btn" style="background: #4a69bd; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">Danser</button>
-                            <button id="wave-btn" style="background: #4a69bd; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">Saluer</button>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            const character = container.querySelector('#game-character');
-
-            // Animation de saut
-            container.querySelector('#jump-btn').addEventListener('click', function() {
-                character.style.animation = 'none';
-                setTimeout(() => {
-                    character.style.animation = 'jump 1s ease';
-                }, 10);
-            });
-
-            // Animation de danse
-            container.querySelector('#dance-btn').addEventListener('click', function() {
-                character.style.animation = 'none';
-                setTimeout(() => {
-                    character.style.animation = 'dance 1s infinite alternate';
-                    character.textContent = '💃';
-
-                    setTimeout(() => {
-                        character.textContent = '🧍';
-                        character.style.animation = 'none';
-                    }, 3000);
-                }, 10);
-            });
-
-            // Animation de salut
-            container.querySelector('#wave-btn').addEventListener('click', function() {
-                character.style.animation = 'none';
-                setTimeout(() => {
-                    character.textContent = '👋';
-
-                    setTimeout(() => {
-                        character.textContent = '🧍';
-                    }, 1000);
-                }, 10);
-            });
-
-            // Ajouter des styles d'animation
-            const style = document.createElement('style');
-            style.textContent = `
-                    @keyframes jump {
-                        0%, 100% { transform: translateY(0); }
-                        50% { transform: translateY(-50px); }
-                    }
-
-                    @keyframes dance {
-                        0% { transform: rotate(-10deg); }
-                        100% { transform: rotate(10deg); }
-                    }
-                `;
-            document.head.appendChild(style);
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'architecture': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">🏠</div>
-                    <h2 class="interaction-title">Architecture d'intérieur</h2>
-                    <div class="interaction-description">
-                        <p>Concevez des espaces fonctionnels, esthétiques et innovants.</p>
-                        <p>Choisissez un style pour cette pièce:</p>
-                    </div>
-
-                    <div class="interaction-content">
-                        <div id="room-preview" style="background-color: #f0f0f0; height: 200px; border-radius: 8px; display: flex; justify-content: center; align-items: center; margin-bottom: 15px;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem;">🏠</div>
-                                <div>Salon moderne</div>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                            <button class="style-btn" data-style="moderne" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">Moderne</button>
-                            <button class="style-btn" data-style="industriel" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">Industriel</button>
-                            <button class="style-btn" data-style="scandinave" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">Scandinave</button>
-                            <button class="style-btn" data-style="artdeco" style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">Art Déco</button>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            const roomPreview = container.querySelector('#room-preview');
-            const styleButtons = container.querySelectorAll('.style-btn');
-
-            styleButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const style = this.dataset.style;
-
-                    // Réinitialiser les boutons
-                    styleButtons.forEach(btn => btn.style.backgroundColor = '#f0f0f0');
-
-                    // Mettre en évidence le bouton sélectionné
-                    this.style.backgroundColor = '#e0c3fc';
-
-                    // Changer l'apparence de la pièce selon le style
-                    switch(style) {
-                        case 'moderne':
-                            roomPreview.style.backgroundColor = '#f0f0f0';
-                            roomPreview.innerHTML = `
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 3rem;">🏠</div>
-                                        <div>Salon moderne</div>
-                                    </div>
-                                `;
-                            break;
-                        case 'industriel':
-                            roomPreview.style.backgroundColor = '#8c8c8c';
-                            roomPreview.innerHTML = `
-                                    <div style="text-align: center; color: white;">
-                                        <div style="font-size: 3rem;">🏭</div>
-                                        <div>Style industriel</div>
-                                    </div>
-                                `;
-                            break;
-                        case 'scandinave':
-                            roomPreview.style.backgroundColor = '#f5efe0';
-                            roomPreview.innerHTML = `
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 3rem;">🪑</div>
-                                        <div>Design scandinave</div>
-                                    </div>
-                                `;
-                            break;
-                        case 'artdeco':
-                            roomPreview.style.backgroundColor = '#e5d1b8';
-                            roomPreview.innerHTML = `
-                                    <div style="text-align: center;">
-                                        <div style="font-size: 3rem;">🏛️</div>
-                                        <div>Style Art Déco</div>
-                                    </div>
-                                `;
-                            break;
-                    }
-                });
-            });
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'audiovisuel': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">🎬</div>
-                    <h2 class="interaction-title">Audiovisuel</h2>
-                    <div class="interaction-description">
-                        <p>Réalisez des productions audiovisuelles professionnelles et créatives.</p>
-                        <p>Appliquez des effets cinématographiques:</p>
-                    </div>
-
-                    <div class="interaction-content">
-                        <div id="video-preview" style="background-color: black; height: 180px; border-radius: 8px; margin-bottom: 15px; border: 20px solid black; display: flex; justify-content: center; align-items: center;">
-                            <div style="font-size: 3rem; color: white;">🎬</div>
-                        </div>
-
-                        <div style="margin-bottom: 15px;">
-                            <div style="font-weight: bold; margin-bottom: 10px;">Choisissez un genre:</div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                <button class="filter-btn" data-filter="normal" style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer;">Normal</button>
-                                <button class="filter-btn" data-filter="noir" style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer;">Film Noir</button>
-                                <button class="filter-btn" data-filter="western" style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer;">Western</button>
-                                <button class="filter-btn" data-filter="scifi" style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer;">Sci-Fi</button>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; justify-content: center; gap: 15px;">
-                            <button id="action-btn" style="background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">ACTION!</button>
-                            <button id="cut-btn" style="background: #f44336; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">COUPEZ!</button>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            const videoPreview = container.querySelector('#video-preview');
-            const filterButtons = container.querySelectorAll('.filter-btn');
-            const actionBtn = container.querySelector('#action-btn');
-            const cutBtn = container.querySelector('#cut-btn');
-
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const filter = this.dataset.filter;
-
-                    // Réinitialiser les boutons
-                    filterButtons.forEach(btn => btn.style.backgroundColor = '#444');
-
-                    // Mettre en évidence le bouton sélectionné
-                    this.style.backgroundColor = '#f44336';
-
-                    // Appliquer le filtre
-                    switch(filter) {
-                        case 'normal':
-                            videoPreview.style.filter = 'none';
-                            videoPreview.style.border = '20px solid black';
-                            break;
-                        case 'noir':
-                            videoPreview.style.filter = 'grayscale(100%) contrast(120%) brightness(90%)';
-                            videoPreview.style.border = '20px solid black';
-                            break;
-                        case 'western':
-                            videoPreview.style.filter = 'sepia(80%) contrast(110%) brightness(110%)';
-                            videoPreview.style.border = '20px solid #a57e4a';
-                            break;
-                        case 'scifi':
-                            videoPreview.style.filter = 'hue-rotate(180deg) saturate(130%) brightness(110%)';
-                            videoPreview.style.border = '20px solid #0a84ff';
-                            break;
-                    }
-                });
-            });
-
-            // Bouton ACTION!
-            actionBtn.addEventListener('click', function() {
-                // Créer un overlay temporaire
-                const overlay = document.createElement('div');
-                overlay.style.position = 'absolute';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100%';
-                overlay.style.height = '100%';
-                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-                overlay.style.display = 'flex';
-                overlay.style.justifyContent = 'center';
-                overlay.style.alignItems = 'center';
-                overlay.style.color = 'red';
-                overlay.style.fontSize = '2rem';
-                overlay.style.fontWeight = 'bold';
-                overlay.innerHTML = 'ACTION!';
-
-                videoPreview.style.position = 'relative';
-                videoPreview.appendChild(overlay);
-
-                setTimeout(() => {
-                    videoPreview.removeChild(overlay);
-                }, 1500);
-            });
-
-            // Bouton COUPEZ!
-            cutBtn.addEventListener('click', function() {
-                // Créer un overlay temporaire
-                const overlay = document.createElement('div');
-                overlay.style.position = 'absolute';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100%';
-                overlay.style.height = '100%';
-                overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.3)';
-                overlay.style.display = 'flex';
-                overlay.style.justifyContent = 'center';
-                overlay.style.alignItems = 'center';
-                overlay.style.color = 'white';
-                overlay.style.fontSize = '2rem';
-                overlay.style.fontWeight = 'bold';
-                overlay.innerHTML = 'COUPEZ!';
-
-                videoPreview.style.position = 'relative';
-                videoPreview.appendChild(overlay);
-
-                setTimeout(() => {
-                    videoPreview.removeChild(overlay);
-                }, 1500);
-            });
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'design': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">🎨</div>
-                    <h2 class="interaction-title">Création & Digital Design</h2>
-                    <div class="interaction-description">
-                        <p>Créez des expériences utilisateur et des interfaces attractives.</p>
-                        <p>Essayez cette toile interactive:</p>
-                    </div>
-
-                    <div class="interaction-content">
-                        <div id="canvas-container" style="position: relative;">
-                            <canvas id="draw-canvas" width="300" height="200" style="border: 1px solid #ddd; border-radius: 8px; background-color: white; cursor: crosshair;"></canvas>
-                            <div style="text-align: center; margin-top: 5px; font-size: 0.8rem; color: #666;">Cliquez et déplacez pour dessiner</div>
-                        </div>
-
-                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                            <button class="color-btn" data-color="#000000" style="width: 30px; height: 30px; border-radius: 50%; background-color: #000000; border: 2px solid #ddd;"></button>
-                            <button class="color-btn" data-color="#ff0000" style="width: 30px; height: 30px; border-radius: 50%; background-color: #ff0000; border: 2px solid #ddd;"></button>
-                            <button class="color-btn" data-color="#0000ff" style="width: 30px; height: 30px; border-radius: 50%; background-color: #0000ff; border: 2px solid #ddd;"></button>
-                            <button class="color-btn" data-color="#00ff00" style="width: 30px; height: 30px; border-radius: 50%; background-color: #00ff00; border: 2px solid #ddd;"></button>
-                            <button class="color-btn" data-color="#ffff00" style="width: 30px; height: 30px; border-radius: 50%; background-color: #ffff00; border: 2px solid #ddd;"></button>
-                            <button id="clear-btn" style="background: #f44336; color: white; border: none; padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">Effacer</button>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            const canvas = container.querySelector('#draw-canvas');
-            const ctx = canvas.getContext('2d');
-            const colorButtons = container.querySelectorAll('.color-btn');
-            const clearBtn = container.querySelector('#clear-btn');
-
-            let isDrawing = false;
-            let lastX = 0;
-            let lastY = 0;
-            let currentColor = '#000000';
-
-            // Initialiser le canvas
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-            ctx.lineWidth = 5;
-
-            // Événements de dessin
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
-
-            // Support tactile
-            canvas.addEventListener('touchstart', function(e) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousedown', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                canvas.dispatchEvent(mouseEvent);
-            });
-
-            canvas.addEventListener('touchmove', function(e) {
-                e.preventDefault();
-                const touch = e.touches[0];
-                const mouseEvent = new MouseEvent('mousemove', {
-                    clientX: touch.clientX,
-                    clientY: touch.clientY
-                });
-                canvas.dispatchEvent(mouseEvent);
-            });
-
-            canvas.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                const mouseEvent = new MouseEvent('mouseup');
-                canvas.dispatchEvent(mouseEvent);
-            });
-
-            // Fonctions de dessin
-            function startDrawing(e) {
-                isDrawing = true;
-                [lastX, lastY] = [e.offsetX, e.offsetY];
-            }
-
-            function draw(e) {
-                if (!isDrawing) return;
-                ctx.strokeStyle = currentColor;
-
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(e.offsetX, e.offsetY);
-                ctx.stroke();
-
-                [lastX, lastY] = [e.offsetX, e.offsetY];
-            }
-
-            function stopDrawing() {
-                isDrawing = false;
-            }
-
-            // Boutons de couleur
-            colorButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    currentColor = this.dataset.color;
-
-                    // Réinitialiser les bordures
-                    colorButtons.forEach(btn => btn.style.borderColor = '#ddd');
-
-                    // Mettre en évidence le bouton sélectionné
-                    this.style.borderColor = '#333';
-                });
-            });
-
-            // Bouton effacer
-            clearBtn.addEventListener('click', function() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            });
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'ai': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">🤖</div>
-                    <h2 class="interaction-title">Intelligence Artificielle & Data</h2>
-                    <div class="interaction-description">
-                        <p>Exploitez les données et l'IA pour créer des solutions intelligentes.</p>
-                        <p>Conversation avec un chatbot:</p>
-                    </div>
-
-                    <div class="interaction-content" style="padding: 0; overflow: hidden;">
-                        <div style="background-color: #f5f5f5; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd;">
-                            <div style="display: flex; align-items: center;">
-                                <div style="width: 30px; height: 30px; background-color: #1e3c72; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; margin-right: 10px;">🤖</div>
-                                <div style="font-weight: bold;">YnovBot</div>
-                            </div>
-                            <div style="color: #4caf50; font-size: 0.8rem;">En ligne</div>
-                        </div>
-
-                        <div id="chat-messages" style="height: 200px; overflow-y: auto; padding: 10px; background-color: #f9f9f9;">
-                            <div style="background-color: #e3f2fd; color: #333; padding: 10px; border-radius: 15px; max-width: 80%; margin-bottom: 10px; border-bottom-left-radius: 5px; align-self: flex-start;">
-                                Bonjour! Je suis YnovBot, l'assistant intelligent d'Ynov Campus!
-                            </div>
-                            <div style="background-color: #e3f2fd; color: #333; padding: 10px; border-radius: 15px; max-width: 80%; margin-bottom: 10px; border-bottom-left-radius: 5px; align-self: flex-start;">
-                                Je vais vous poser quelques questions pour déterminer quel parcours dans le numérique vous conviendrait le mieux! 🚀
-                            </div>
-                            <div style="background-color: #e3f2fd; color: #333; padding: 10px; border-radius: 15px; max-width: 80%; margin-bottom: 10px; border-bottom-left-radius: 5px; align-self: flex-start;">
-                                Quelle technologie vous attire le plus?
-                            </div>
-                        </div>
-
-                        <div style="padding: 10px; border-top: 1px solid #ddd;">
-                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
-                                <button class="ai-option-btn" data-response="Programmation">Programmation</button>
-                                <button class="ai-option-btn" data-response="Analyse de données">Analyse de données</button>
-                                <button class="ai-option-btn" data-response="Design">Design</button>
-                                <button class="ai-option-btn" data-response="Cybersécurité">Cybersécurité</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            const chatMessages = container.querySelector('#chat-messages');
-            const optionButtons = container.querySelectorAll('.ai-option-btn');
-
-            // Styliser les boutons d'option
-            optionButtons.forEach(button => {
-                button.style.backgroundColor = '#e3f2fd';
-                button.style.border = '1px solid #bbdefb';
-                button.style.borderRadius = '20px';
-                button.style.padding = '8px 15px';
-                button.style.cursor = 'pointer';
-                button.style.color = '#1e3c72';
-
-                button.addEventListener('click', function() {
-                    const response = this.dataset.response;
-
-                    // Ajouter la réponse de l'utilisateur
-                    const userMessage = document.createElement('div');
-                    userMessage.style.backgroundColor = '#1e3c72';
-                    userMessage.style.color = 'white';
-                    userMessage.style.padding = '10px';
-                    userMessage.style.borderRadius = '15px';
-                    userMessage.style.maxWidth = '80%';
-                    userMessage.style.marginBottom = '10px';
-                    userMessage.style.borderBottomRightRadius = '5px';
-                    userMessage.style.marginLeft = 'auto';
-                    userMessage.textContent = response;
-                    chatMessages.appendChild(userMessage);
-
-                    // Faire défiler vers le bas
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                    // Désactiver tous les boutons
-                    optionButtons.forEach(btn => {
-                        btn.disabled = true;
-                        btn.style.opacity = '0.5';
-                    });
-
-                    // Ajouter un délai pour la réponse du bot
-                    setTimeout(() => {
-                        // Ajouter une animation "en train d'écrire"
-                        const typingIndicator = document.createElement('div');
-                        typingIndicator.style.display = 'flex';
-                        typingIndicator.style.padding = '10px';
-                        typingIndicator.style.alignSelf = 'flex-start';
-                        typingIndicator.innerHTML = `
-                                <div style="width: 8px; height: 8px; background-color: #bbb; border-radius: 50%; margin: 0 2px; animation: typing 1.4s infinite ease-in-out;"></div>
-                                <div style="width: 8px; height: 8px; background-color: #bbb; border-radius: 50%; margin: 0 2px; animation: typing 1.4s infinite ease-in-out; animation-delay: 0.2s;"></div>
-                                <div style="width: 8px; height: 8px; background-color: #bbb; border-radius: 50%; margin: 0 2px; animation: typing 1.4s infinite ease-in-out; animation-delay: 0.4s;"></div>
-                            `;
-                        chatMessages.appendChild(typingIndicator);
-
-                        // Ajouter les styles d'animation
-                        if (!document.querySelector('#typing-animation-style')) {
-                            const style = document.createElement('style');
-                            style.id = 'typing-animation-style';
-                            style.textContent = `
-                                    @keyframes typing {
-                                        0%, 60%, 100% { transform: translateY(0); }
-                                        30% { transform: translateY(-5px); }
-                                    }
-                                `;
-                            document.head.appendChild(style);
-                        }
-
-                        // Faire défiler vers le bas
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-                        setTimeout(() => {
-                            // Supprimer l'indicateur
-                            chatMessages.removeChild(typingIndicator);
-
-                            // Ajouter la réponse du bot
-                            const botMessage = document.createElement('div');
-                            botMessage.style.backgroundColor = '#e3f2fd';
-                            botMessage.style.color = '#333';
-                            botMessage.style.padding = '10px';
-                            botMessage.style.borderRadius = '15px';
-                            botMessage.style.maxWidth = '80%';
-                            botMessage.style.marginBottom = '10px';
-                            botMessage.style.borderBottomLeftRadius = '5px';
-                            botMessage.style.alignSelf = 'flex-start';
-
-                            if (response === 'Programmation') {
-                                botMessage.innerHTML = "Excellent choix! La programmation est au cœur de la transformation numérique. D'après votre profil, vous pourriez être intéressé(e) par la filière <strong>Informatique</strong> d'Ynov Campus.";
-                            } else if (response === 'Analyse de données') {
-                                botMessage.innerHTML = "Intéressant! Les données sont le pétrole du 21ème siècle. D'après votre profil, vous pourriez être intéressé(e) par la filière <strong>Intelligence Artificielle & Data</strong> d'Ynov Campus.";
-                            } else if (response === 'Design') {
-                                botMessage.innerHTML = "Excellent! Le design est essentiel dans la création d'expériences numériques marquantes. D'après votre profil, vous pourriez être intéressé(e) par la filière <strong>Création & Digital Design</strong> d'Ynov Campus.";
-                            } else {
-                                botMessage.innerHTML = "Un domaine passionnant! La sécurité est un enjeu majeur du numérique. D'après votre profil, vous pourriez être intéressé(e) par la filière <strong>Cybersécurité</strong> d'Ynov Campus.";
-                            }
-
-                            chatMessages.appendChild(botMessage);
-
-                            // Faire défiler vers le bas
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        }, 1500);
-                    }, 1000);
-                });
-            });
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'marketing': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">📱</div>
-                    <h2 class="interaction-title">Marketing & Communication Digitale</h2>
-                    <div class="interaction-description">
-                        <p>Élaborez des stratégies marketing efficaces dans l'univers numérique.</p>
-                        <p>Créez une publication pour les réseaux sociaux:</p>
-                    </div>
-
-                    <div class="interaction-content">
-                        <div id="post-preview" style="background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%); color: white; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 15px; width: 100%; max-width: 300px; margin: 0 auto 15px;">
-                            <div style="font-size: 2rem; margin-bottom: 10px;">🎉</div>
-                            <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">Événement spécial</div>
-                            <div style="font-size: 0.9rem; margin-bottom: 15px;">Rejoignez-nous pour un événement exceptionnel!</div>
-                            <button style="background: white; color: #333; border: none; padding: 5px 15px; border-radius: 20px; font-weight: bold;">Je participe!</button>
-                        </div>
-
-                        <div style="background: white; border-radius: 10px; padding: 15px; margin-top: 15px;">
-                            <div style="font-weight: bold; margin-bottom: 10px; color: #5B247A;">Type de post</div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
-                                <button class="post-type-btn" data-type="event" style="padding: 6px 12px; border: 2px solid #5B247A; border-radius: 20px; background: #5B247A; color: white; cursor: pointer;">Événement</button>
-                                <button class="post-type-btn" data-type="promo" style="padding: 6px 12px; border: 2px solid #eee; border-radius: 20px; background: white; color: #333; cursor: pointer;">Promotion</button>
-                                <button class="post-type-btn" data-type="product" style="padding: 6px 12px; border: 2px solid #eee; border-radius: 20px; background: white; color: #333; cursor: pointer;">Produit</button>
-                            </div>
-
-                            <div style="font-weight: bold; margin-bottom: 10px; color: #5B247A;">Emoji</div>
-                            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;">
-                                <button class="emoji-btn" data-emoji="🎉" style="width: 30px; height: 30px; border-radius: 50%; background: white; border: 2px solid #5B247A; display: flex; justify-content: center; align-items: center; cursor: pointer;">🎉</button>
-                                <button class="emoji-btn" data-emoji="🔥" style="width: 30px; height: 30px; border-radius: 50%; background: white; border: 2px solid #ddd; display: flex; justify-content: center; align-items: center; cursor: pointer;">🔥</button>
-                                <button class="emoji-btn" data-emoji="✨" style="width: 30px; height: 30px; border-radius: 50%; background: white; border: 2px solid #ddd; display: flex; justify-content: center; align-items: center; cursor: pointer;">✨</button>
-                                <button class="emoji-btn" data-emoji="💯" style="width: 30px; height: 30px; border-radius: 50%; background: white; border: 2px solid #ddd; display: flex; justify-content: center; align-items: center; cursor: pointer;">💯</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            const postPreview = container.querySelector('#post-preview');
-            const postTypeButtons = container.querySelectorAll('.post-type-btn');
-            const emojiButtons = container.querySelectorAll('.emoji-btn');
-
-            // Changer le type de post
-            postTypeButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const type = this.dataset.type;
-
-                    // Réinitialiser les boutons
-                    postTypeButtons.forEach(btn => {
-                        btn.style.backgroundColor = 'white';
-                        btn.style.borderColor = '#eee';
-                        btn.style.color = '#333';
-                    });
-
-                    // Mettre en évidence le bouton sélectionné
-                    this.style.backgroundColor = '#5B247A';
-                    this.style.borderColor = '#5B247A';
-                    this.style.color = 'white';
-
-                    // Changer l'apparence du post
-                    switch(type) {
-                        case 'event':
-                            postPreview.style.background = 'linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%)';
-                            postPreview.querySelector('div:nth-child(2)').textContent = 'Événement spécial';
-                            postPreview.querySelector('div:nth-child(3)').textContent = 'Rejoignez-nous pour un événement exceptionnel!';
-                            postPreview.querySelector('button').textContent = 'Je participe!';
-                            break;
-                        case 'promo':
-                            postPreview.style.background = 'linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)';
-                            postPreview.querySelector('div:nth-child(2)').textContent = 'Offre limitée';
-                            postPreview.querySelector('div:nth-child(3)').textContent = 'Ne manquez pas notre offre exceptionnelle!';
-                            postPreview.querySelector('button').textContent = "J'en profite!";
-                            break;
-                        case 'product':
-                            postPreview.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
-                            postPreview.querySelector('div:nth-child(2)').textContent = 'Nouveau produit';
-                            postPreview.querySelector('div:nth-child(3)').textContent = 'Découvrez notre dernière innovation!';
-                            postPreview.querySelector('button').textContent = 'Je découvre!';
-                            break;
-                    }
-                });
-            });
-
-            // Changer l'emoji
-            emojiButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const emoji = this.dataset.emoji;
-
-                    // Réinitialiser les boutons
-                    emojiButtons.forEach(btn => {
-                        btn.style.borderColor = '#ddd';
-                    });
-
-                    // Mettre en évidence le bouton sélectionné
-                    this.style.borderColor = '#5B247A';
-
-                    // Changer l'emoji
-                    postPreview.querySelector('div:first-child').textContent = emoji;
-                });
-            });
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        },
-        'business': function(container) {
-            container.innerHTML = `
-                    <div class="interaction-emoji">💼</div>
-                    <h2 class="interaction-title">Tech & Business</h2>
-                    <div class="interaction-description">
-                        <p>Combinez compétences techniques et managériales pour piloter des projets innovants.</p>
-                        <p>Investissez dans une startup virtuelle:</p>
-                    </div>
-
-                    <div class="interaction-content">
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
-                            <div class="startup-card" data-startup="ecotech" style="flex: 1; min-width: 120px; border: 2px solid #302b63; background-color: #f0f0f7; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer;">
-                                <div style="font-size: 2rem; margin-bottom: 5px;">🌱</div>
-                                <div style="font-weight: bold; margin-bottom: 5px;">EcoTech</div>
-                                <div style="font-size: 0.8rem; color: #666;">Écologie</div>
-                            </div>
-                            <div class="startup-card" data-startup="healthai" style="flex: 1; min-width: 120px; border: 2px solid #eee; background-color: white; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer;">
-                                <div style="font-size: 2rem; margin-bottom: 5px;">🩺</div>
-                                <div style="font-weight: bold; margin-bottom: 5px;">HealthAI</div>
-                                <div style="font-size: 0.8rem; color: #666;">Santé</div>
-                            </div>
-                        </div>
-
-                        <div id="investment-details" style="background-color: #f9f9f9; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
-                            <div style="display: flex; align-items: center; gap: 10px; font-weight: bold; margin-bottom: 10px;">
-                                🌱 EcoTech
-                                <span style="display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; background-color: #fff8e1; color: #f57f17;">Risque moyen</span>
-                            </div>
-                            <div style="margin-bottom: 15px;">Solutions technologiques pour l'environnement et le développement durable.</div>
-
-                            <div style="margin-bottom: 15px;">
-                                <div style="margin-bottom: 5px;">Montant de l'investissement:</div>
-                                <input type="range" id="investment-slider" min="10000" max="100000" step="5000" value="50000" style="width: 100%;">
-                                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #666;">
-                                    <span>10K€</span>
-                                    <span>100K€</span>
-                                </div>
-                                <div style="text-align: center; font-size: 1.2rem; font-weight: bold; margin-top: 5px;">
-                                    <span id="investment-value">50,000</span> €
-                                </div>
-                            </div>
-
-                            <button id="invest-button" style="background-color: #302b63; color: white; border: none; padding: 8px 15px; border-radius: 20px; width: 100%; font-weight: bold; cursor: pointer;">Investir</button>
-                        </div>
-
-                        <div id="investment-result" style="display: none; background-color: #f0f0f7; border-radius: 8px; padding: 15px; text-align: center;">
-                            <div style="font-size: 1.5rem; margin-bottom: 10px;">📈</div>
-                            <div style="font-weight: bold; margin-bottom: 5px;">Résultat de l'investissement</div>
-                            <div style="font-size: 1.2rem; font-weight: bold; margin: 10px 0;">
-                                <span id="result-value">65,000</span> € <span style="color: #4caf50;">(+30%)</span>
-                            </div>
-                            <div style="font-style: italic; margin-bottom: 10px;">Félicitations! Votre investissement a été très rentable.</div>
-                        </div>
-                    </div>
-
-                    <button class="close-button">Continuer</button>
-                `;
-
-            const startupCards = container.querySelectorAll('.startup-card');
-            const investmentSlider = container.querySelector('#investment-slider');
-            const investmentValue = container.querySelector('#investment-value');
-            const investButton = container.querySelector('#invest-button');
-            const investmentDetails = container.querySelector('#investment-details');
-            const investmentResult = container.querySelector('#investment-result');
-            const resultValue = container.querySelector('#result-value');
-
-            // Formater le nombre avec des séparateurs
-            function formatNumber(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            // Changer la startup
-            startupCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const startup = this.dataset.startup;
-
-                    // Réinitialiser les cartes
-                    startupCards.forEach(c => {
-                        c.style.borderColor = '#eee';
-                        c.style.backgroundColor = 'white';
-                    });
-
-                    // Mettre en évidence la carte sélectionnée
-                    this.style.borderColor = '#302b63';
-                    this.style.backgroundColor = '#f0f0f7';
-
-                    // Mettre à jour les détails
-                    if (startup === 'ecotech') {
-                        investmentDetails.querySelector('div:first-child').innerHTML = `
-                                🌱 EcoTech
-                                <span style="display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; background-color: #fff8e1; color: #f57f17;">Risque moyen</span>
-                            `;
-                        investmentDetails.querySelector('div:nth-child(2)').textContent = 'Solutions technologiques pour l\'environnement et le développement durable.';
-                    } else {
-                        investmentDetails.querySelector('div:first-child').innerHTML = `
-                                🩺 HealthAI
-                                <span style="display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; background-color: #ffebee; color: #c62828;">Risque élevé</span>
-                            `;
-                        investmentDetails.querySelector('div:nth-child(2)').textContent = 'Intelligence artificielle appliquée au secteur de la santé.';
-                    }
-                });
-            });
-
-            // Mettre à jour la valeur de l'investissement
-            investmentSlider.addEventListener('input', function() {
-                investmentValue.textContent = formatNumber(this.value);
-            });
-
-            // Bouton investir
-            investButton.addEventListener('click', function() {
-                // Cacher les détails
-                investmentDetails.style.display = 'none';
-
-                // Calculer et afficher le résultat
-                const investmentAmount = parseInt(investmentSlider.value);
-                const growth = Math.random() * 60 - 10; // Entre -10% et +50%
-                const finalAmount = Math.round(investmentAmount * (1 + growth / 100));
-                const profit = finalAmount - investmentAmount;
-                const profitPercentage = (profit / investmentAmount * 100).toFixed(1);
-
-                resultValue.textContent = formatNumber(finalAmount);
-
-                const profitSpan = document.createElement('span');
-                profitSpan.style.marginLeft = '5px';
-                if (profit >= 0) {
-                    profitSpan.style.color = '#4caf50';
-                    profitSpan.textContent = `(+${profitPercentage}%)`;
-                } else {
-                    profitSpan.style.color = '#f44336';
-                    profitSpan.textContent = `(${profitPercentage}%)`;
-                }
-
-                resultValue.nextElementSibling.remove(); // Supprimer l'ancien span
-                resultValue.parentNode.appendChild(profitSpan);
-
-                // Message en fonction du résultat
-                let resultMessage = '';
-                if (profit >= investmentAmount * 0.3) {
-                    resultMessage = 'Félicitations! Votre investissement a été extrêmement rentable.';
-                } else if (profit >= investmentAmount * 0.1) {
-                    resultMessage = 'Bien joué! Votre investissement a été très rentable.';
-                } else if (profit >= 0) {
-                    resultMessage = 'Votre investissement est rentable.';
-                } else if (profit >= -investmentAmount * 0.1) {
-                    resultMessage = 'Votre investissement a subi une légère perte.';
-                } else {
-                    resultMessage = 'Votre investissement a malheureusement subi une forte perte.';
-                }
-
-                investmentResult.querySelector('div:nth-child(4)').textContent = resultMessage;
-
-                // Afficher le résultat
-                investmentResult.style.display = 'block';
-            });
-
-            container.querySelector('.close-button').addEventListener('click', closeModal);
-        }
+        'informatique': computerInteraction,
+        'cybersecurite': securityInteraction,
+        'gaming': gamingInteraction,
+        'architecture': architectureInteraction,
+        'audiovisuel': videoInteraction,
+        'design': designInteraction,
+        'ai': aiInteraction,
+        'marketing': marketingInteraction,
+        'business': businessInteraction
     };
 
-    // Trouvé les emojis
-    const discoveredEmojis = {};
+    // Fonction d'initialisation
+    function init() {
+        // Initialiser le gestionnaire d'emojis
+        emojiManager = new EmojiManager(emojiData);
 
-    // Éléments principaux
-    const modalOverlay = document.getElementById('modal-overlay');
-    const modalContent = document.getElementById('modal-content');
-    const generateButton = document.getElementById('generate-card-button');
-    const cardOverlay = document.getElementById('card-overlay');
-    const digitalCard = document.getElementById('digital-card');
-    const closeCardButton = document.getElementById('close-card-button');
+        // Initialiser le générateur de carte
+        cardGenerator = new CardGenerator(emojiManager, {
+            minEmojisRequired: 5,
+            emojiData: emojiData
+        });
 
-    // Fonction pour ouvrir le modal
-    function openModal(emojiId) {
-        modalContent.innerHTML = ''; // Vider le contenu
+        // Générer la grille d'emojis
+        generateEmojiGrid();
 
-        // Marquer l'emoji comme trouvé
-        discoveredEmojis[emojiId] = true;
-
-        // Appeler l'interaction correspondante
-        interactions[emojiId](modalContent);
-
-        // Afficher le modal
-        modalOverlay.style.display = 'flex';
-
-        // Mettre à jour la grille d'emojis
-        updateEmojiGrid();
+        // Configurer les boutons
+        document.getElementById('generate-card-button').addEventListener('click', generateCard);
+        document.getElementById('continue-button').addEventListener('click', hideCard);
+        document.getElementById('download-button').addEventListener('click', downloadCard);
+        document.getElementById('share-button').addEventListener('click', shareCard);
     }
 
-    // Fonction pour fermer le modal
-    function closeModal() {
-        modalOverlay.style.display = 'none';
-    }
-
-    // Fonction pour générer la grille d'emojis
+    // Générer la grille d'emojis
     function generateEmojiGrid() {
         const grid = document.getElementById('emoji-grid');
+        grid.innerHTML = '';
 
-        for (const emojiId in emojiData) {
-            const emojiInfo = emojiData[emojiId];
-
+        Object.keys(emojiData).forEach(emojiId => {
+            const data = emojiData[emojiId];
             const card = document.createElement('div');
             card.className = 'emoji-card';
             card.innerHTML = `
-                    <div class="emoji-icon">${emojiInfo.emoji}</div>
-                    <div class="emoji-title">${emojiInfo.title}</div>
-                    <div class="emoji-description">${emojiInfo.description}</div>
+                    <div class="emoji-icon">${data.emoji}</div>
+                    <div class="emoji-title">${data.title}</div>
+                    <div class="emoji-description">${data.description}</div>
                 `;
-
-            // Style pour émojis trouvés
-            if (discoveredEmojis[emojiId]) {
-                card.style.borderLeft = '5px solid #6e8efb';
-            }
 
             // Ajouter l'événement de clic
-            card.addEventListener('click', () => openModal(emojiId));
+            card.addEventListener('click', () => {
+                // Marquer l'emoji comme trouvé
+                emojiManager.markAsFound(emojiId);
+
+                // Lancer l'interaction
+                triggerInteraction(emojiId);
+            });
 
             grid.appendChild(card);
+        });
+    }
+
+    // Déclencher l'interaction pour un emoji
+    function triggerInteraction(emojiId) {
+        const interactionFunction = interactions[emojiId];
+        const emojiData = emojiManager.getEmojiData(emojiId);
+
+        if (interactionFunction && emojiData) {
+            // Montrer le conteneur d'interaction
+            const interactionContainer = document.getElementById('interaction-container');
+            interactionContainer.style.display = 'flex';
+            interactionContainer.classList.add('fade-in');
+
+            // Appeler la fonction d'interaction
+            interactionFunction(interactionContainer, emojiData, () => {
+                // Callback lorsque l'interaction est terminée
+                interactionContainer.classList.add('fade-out');
+
+                // Délai avant de masquer le conteneur
+                setTimeout(() => {
+                    interactionContainer.style.display = 'none';
+                    interactionContainer.classList.remove('fade-out');
+                    interactionContainer.innerHTML = '';
+                }, 500);
+            });
         }
     }
 
-    // Fonction pour mettre à jour la grille d'emojis
-    function updateEmojiGrid() {
-        const grid = document.getElementById('emoji-grid');
-        grid.innerHTML = ''; // Vider la grille
-
-        generateEmojiGrid(); // Recréer la grille
-
-        // Mettre à jour le texte du bouton
-        const count = Object.keys(discoveredEmojis).length;
-        generateButton.textContent = `Générer la carte d'identité digitale (${count}/9)`;
-
-        // Activer le bouton si au moins 1 emoji est trouvé
-        generateButton.disabled = count === 0;
-    }
-
-    // Fonction pour générer la carte
+    // Générer la carte d'identité
     function generateCard() {
-        // Liste des emojis trouvés
-        const foundEmojis = Object.keys(discoveredEmojis).map(id => ({
-            id,
-            ...emojiData[id]
-        }));
-
-        // Date actuelle
-        const today = new Date();
-        const formattedDate = today.toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-
-        // Numéro de série aléatoire
-        const serialNumber = 'YNV-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-
-        // Générer les emojis pour la carte
-        let emojisHTML = '';
-        foundEmojis.forEach(emoji => {
-            emojisHTML += `
-                    <div class="card-emoji-item">
-                        <span class="card-emoji-icon">${emoji.emoji}</span>
-                        <span class="card-emoji-name">${emoji.title}</span>
-                    </div>
-                `;
-        });
-
         // Générer la carte
-        digitalCard.innerHTML = `
-                <div class="card-header">
-                    <div class="card-title">Carte d'Identité Digitale</div>
-                </div>
+        cardGenerator.generateCard();
 
-                <div class="card-user-info">
-                    <div class="card-avatar">😎</div>
-                    <div class="card-user-details">
-                        <div class="card-user-name">Visiteur Ynov Campus</div>
-                        <div class="card-date">Délivrée le ${formattedDate}</div>
-                        <div class="card-serial">N° ${serialNumber}</div>
-                    </div>
-                </div>
+        // Afficher l'écran de félicitations
+        const digitalCard = document.getElementById('digital-card');
+        digitalCard.innerHTML = cardGenerator.getCardHTML();
 
-                <div class="card-emojis-section">
-                    <div class="card-section-title">Compétences Découvertes</div>
-                    <div class="card-emojis-grid">
-                        ${emojisHTML}
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <div class="card-footer-text">Campus Montpellier</div>
-                    <div class="card-badge">
-                        ${foundEmojis.length}/9
-                    </div>
-                </div>
-            `;
-
-        // Afficher la carte
-        cardOverlay.style.display = 'flex';
+        const completeScreen = document.getElementById('complete-screen');
+        completeScreen.style.display = 'flex';
+        completeScreen.classList.add('fade-in');
     }
 
-    // Initialisation
-    generateEmojiGrid();
+    // Masquer la carte
+    function hideCard() {
+        const completeScreen = document.getElementById('complete-screen');
+        completeScreen.classList.add('fade-out');
+        setTimeout(() => {
+            completeScreen.style.display = 'none';
+            completeScreen.classList.remove('fade-out');
+        }, 500);
+    }
 
-    // Événements
-    generateButton.addEventListener('click', generateCard);
-    closeCardButton.addEventListener('click', () => {
-        cardOverlay.style.display = 'none';
-    });
+    // Télécharger la carte
+    function downloadCard() {
+        html2canvas(document.getElementById('digital-card')).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'carte-ynov-campus.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
 
-    // Fermer le modal si on clique en dehors du contenu
-    modalOverlay.addEventListener('click', function(event) {
-        if (event.target === modalOverlay) {
-            closeModal();
-        }
-    });
+    // Partager la carte
+    function shareCard() {
+        html2canvas(document.getElementById('digital-card')).then(canvas => {
+            canvas.toBlob(blob => {
+                // Si l'API Web Share est disponible
+                if (navigator.share) {
+                    const file = new File([blob], 'carte-ynov-campus.png', { type: 'image/png' });
 
-    // Désactiver le bouton générer au début
-    generateButton.disabled = true;
+                    navigator.share({
+                        title: 'Ma carte d\'identité digitale Ynov Campus',
+                        text: 'Voici ma carte d\'identité digitale Ynov Campus obtenue lors de la Chasse aux Emoji Secrets!',
+                        files: [file]
+                    }).catch(error => {
+                        console.error('Erreur lors du partage:', error);
+                        // Fallback: ouvrir dans un nouvel onglet
+                        window.open(canvas.toDataURL('image/png'));
+                    });
+                } else {
+                    // Fallback: ouvrir dans un nouvel onglet
+                    window.open(canvas.toDataURL('image/png'));
+                }
+            });
+        });
+    }
+
+    // Initialiser l'application au chargement
+    window.onload = init;
 </script>
 </body>
 </html>
