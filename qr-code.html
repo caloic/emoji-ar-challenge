@@ -79,15 +79,24 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+
 <script>
-    // Génère le QR code pointant vers index.html
     window.onload = function() {
         const qr = qrcode(0, 'M');
-        // URL complète basée sur l'emplacement actuel
-        const appUrl = window.location.href.replace('qr-code.html', '') + 'index.html';
+
+        // Obtenir l'URL de base (sans le nom de fichier)
+        const currentUrl = window.location.href;
+        const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+
+        // Ajouter index.html à l'URL de base
+        const appUrl = baseUrl + 'index.html';
+
         qr.addData(appUrl);
         qr.make();
         document.getElementById('qrcode').src = qr.createDataURL(10, 0);
+
+        // Afficher l'URL dans la console pour vérification
+        console.log("URL du QR code: " + appUrl);
     };
 </script>
 
