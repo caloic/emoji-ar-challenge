@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chasse aux Emoji Secrets - Ynov Campus Montpellier</title>
     <meta name="description" content="Jeu de chasse aux trésors en réalité augmentée pour les Journées Portes Ouvertes d'Ynov Campus Montpellier">
 
@@ -55,7 +55,7 @@
 
 <!-- Scène AR -->
 <div class="ar-scene">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;" vr-mode-ui="enabled: false">
         <!-- Utiliser des marqueurs standard qui fonctionnent très bien -->
         <a-marker preset="hiro" id="marker-informatique">
             <a-entity id="emoji-informatique" position="0 0.5 0" scale="1 1 1"></a-entity>
@@ -119,9 +119,11 @@
     <div class="help-button" id="help-button">?</div>
 </div>
 
-<!-- Conteneur pour les interactions -->
+<!-- Conteneur pour les interactions avec wrapper -->
 <div class="interaction-container" id="interaction-container" style="display: none;">
-    <!-- Le contenu sera généré dynamiquement en fonction de l'emoji trouvé -->
+    <div class="interaction-wrapper" id="interaction-wrapper">
+        <!-- Le contenu sera généré dynamiquement en fonction de l'emoji trouvé -->
+    </div>
 </div>
 
 <!-- Écran de félicitations et carte d'identité digitale -->
@@ -139,7 +141,7 @@
         <button class="button" id="share-button">Partager</button>
     </div>
 
-    <button class="button" id="continue-button">Continuer la chasse</button>
+    <button class="button" id="continue-button">Continuer</button>
 </div>
 
 <!-- Scripts de l'application -->

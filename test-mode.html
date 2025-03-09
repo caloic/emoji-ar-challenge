@@ -2,17 +2,28 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mode Test - Chasse aux Emoji Secrets</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/card.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Styles de base */
         body {
             background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
             min-height: 100vh;
             padding: 20px;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        body.interaction-active {
+            overflow: hidden; /* Empêche le défilement du corps lors d'une interaction */
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
         .test-container {
@@ -28,6 +39,7 @@
             text-align: center;
             color: #6e8efb;
             margin-bottom: 20px;
+            font-size: 1.8rem;
         }
 
         .description {
@@ -38,7 +50,7 @@
 
         .emoji-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -50,6 +62,11 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            touch-action: manipulation; /* Amélioration pour le toucher */
+        }
+
+        .emoji-card:active {
+            transform: scale(0.95);
         }
 
         .emoji-card:hover {
@@ -65,11 +82,16 @@
         .emoji-title {
             font-weight: 600;
             margin-bottom: 5px;
+            font-size: 0.9rem;
         }
 
         .emoji-description {
             font-size: 0.8rem;
             color: #666;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .test-footer {
@@ -83,11 +105,13 @@
             background-color: #6e8efb;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 15px 30px; /* Plus grand pour mobile */
             border-radius: 30px;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s;
+            touch-action: manipulation;
         }
 
         .generate-card-button:hover {
@@ -95,7 +119,7 @@
             transform: translateY(-2px);
         }
 
-        /* Styles pour le conteneur d'interaction (repris de main.css avec quelques ajustements) */
+        /* Styles pour le conteneur d'interaction */
         .interaction-container {
             position: fixed;
             top: 0;
@@ -108,7 +132,31 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
+            padding: 0; /* Pas de padding fixe */
+            overflow-y: auto; /* Permet le défilement interne */
+            -webkit-overflow-scrolling: touch; /* Défilement fluide sur iOS */
+        }
+
+        .interaction-wrapper {
             padding: 20px;
+            width: 100%;
+            max-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+
+        .interaction-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            margin: 20px auto;
+            overflow-y: auto; /* Permet de défiler le contenu de la carte */
+            max-height: 85vh;
+            touch-action: pan-y; /* Permet le défilement vertical tactile */
         }
 
         /* Style pour la carte d'identité */
@@ -121,12 +169,119 @@
             background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
             display: none;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Changé pour permettre le défilement */
             align-items: center;
             z-index: 1000;
             padding: 20px;
             color: white;
             text-align: center;
+            overflow-y: auto; /* Permet le défilement */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .congrats-title {
+            font-size: 1.8rem;
+            margin-top: 30px;
+        }
+
+        .digital-card {
+            margin: 20px 0;
+            /* Le reste des styles est dans card.css */
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap; /* Pour mobile */
+        }
+
+        .button {
+            background-color: #a777e3;
+            color: white;
+            border: none;
+            padding: 12px 25px; /* Plus grand pour mobile */
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            touch-action: manipulation;
+        }
+
+        /* Améliorations pour les interactions spécifiques */
+        .code-container, .drawing-tools, .social-post-creator, .chatbot-container, .crypto-container {
+            touch-action: pan-y;
+        }
+
+        #drawing-canvas, .game-container canvas {
+            touch-action: pinch-zoom;
+        }
+
+        .game-controls, .filter-selector, .tools-buttons, .template-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-button, .filter-button, .tool-button, .template-button {
+            margin: 5px;
+            min-width: 40px;
+            min-height: 40px; /* Taille minimale pour touch */
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .test-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .emoji-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .emoji-icon {
+                font-size: 2.5rem;
+            }
+
+            .interaction-card {
+                padding: 15px;
+            }
+
+            /* Ajuster les margins pour laisser plus de place au contenu */
+            .interaction-content {
+                margin-bottom: 10px;
+            }
+
+            /* Plus d'espace pour les boutons sur mobile */
+            .button, .generate-card-button, .control-button {
+                padding: 12px 20px;
+            }
+
+            /* Position fixe pour certains contrôles d'interaction */
+            .interaction-buttons {
+                position: sticky;
+                bottom: 0;
+                background-color: white;
+                padding-top: 10px;
+                margin-bottom: 0;
+                z-index: 10;
+            }
+        }
+
+        /* Pour les grands écrans */
+        @media (min-width: 992px) {
+            .emoji-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
     </style>
 </head>
@@ -136,7 +291,7 @@
     <p class="description">
         Ce mode de test vous permet d'essayer toutes les animations et interactions
         sans avoir besoin de scanner les marqueurs AR.
-        Cliquez simplement sur un emoji pour voir son interaction!
+        Touchez simplement un emoji pour voir son interaction!
     </p>
 
     <div class="emoji-grid" id="emoji-grid">
@@ -149,7 +304,9 @@
 </div>
 
 <!-- Conteneur pour les interactions -->
-<div class="interaction-container" id="interaction-container"></div>
+<div class="interaction-container" id="interaction-container">
+    <div class="interaction-wrapper" id="interaction-wrapper"></div>
+</div>
 
 <!-- Écran de félicitations et carte d'identité digitale -->
 <div class="complete-screen" id="complete-screen">
@@ -165,25 +322,11 @@
         <button class="button" id="share-button">Partager</button>
     </div>
 
-    <button class="button" id="continue-button">Continuer</button>
+    <button class="button" id="continue-button" style="margin-bottom: 30px;">Continuer</button>
 </div>
 
 <!-- Importation des scripts nécessaires -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/emoji-manager.js"></script>
-<script src="js/card-generator.js"></script>
-
-<!-- Scripts des interactions -->
-<script src="js/interactions/computer.js"></script>
-<script src="js/interactions/security.js"></script>
-<script src="js/interactions/gaming.js"></script>
-<script src="js/interactions/architecture.js"></script>
-<script src="js/interactions/video.js"></script>
-<script src="js/interactions/design.js"></script>
-<script src="js/interactions/ai.js"></script>
-<script src="js/interactions/marketing.js"></script>
-<script src="js/interactions/business.js"></script>
 
 <script>
     // Données des emojis
@@ -235,8 +378,461 @@
         }
     };
 
-    // Gestionnaire d'emojis et générateur de carte
-    let emojiManager, cardGenerator;
+    // Simuler les classes et fonctions requises pour le test
+
+    // Gestionnaire d'emojis simplifié
+    class EmojiManager {
+        constructor(emojiData) {
+            this.emojiData = emojiData;
+            this.foundEmojis = {};
+
+            // Initialiser tous les emojis comme non trouvés
+            Object.keys(this.emojiData).forEach(emojiId => {
+                this.foundEmojis[emojiId] = false;
+            });
+        }
+
+        markAsFound(emojiId) {
+            if (!this.emojiData[emojiId]) return false;
+
+            const wasFound = this.foundEmojis[emojiId];
+            this.foundEmojis[emojiId] = true;
+
+            // Simuler l'événement
+            const event = new CustomEvent('emojiFound', {
+                detail: { emojiId }
+            });
+            document.dispatchEvent(event);
+
+            return !wasFound;
+        }
+
+        isFound(emojiId) {
+            return this.foundEmojis[emojiId] === true;
+        }
+
+        getFoundCount() {
+            return Object.values(this.foundEmojis).filter(found => found).length;
+        }
+
+        getFoundEmojiIds() {
+            return Object.keys(this.foundEmojis).filter(emojiId => this.foundEmojis[emojiId]);
+        }
+
+        getEmojiData(emojiId) {
+            return this.emojiData[emojiId] || null;
+        }
+    }
+
+    // Générateur de carte simplifié
+    class CardGenerator {
+        constructor(emojiManager, config) {
+            this.emojiManager = emojiManager;
+            this.config = config;
+            this.cardHTML = '';
+        }
+
+        generateCard() {
+            const foundEmojiIds = this.emojiManager.getFoundEmojiIds();
+
+            // Générer la date
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('fr-FR');
+
+            // Générer un numéro de série
+            const serialNumber = 'YNV-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+            // Construire les emojis
+            let emojisHTML = '';
+            foundEmojiIds.forEach(emojiId => {
+                const emojiData = this.emojiManager.getEmojiData(emojiId);
+                emojisHTML += `
+                        <div class="card-emoji-item">
+                            <span class="card-emoji-icon">${emojiData.emoji}</span>
+                            <span class="card-emoji-name">${emojiData.title}</span>
+                        </div>
+                    `;
+            });
+
+            // Construire le HTML
+            this.cardHTML = `
+                    <div class="digital-id-card">
+                        <div class="card-header">
+                            <img src="assets/images/icons/ynov-logo.svg" alt="Ynov Campus" class="card-logo" style="height: 40px;">
+                            <div class="card-title">Carte d'Identité Digitale</div>
+                        </div>
+
+                        <div class="card-user-info">
+                            <div class="card-avatar" style="border-color: #ffcc00;">
+                                <div style="font-size: 2rem;">😎</div>
+                            </div>
+                            <div class="card-user-details">
+                                <div class="card-user-name">Visiteur Ynov Campus</div>
+                                <div class="card-date">Délivrée le ${formattedDate}</div>
+                                <div class="card-serial">N° ${serialNumber}</div>
+                            </div>
+                        </div>
+
+                        <div class="card-emojis-section">
+                            <div class="card-section-title" style="color: #ffcc00;">Compétences Découvertes</div>
+                            <div class="card-emojis-grid">
+                                ${emojisHTML}
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="card-footer-text">Campus Montpellier</div>
+                            <div class="card-badge" style="border-color: #ffcc00;">
+                                ${foundEmojiIds.length}/9
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            return this.cardHTML;
+        }
+
+        getCardHTML() {
+            return this.cardHTML;
+        }
+    }
+
+    // Simuler les interactions
+    function computerInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Voici un mini-jeu de debug! Trouvez l'erreur dans ce code:</p>
+                    </div>
+
+                    <div style="background: #282c34; color: white; padding: 15px; border-radius: 8px; font-family: monospace; margin: 15px 0; overflow-x: auto;">
+                    function calculerSomme(tableau) {<br>
+                      &nbsp;&nbsp;let somme = 0;<br>
+                      &nbsp;&nbsp;for (let i = 0; i &lt;= tableau.length; i++) {<br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;somme += tableau[i];<br>
+                      &nbsp;&nbsp;}<br>
+                      &nbsp;&nbsp;return somme;<br>
+                    }
+                    </div>
+
+                    <div style="background: #f0f0f0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p><strong>Indice:</strong> Attention à la condition dans la boucle!</p>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function securityInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Déchiffrez ce message codé:</p>
+                    </div>
+
+                    <div style="background: #1a1a2e; color: #e2e2e2; padding: 20px; border-radius: 8px; text-align: center; font-family: monospace; margin: 15px 0;">
+                        ZNPW DBNQVT FTU MB HSBOEF FDPMF EV OVNFSJRVF
+                    </div>
+
+                    <div style="background: #0f3460; padding: 15px; border-radius: 8px; margin: 15px 0; color: white;">
+                        <p><strong>Indice:</strong> Décalage d'une lettre (chiffre de César)</p>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function gamingInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Interagissez avec ce personnage:</p>
+                    </div>
+
+                    <div style="background: #1e272e; border-radius: 8px; padding: 20px; margin: 15px 0; height: 200px; display: flex; justify-content: center; align-items: center;">
+                        <div style="font-size: 5rem; animation: bounce 2s infinite alternate;">🧍</div>
+                    </div>
+
+                    <div class="game-controls" style="display: flex; justify-content: center; gap: 10px; margin: 15px 0;">
+                        <button style="background: #4a69bd; color: white; border: none; padding: 10px 20px; border-radius: 20px;">Sauter</button>
+                        <button style="background: #4a69bd; color: white; border: none; padding: 10px 20px; border-radius: 20px;">Danser</button>
+                        <button style="background: #4a69bd; color: white; border: none; padding: 10px 20px; border-radius: 20px;">Saluer</button>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function architectureInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Transformez cet espace avec différents styles:</p>
+                    </div>
+
+                    <div style="background: #e0c3fc; border-radius: 10px; padding: 15px; margin: 15px 0;">
+                        <div style="background: white; height: 150px; border-radius: 8px; display: flex; justify-content: center; align-items: center;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 3rem;">🏠</div>
+                                <div>Vue d'ensemble</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                            <button style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px;">Moderne</button>
+                            <button style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px;">Industriel</button>
+                            <button style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px;">Scandinave</button>
+                            <button style="background: #f0f0f0; border: none; padding: 8px 15px; border-radius: 20px;">Art Déco</button>
+                        </div>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function videoInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Devenez réalisateur en appliquant des effets cinématographiques!</p>
+                    </div>
+
+                    <div style="background: #222; color: white; border-radius: 10px; padding: 15px; margin: 15px 0;">
+                        <div style="border: 20px solid black; height: 150px; display: flex; justify-content: center; align-items: center; background: #000;">
+                            <div style="font-size: 3rem;">🎬</div>
+                        </div>
+
+                        <div style="margin: 15px 0;">
+                            <div style="font-weight: bold; margin-bottom: 10px;">Choisissez un genre:</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                <button style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px;">Film Noir</button>
+                                <button style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px;">Western</button>
+                                <button style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px;">Sci-Fi</button>
+                                <button style="background: #444; color: white; border: none; padding: 8px 12px; border-radius: 20px;">Horreur</button>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: center; gap: 15px;">
+                            <button style="background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 5px;">ACTION!</button>
+                            <button style="background: #f44336; color: white; border: none; padding: 10px 15px; border-radius: 5px;">COUPEZ!</button>
+                        </div>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function designInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Exprimez votre créativité sur cette toile virtuelle!</p>
+                    </div>
+
+                    <div style="background: white; border-radius: 10px; padding: 15px; margin: 15px 0;">
+                        <div style="background: #f5f5f5; height: 200px; border-radius: 5px; border: 1px solid #ddd; display: flex; justify-content: center; align-items: center;">
+                            <div style="font-size: 3rem;">🎨</div>
+                        </div>
+
+                        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                            <button style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ddd; background: white; display: flex; justify-content: center; align-items: center;">🖌️</button>
+                            <button style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ddd; background: white; display: flex; justify-content: center; align-items: center;">✒️</button>
+                            <button style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ddd; background: white; display: flex; justify-content: center; align-items: center;">💨</button>
+                            <button style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ddd; background: white; display: flex; justify-content: center; align-items: center;">⭐</button>
+                            <button style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ddd; background: white; display: flex; justify-content: center; align-items: center;">🧽</button>
+                        </div>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function aiInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Discutez avec notre IA pour découvrir votre parcours idéal!</p>
+                    </div>
+
+                    <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: #f5f5f5; padding: 12px 15px; border-bottom: 1px solid #eee;">
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 30px; height: 30px; background: #1e3c72; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 10px; color: white;">🤖</div>
+                                <div style="font-weight: 600; color: #333;">YnovBot</div>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #4caf50;">En ligne</div>
+                        </div>
+
+                        <div style="padding: 15px; height: 200px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="background: #e3f2fd; color: #333; padding: 10px 15px; border-radius: 15px; border-bottom-left-radius: 5px; align-self: flex-start; max-width: 80%;">
+                                Bonjour! Je suis YnovBot, l'assistant intelligent d'Ynov Campus!
+                            </div>
+                            <div style="background: #e3f2fd; color: #333; padding: 10px 15px; border-radius: 15px; border-bottom-left-radius: 5px; align-self: flex-start; max-width: 80%;">
+                                Je vais vous poser quelques questions pour déterminer quel parcours dans le numérique vous conviendrait le mieux! 🚀
+                            </div>
+                            <div style="background: #e3f2fd; color: #333; padding: 10px 15px; border-radius: 15px; border-bottom-left-radius: 5px; align-self: flex-start; max-width: 80%;">
+                                Quelle technologie vous attire le plus?
+                            </div>
+                        </div>
+
+                        <div style="padding: 15px; border-top: 1px solid #eee; background: white;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                                <button style="background: #e3f2fd; border: 1px solid #bbdefb; border-radius: 20px; padding: 8px 15px; color: #1e3c72;">Programmation</button>
+                                <button style="background: #e3f2fd; border: 1px solid #bbdefb; border-radius: 20px; padding: 8px 15px; color: #1e3c72;">Analyse de données</button>
+                                <button style="background: #e3f2fd; border: 1px solid #bbdefb; border-radius: 20px; padding: 8px 15px; color: #1e3c72;">Design</button>
+                                <button style="background: #e3f2fd; border: 1px solid #bbdefb; border-radius: 20px; padding: 8px 15px; color: #1e3c72;">Sécurité</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function marketingInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Créez une publication captivante pour les réseaux sociaux!</p>
+                    </div>
+
+                    <div style="background: white; border-radius: 10px; padding: 15px; margin: 15px 0; display: flex; flex-direction: column; gap: 15px;">
+                        <div style="background: #f5f5f5; border-radius: 10px; padding: 15px; text-align: center;">
+                            <div style="background: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%); width: 80%; height: 180px; margin: 0 auto; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; padding: 20px;">
+                                <div style="font-size: 2rem; margin-bottom: 10px;">🎉</div>
+                                <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">Événement spécial</div>
+                                <div style="font-size: 0.9rem; margin-bottom: 15px;">Rejoignez-nous pour un événement exceptionnel!</div>
+                                <button style="background: white; color: #333; border: none; padding: 5px 15px; border-radius: 20px; font-weight: 600;">Je participe!</button>
+                            </div>
+                        </div>
+
+                        <div style="background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                            <div style="font-weight: 600; margin-bottom: 10px; color: #5B247A;">Type de post</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                <button style="padding: 6px 12px; border: 2px solid #5B247A; border-radius: 20px; background: #5B247A; color: white;">Événement</button>
+                                <button style="padding: 6px 12px; border: 2px solid #eee; border-radius: 20px; background: white;">Promotion</button>
+                                <button style="padding: 6px 12px; border: 2px solid #eee; border-radius: 20px; background: white;">Nouveauté</button>
+                                <button style="padding: 6px 12px; border: 2px solid #eee; border-radius: 20px; background: white;">Témoignage</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
+
+    function businessInteraction(container, emojiData, onComplete) {
+        container.innerHTML = `
+                <div class="interaction-card">
+                    <div class="interaction-emoji">${emojiData.emoji}</div>
+                    <h2 class="interaction-title">${emojiData.title}</h2>
+                    <div class="interaction-description">
+                        <p>${emojiData.description}</p>
+                        <p>Investissez dans une startup et voyez comment évolue votre investissement!</p>
+                    </div>
+
+                    <div style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); margin: 15px 0;">
+                        <div style="padding: 20px;">
+                            <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 15px; color: #24243e; text-align: center;">Choisissez une startup</h3>
+
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px;">
+                                <div style="border: 2px solid #302b63; border-radius: 8px; padding: 10px; text-align: center; background-color: #f0f0f7;">
+                                    <div style="font-size: 2rem; margin-bottom: 5px;">🌱</div>
+                                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 5px;">EcoTech</div>
+                                    <div style="font-size: 0.8rem; color: #666;">Écologie</div>
+                                </div>
+                                <div style="border: 2px solid #eee; border-radius: 8px; padding: 10px; text-align: center;">
+                                    <div style="font-size: 2rem; margin-bottom: 5px;">🩺</div>
+                                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 5px;">HealthAI</div>
+                                    <div style="font-size: 0.8rem; color: #666;">Santé</div>
+                                </div>
+                            </div>
+
+                            <div style="background: #f9f9f9; border-radius: 8px; padding: 15px;">
+                                <div style="display: flex; align-items: center; gap: 10px; font-weight: 600;">
+                                    🌱 EcoTech
+                                    <span style="display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; background-color: #fff8e1; color: #f57f17;">Risque moyen</span>
+                                </div>
+                                <div style="font-size: 0.9rem; line-height: 1.4; margin-top: 10px;">
+                                    Solutions technologiques pour l'environnement et le développement durable.
+                                </div>
+                                <button style="background-color: #302b63; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-weight: 600; margin-top: 15px; width: 100%;">Sélectionner</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interaction-buttons">
+                        <button class="button" id="demo-continue">Continuer</button>
+                    </div>
+                </div>
+            `;
+
+        document.getElementById('demo-continue').addEventListener('click', onComplete);
+    }
 
     // Interactions associées à chaque emoji
     const interactions = {
@@ -250,6 +846,9 @@
         'marketing': marketingInteraction,
         'business': businessInteraction
     };
+
+    // Variables d'état
+    let emojiManager, cardGenerator;
 
     // Fonction d'initialisation
     function init() {
@@ -270,6 +869,15 @@
         document.getElementById('continue-button').addEventListener('click', hideCard);
         document.getElementById('download-button').addEventListener('click', downloadCard);
         document.getElementById('share-button').addEventListener('click', shareCard);
+
+        // Écouteurs pour l'interaction-container
+        const interactionContainer = document.getElementById('interaction-container');
+        interactionContainer.addEventListener('click', function(e) {
+            if (e.target === interactionContainer) {
+                // L'utilisateur a cliqué en dehors de la carte d'interaction
+                // Ne rien faire, on garde l'interaction ouverte
+            }
+        });
     }
 
     // Générer la grille d'emojis
@@ -306,13 +914,21 @@
         const emojiData = emojiManager.getEmojiData(emojiId);
 
         if (interactionFunction && emojiData) {
-            // Montrer le conteneur d'interaction
+            // Empêcher le défilement du corps
+            document.body.classList.add('interaction-active');
+
+            // Montrer le conteneur d'interaction et préparer le wrapper
             const interactionContainer = document.getElementById('interaction-container');
+            const interactionWrapper = document.getElementById('interaction-wrapper');
+
             interactionContainer.style.display = 'flex';
             interactionContainer.classList.add('fade-in');
 
+            // Vider le conteneur d'interaction
+            interactionWrapper.innerHTML = '';
+
             // Appeler la fonction d'interaction
-            interactionFunction(interactionContainer, emojiData, () => {
+            interactionFunction(interactionWrapper, emojiData, () => {
                 // Callback lorsque l'interaction est terminée
                 interactionContainer.classList.add('fade-out');
 
@@ -320,7 +936,10 @@
                 setTimeout(() => {
                     interactionContainer.style.display = 'none';
                     interactionContainer.classList.remove('fade-out');
-                    interactionContainer.innerHTML = '';
+                    interactionWrapper.innerHTML = '';
+
+                    // Réactiver le défilement du corps
+                    document.body.classList.remove('interaction-active');
                 }, 500);
             });
         }
@@ -330,6 +949,9 @@
     function generateCard() {
         // Générer la carte
         cardGenerator.generateCard();
+
+        // Empêcher le défilement du corps
+        document.body.classList.add('interaction-active');
 
         // Afficher l'écran de félicitations
         const digitalCard = document.getElementById('digital-card');
@@ -347,6 +969,9 @@
         setTimeout(() => {
             completeScreen.style.display = 'none';
             completeScreen.classList.remove('fade-out');
+
+            // Réactiver le défilement du corps
+            document.body.classList.remove('interaction-active');
         }, 500);
     }
 
