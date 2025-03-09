@@ -4,8 +4,8 @@ const CACHE_NAME = 'emoji-ar-cache-v1';
 // Liste des ressources à mettre en cache
 const CACHED_ASSETS = [
     './',
+    './qr-code.html',
     './index.html',
-    './app.html',
     './manifest.json',
     './css/main.css',
     './css/animations.css',
