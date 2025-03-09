@@ -84,7 +84,7 @@
     window.onload = function() {
         const qr = qrcode(0, 'M');
         // URL complète basée sur l'emplacement actuel
-        const appUrl = window.location.href.replace('qr-code.html', '') + 'app.html';
+        const appUrl = window.location.href.replace('qr-code.html', '') + 'index.html';
         qr.addData(appUrl);
         qr.make();
         document.getElementById('qrcode').src = qr.createDataURL(10, 0);
