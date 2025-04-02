@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chasse aux Emoji Secrets - Ynov Campus Montpellier</title>
-    <meta name="description" content="Jeu de chasse aux trésors en réalité augmentée pour les Journées Portes Ouvertes d'Ynov Campus Montpellier">
+    <title>Chasse aux Emoji Secrets - Ynov Campus</title>
+    <meta name="description" content="Jeu de chasse aux trésors en QR codes pour les Journées Portes Ouvertes d'Ynov Campus Montpellier">
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/main.css">
@@ -17,93 +17,419 @@
     <meta name="theme-color" content="#6e8efb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Emoji AR">
+    <meta name="apple-mobile-web-app-title" content="Emoji QR">
 
     <!-- Favicon -->
     <link rel="icon" href="./assets/images/icons/ynov-logo-white.svg" type="image/x-icon">
     <link rel="apple-touch-icon" href="./assets/images/icons/ynov-logo-white.svg">
 
-    <!-- Icons for Apple devices -->
-    <link rel="apple-touch-icon" sizes="57x57" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="60x60" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="72x72" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="76x76" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="114x114" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="120x120" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="144x144" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="152x152" href="./assets/images/icons/ynov-logo-white.svg">
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/icons/ynov-logo-white.svg">
-
     <!-- Scripts externes -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <style>
+        /* Styles spécifiques pour l'interface mobile améliorée */
+        body {
+            background: linear-gradient(135deg, #6e8efb 0%, #a777e3 100%);
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .intro-overlay {
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .intro-content {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .intro-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .emoji-big {
+            font-size: 4rem;
+            text-align: center;
+            margin: 10px 0;
+            animation: bounce 2s infinite alternate;
+        }
+
+        .intro-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .intro-steps {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .intro-steps ol {
+            margin: 0;
+            padding-left: 25px;
+        }
+
+        .intro-steps li {
+            margin-bottom: 8px;
+        }
+
+        .intro-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .primary-button {
+            background-color: #ffcc00;
+            color: #333;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .primary-button:hover, .primary-button:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .secondary-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+
+        .secondary-button:hover, .secondary-button:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .emoji-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .emoji-item {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+        }
+
+        .emoji-item.found {
+            background-color: #ffcc00;
+            box-shadow: 0 0 10px #ffcc00;
+        }
+
+        .progress-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .progress-count {
+            background-color: #ffcc00;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .scan-instructions {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .scan-instructions p {
+            margin: 0 0 10px 0;
+        }
+
+        .scan-arrow {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            animation: bounce 1s infinite alternate;
+        }
+
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(110, 142, 251, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .action-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-button:hover, .action-button:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .action-button.primary {
+            background-color: #ffcc00;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .help-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .help-content {
+            background-color: white;
+            color: #333;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+        }
+
+        .help-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #6e8efb;
+        }
+
+        .help-steps {
+            margin-bottom: 20px;
+        }
+
+        .help-steps ol {
+            padding-left: 25px;
+        }
+
+        .help-steps li {
+            margin-bottom: 8px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .qr-instructions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .qr-phone-img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .qr-steps {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .intro-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .primary-button, .secondary-button {
+                min-width: 200px;
+            }
+        }
+    </style>
 </head>
 <body>
 <!-- Écran d'introduction -->
 <div class="intro-overlay" id="intro-screen">
     <div class="intro-content">
-        <h1 class="intro-title">Chasse aux Emoji Secrets</h1>
+        <h1 class="intro-title">Chasse aux Emoji</h1>
         <div class="emoji-big">🔍</div>
-        <p>Bienvenue à la chasse aux emojis secrets d'Ynov Campus Montpellier!</p>
-        <p>Explorez l'Atrium et trouvez les 9 QR codes cachés, chacun représentant une filière de l'école.</p>
-        <p>Utilisez <strong>l'appareil photo de votre téléphone</strong> pour scanner les QR codes et découvrir les interactions!</p>
+
+        <div class="intro-description">
+            <p>Bienvenue à la chasse aux emojis d'Ynov Campus Montpellier!</p>
+        </div>
+
+        <div class="intro-steps">
+            <ol>
+                <li>Parcourez l'Atrium pour trouver les 9 QR codes cachés</li>
+                <li>Scannez-les avec l'appareil photo de votre téléphone</li>
+                <li>Découvrez les filières d'Ynov et collectez les emojis</li>
+                <li>Trouvez-en au moins 5 pour obtenir votre carte d'identité digitale</li>
+            </ol>
+        </div>
+
+        <div class="emoji-grid">
+            <div class="emoji-item">💻</div>
+            <div class="emoji-item">🔒</div>
+            <div class="emoji-item">🎮</div>
+            <div class="emoji-item">🏠</div>
+            <div class="emoji-item">🎬</div>
+            <div class="emoji-item">🎨</div>
+            <div class="emoji-item">🤖</div>
+            <div class="emoji-item">📱</div>
+            <div class="emoji-item">💼</div>
+        </div>
+
         <div class="intro-buttons">
-            <button class="start-button" id="start-button">Voir ma progression</button>
-            <button class="camera-button" id="open-camera-button">Ouvrir l'appareil photo</button>
+            <button class="primary-button" id="start-button">
+                <span>Commencer</span>
+                <span>→</span>
+            </button>
         </div>
     </div>
 </div>
 
-<!-- Conteneur d'informations -->
-<div class="instruction-container">
-    <div class="qr-instructions">
-        <h2>Comment jouer?</h2>
-        <ol>
-            <li>Parcourez l'Atrium pour trouver les 9 QR codes cachés</li>
-            <li>Utilisez l'appareil photo de votre téléphone pour scanner chaque QR code</li>
-            <li>Découvrez une filière d'Ynov Campus avec une interaction unique</li>
-            <li>Collectez au moins 5 emojis pour obtenir votre carte d'identité digitale</li>
-        </ol>
-        <button class="camera-button" id="instruction-camera-button">Scanner un QR code</button>
-        <div class="emoji-preview">
-            <div class="emoji">💻</div>
-            <div class="emoji">🔒</div>
-            <div class="emoji">🎮</div>
-            <div class="emoji">🏠</div>
-            <div class="emoji">🎬</div>
-            <div class="emoji">🎨</div>
-            <div class="emoji">🤖</div>
-            <div class="emoji">📱</div>
-            <div class="emoji">💼</div>
+<!-- Écran de progression -->
+<div class="progress-container" id="progress-screen" style="display: none;">
+    <div class="progress-header">
+        <div class="progress-title">Votre progression</div>
+        <div class="progress-count"><span id="found-count">0</span>/9</div>
+    </div>
+
+    <div class="emoji-grid" id="emoji-progress-grid">
+        <div class="emoji-item" data-emoji="informatique">💻</div>
+        <div class="emoji-item" data-emoji="cybersecurite">🔒</div>
+        <div class="emoji-item" data-emoji="gaming">🎮</div>
+        <div class="emoji-item" data-emoji="architecture">🏠</div>
+        <div class="emoji-item" data-emoji="audiovisuel">🎬</div>
+        <div class="emoji-item" data-emoji="design">🎨</div>
+        <div class="emoji-item" data-emoji="ai">🤖</div>
+        <div class="emoji-item" data-emoji="marketing">📱</div>
+        <div class="emoji-item" data-emoji="business">💼</div>
+    </div>
+
+    <div class="scan-instructions">
+        <p>Pour scanner un QR code:</p>
+        <div class="qr-instructions">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxyZWN0IHg9IjUiIHk9IjUiIHdpZHRoPSIxNCIgaGVpZ2h0PSIxOSIgcng9IjIiIHJ5PSIyIj48L3JlY3Q+PHBhdGggZD0iTTEyIDN2MiI+PC9wYXRoPjxwYXRoIGQ9Ik05IDIxaDYiPjwvcGF0aD48L3N2Zz4=" class="qr-phone-img" alt="Phone icon">
+            <div class="qr-steps">
+                <p>1. Ouvrez l'appareil photo de votre téléphone</p>
+                <p>2. Pointez vers un QR code</p>
+                <p>3. Appuyez sur la notification qui apparaît</p>
+            </div>
         </div>
+        <div class="scan-arrow">⬇️</div>
     </div>
 </div>
 
-<!-- Interface utilisateur -->
-<div class="ui-container">
-    <!-- Barre de progression -->
-    <div class="progress-bar" id="progress-bar">
-        <div class="emoji-counter"><span id="found-count">0</span>/9</div>
-        <div class="emoji-icons" id="emoji-icons">
-            <div class="emoji-icon" data-emoji="informatique">💻</div>
-            <div class="emoji-icon" data-emoji="cybersecurite">🔒</div>
-            <div class="emoji-icon" data-emoji="gaming">🎮</div>
-            <div class="emoji-icon" data-emoji="architecture">🏠</div>
-            <div class="emoji-icon" data-emoji="audiovisuel">🎬</div>
-            <div class="emoji-icon" data-emoji="design">🎨</div>
-            <div class="emoji-icon" data-emoji="ai">🤖</div>
-            <div class="emoji-icon" data-emoji="marketing">📱</div>
-            <div class="emoji-icon" data-emoji="business">💼</div>
-        </div>
-    </div>
-
-    <!-- Bouton d'aide -->
-    <div class="help-button" id="help-button">?</div>
-
-    <!-- Bouton caméra flottant -->
-    <div class="camera-button-floating" id="floating-camera-button">📷</div>
-</div>
-
-<!-- Conteneur pour les interactions avec wrapper -->
+<!-- Conteneur pour les interactions -->
 <div class="interaction-container" id="interaction-container" style="display: none;">
     <div class="interaction-wrapper" id="interaction-wrapper">
         <!-- Le contenu sera généré dynamiquement en fonction de l'emoji trouvé -->
@@ -126,6 +452,40 @@
     </div>
 
     <button class="button" id="continue-button">Continuer</button>
+</div>
+
+<!-- Fenêtre modale d'aide -->
+<div class="help-modal" id="help-modal">
+    <div class="help-content">
+        <button class="close-button" id="close-help">×</button>
+        <div class="help-title">
+            <span>🔍</span>
+            <span>Comment jouer?</span>
+        </div>
+        <div class="help-steps">
+            <ol>
+                <li>Parcourez l'Atrium pour trouver les 9 QR codes cachés</li>
+                <li>Ouvrez l'appareil photo de votre téléphone</li>
+                <li>Pointez-le vers un QR code et cliquez sur la notification</li>
+                <li>Découvrez une filière Ynov et collectez son emoji</li>
+                <li>Trouvez au moins 5 emojis pour obtenir votre carte d'identité digitale</li>
+            </ol>
+        </div>
+        <div class="qr-instructions">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmU4ZWZiIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iNSIgeT0iNSIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE5IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48cGF0aCBkPSJNMTIgM3YyIj48L3BhdGg+PHBhdGggZD0iTTkgMjFoNiI+PC9wYXRoPjwvc3ZnPg==" class="qr-phone-img" alt="Phone icon">
+            <div class="qr-steps">
+                <p>Sur iPhone : ouvrez directement l'appareil photo</p>
+                <p>Sur Android : certains téléphones ont un lecteur QR code intégré, sinon utilisez l'appareil photo</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Boutons d'action fixes -->
+<div class="action-buttons" id="action-buttons" style="display: none;">
+    <button class="action-button" id="help-button" aria-label="Aide">❓</button>
+    <button class="action-button primary" id="camera-hint-button" aria-label="Scanner un QR code">📷</button>
+    <button class="action-button" id="progress-button" aria-label="Voir la progression">📊</button>
 </div>
 
 <!-- Scripts de l'application -->
@@ -151,122 +511,101 @@
 <!-- Service Worker -->
 <script src="js/sw-register.js"></script>
 
+<!-- Script pour l'interface utilisateur améliorée -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Éléments DOM
+        const introScreen = document.getElementById('intro-screen');
+        const progressScreen = document.getElementById('progress-screen');
+        const actionButtons = document.getElementById('action-buttons');
+        const helpModal = document.getElementById('help-modal');
+        const helpButton = document.getElementById('help-button');
+        const closeHelpButton = document.getElementById('close-help');
+        const cameraHintButton = document.getElementById('camera-hint-button');
+        const startButton = document.getElementById('start-button');
+
+        // Initialisation du gestionnaire d'emojis et contrôleur depuis main.js
+        // Ils seront disponibles via window.app
+
+        // Fonction pour ouvrir le modal d'aide
+        function openHelpModal() {
+            helpModal.classList.add('active');
+        }
+
+        // Fonction pour fermer le modal d'aide
+        function closeHelpModal() {
+            helpModal.classList.remove('active');
+        }
+
+        // Fonction pour donner des instructions sur comment ouvrir l'appareil photo
+        function showCameraInstructions() {
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            if (isIOS) {
+                alert("Pour scanner un QR code sur iPhone :\n\n1. Quittez cette page\n2. Ouvrez l'application Appareil Photo\n3. Pointez vers un QR code\n4. Appuyez sur la notification qui apparaît");
+            } else {
+                // Essaie d'ouvrir directement l'appareil photo sur Android
+                if (typeof window.app !== 'undefined' && typeof window.app.openCamera === 'function') {
+                    window.app.openCamera();
+                } else {
+                    alert("Pour scanner un QR code :\n\n1. Ouvrez l'appareil photo de votre téléphone\n2. Pointez vers un QR code\n3. Appuyez sur la notification qui apparaît");
+                }
+            }
+        }
+
+        // Afficher l'écran de progression
+        function showProgressScreen() {
+            introScreen.style.display = 'none';
+            progressScreen.style.display = 'block';
+            actionButtons.style.display = 'flex';
+
+            // Mettre à jour l'affichage des emojis trouvés
+            updateEmojiDisplay();
+        }
+
+        // Mettre à jour l'affichage des emojis trouvés
+        function updateEmojiDisplay() {
+            if (typeof window.app !== 'undefined' && window.app.emojiManager) {
+                const foundCount = document.getElementById('found-count');
+                foundCount.textContent = window.app.emojiManager.getFoundCount();
+
+                const emojiItems = document.querySelectorAll('.emoji-item[data-emoji]');
+                emojiItems.forEach(item => {
+                    const emojiId = item.getAttribute('data-emoji');
+                    if (window.app.emojiManager.isFound(emojiId)) {
+                        item.classList.add('found');
+                    } else {
+                        item.classList.remove('found');
+                    }
+                });
+            }
+        }
+
+        // Événements
+        startButton.addEventListener('click', showProgressScreen);
+        helpButton.addEventListener('click', openHelpModal);
+        closeHelpButton.addEventListener('click', closeHelpModal);
+        cameraHintButton.addEventListener('click', showCameraInstructions);
+
+        // Écouter les changements d'emoji trouvés
+        document.addEventListener('emojiFound', updateEmojiDisplay);
+
+        // Vérifier si un emoji est passé en paramètre URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const emojiParam = urlParams.get('emoji');
+
+        if (emojiParam) {
+            // Si on a un emoji en paramètre, aller directement à l'écran de progression
+            showProgressScreen();
+        }
+    });
+</script>
+
 <!-- No JavaScript Fallback -->
 <noscript>
     <div style="background-color: #f44336; color: white; padding: 15px; text-align: center; position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;">
         Cette application nécessite JavaScript pour fonctionner. Veuillez l'activer dans les paramètres de votre navigateur.
     </div>
 </noscript>
-
-<style>
-    .instruction-container {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        border-radius: 15px;
-        color: white;
-        display: none;
-    }
-
-    .qr-instructions {
-        text-align: center;
-    }
-
-    .qr-instructions h2 {
-        margin-bottom: 15px;
-    }
-
-    .qr-instructions ol {
-        text-align: left;
-        display: inline-block;
-        margin: 0 auto 20px;
-    }
-
-    .qr-instructions li {
-        margin-bottom: 10px;
-    }
-
-    .intro-buttons {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-        margin-top: 20px;
-    }
-
-    .camera-button {
-        background-color: #ffcc00;
-        color: #333;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 30px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .camera-button:before {
-        content: "📷";
-        font-size: 1.2rem;
-    }
-
-    .camera-button:hover {
-        background-color: #ffd740;
-        transform: translateY(-2px);
-    }
-
-    .camera-button-floating {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background-color: #ffcc00;
-        color: #333;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-        cursor: pointer;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        z-index: 90;
-        transition: all 0.2s;
-    }
-
-    .camera-button-floating:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    @media (min-width: 768px) {
-        .intro-buttons {
-            flex-direction: row;
-        }
-    }
-</style>
-
-<script>
-    // Afficher les instructions quand on clique sur "Voir ma progression"
-    document.getElementById('start-button').addEventListener('click', function() {
-        document.getElementById('intro-screen').style.display = 'none';
-        document.getElementById('progress-bar').style.display = 'flex';
-        document.querySelector('.instruction-container').style.display = 'block';
-    });
-
-    // Configurer les boutons d'appareil photo
-    document.querySelectorAll('#open-camera-button, #instruction-camera-button, #floating-camera-button').forEach(button => {
-        button.addEventListener('click', function() {
-            // Cette fonction est définie dans main.js
-            window.app.openCamera();
-        });
-    });
-</script>
 </body>
 </html>
