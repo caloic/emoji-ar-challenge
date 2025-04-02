@@ -7,28 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function securityInteraction(container, emojiData, onComplete) {
-    // Liste de messages chiffrés avec leurs solutions
-    const cryptoMessages = [
-        {
-            encrypted: "QOPV TBNQVT FTU MB HSBOEF FDPMF EV OVNFSJRVF",
-            hint: "Décalage d'une lettre (chiffre de César)",
-            solution: "YNOV CAMPUS EST LA GRANDE ECOLE DU NUMERIQUE"
-        },
-        {
-            encrypted: "01011001 01001110 01001111 01010110",
-            hint: "Conversion binaire en texte",
-            solution: "YNOV"
-        },
-        {
-            encrypted: "89 78 79 86",
-            hint: "Code ASCII (décimal)",
-            solution: "YNOV"
-        }
-    ];
-
-    // Choisir un message aléatoire
-    const randomIndex = Math.floor(Math.random() * cryptoMessages.length);
-    const selectedMessage = cryptoMessages[randomIndex];
+    // Message binaire à déchiffrer
+    const cryptoMessage = {
+        encrypted: "01011001 01001110 01001111 01010110",
+        hint: "Conversion binaire en texte",
+        solution: "YNOV"
+    };
 
     // Créer le contenu de l'interaction
     const content = `
@@ -37,16 +21,16 @@ function securityInteraction(container, emojiData, onComplete) {
             <h2 class="interaction-title">${emojiData.title}</h2>
             <div class="interaction-description">
                 <p>${emojiData.description}</p>
-                <p>Déchiffrez le message crypté pour débloquer le secret.</p>
+                <p>Déchiffrez le message binaire pour débloquer le secret.</p>
             </div>
             
             <div class="crypto-container">
-                <div class="encrypted-message">${selectedMessage.encrypted}</div>
+                <div class="encrypted-message">${cryptoMessage.encrypted}</div>
                 
                 <div class="crypto-clues">
                     <div class="clue-item" id="clue-1">
                         <div class="clue-icon">🔍</div>
-                        <div class="clue-content">Message mystérieux détecté</div>
+                        <div class="clue-content">Message binaire détecté</div>
                     </div>
                     
                     <div class="clue-item" id="clue-2" style="opacity: 0.3">
@@ -199,7 +183,7 @@ function securityInteraction(container, emojiData, onComplete) {
     hintButton.addEventListener('click', () => {
         // Afficher l'indice
         cryptoHint.style.display = 'block';
-        hintText.textContent = selectedMessage.hint;
+        hintText.textContent = cryptoMessage.hint;
 
         // Animer le troisième indice
         clue3.style.opacity = '1';
@@ -229,7 +213,7 @@ function securityInteraction(container, emojiData, onComplete) {
 
     solutionButton.addEventListener('click', () => {
         // Afficher la solution
-        solutionInput.value = selectedMessage.solution;
+        solutionInput.value = cryptoMessage.solution;
         solutionInput.classList.add('input-correct');
         validateButton.style.display = 'none';
         solutionButton.style.display = 'none';
@@ -237,7 +221,7 @@ function securityInteraction(container, emojiData, onComplete) {
 
         // Modifier le texte d'indice
         cryptoHint.style.display = 'block';
-        hintText.innerHTML = '<strong>Solution:</strong> ' + selectedMessage.solution;
+        hintText.innerHTML = '<strong>Solution:</strong> ' + cryptoMessage.solution;
     });
 
     continueButton.addEventListener('click', () => {
@@ -250,7 +234,7 @@ function securityInteraction(container, emojiData, onComplete) {
      */
     function validateSolution() {
         const userSolution = solutionInput.value.trim().toUpperCase();
-        const correctSolution = selectedMessage.solution;
+        const correctSolution = cryptoMessage.solution;
 
         if (userSolution === correctSolution) {
             // Solution correcte

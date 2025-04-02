@@ -1,75 +1,35 @@
 /**
  * Interaction pour l'emoji Informatique (💻)
- * Mini-jeu de debug : trouver et corriger une erreur dans un code
+ * Activité simple pour écrire "Hello World"
  *
  * @param {HTMLElement} container - Conteneur de l'interaction
  * @param {Object} emojiData - Données de l'emoji (emoji, titre, description)
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function computerInteraction(container, emojiData, onComplete) {
-    // Liste de snippets de code avec des erreurs à corriger
-    const codeSnippets = [
+    // Liste d'exemples "Hello World" en différents langages
+    const helloWorldExamples = [
         {
-            code: `function calculerSomme(tableau) {
-  let somme = 0;
-  for (let i = 0; i <= tableau.length; i++) {
-    somme += tableau[i];
-  }
-  return somme;
-}`,
-            error: "La boucle va trop loin et provoque une erreur d'index",
-            hint: "Attention aux limites de la boucle",
-            solution: `function calculerSomme(tableau) {
-  let somme = 0;
-  for (let i = 0; i < tableau.length; i++) {
-    somme += tableau[i];
-  }
-  return somme;
-}`
+            language: "Python",
+            code: "print('Hello, World!')"
         },
         {
-            code: `function estPremier(nombre) {
-  for (let i = 2; i < nombre; i++) {
-    if (nombre % i = 0) {
-      return false;
-    }
-  }
-  return nombre > 1;
-}`,
-            error: "Utilisation d'un = au lieu de == ou ===",
-            hint: "Attention à l'opérateur de comparaison",
-            solution: `function estPremier(nombre) {
-  for (let i = 2; i < nombre; i++) {
-    if (nombre % i === 0) {
-      return false;
-    }
-  }
-  return nombre > 1;
-}`
+            language: "JavaScript",
+            code: "console.log('Hello, World!');"
         },
         {
-            code: `function inverserChaine(chaine) {
-  let resultat = "";
-  for (let i = chaine.length; i >= 0; i--) {
-    resultat += chaine[i];
-  }
-  return resultat;
-}`,
-            error: "L'index commence à la longueur de la chaîne et inclut -1",
-            hint: "La première et dernière lettre ne sont pas traitées correctement",
-            solution: `function inverserChaine(chaine) {
-  let resultat = "";
-  for (let i = chaine.length - 1; i >= 0; i--) {
-    resultat += chaine[i];
-  }
-  return resultat;
-}`
+            language: "Java",
+            code: "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}"
+        },
+        {
+            language: "C",
+            code: "#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}"
+        },
+        {
+            language: "HTML",
+            code: "<!DOCTYPE html>\n<html>\n<head>\n    <title>Hello World</title>\n</head>\n<body>\n    <h1>Hello, World!</h1>\n</body>\n</html>"
         }
     ];
-
-    // Choisir un snippet aléatoire
-    const randomIndex = Math.floor(Math.random() * codeSnippets.length);
-    const selectedSnippet = codeSnippets[randomIndex];
 
     // Créer le contenu de l'interaction
     const content = `
@@ -78,22 +38,27 @@ function computerInteraction(container, emojiData, onComplete) {
             <h2 class="interaction-title">${emojiData.title}</h2>
             <div class="interaction-description">
                 <p>${emojiData.description}</p>
-                <p>Pouvez-vous trouver et corriger l'erreur dans ce code?</p>
+                <p>Écrivez un programme "Hello World" dans le langage de votre choix !</p>
             </div>
             
             <div class="code-container">
-                <pre><code class="code-editor" id="code-editor" contenteditable="true">${selectedSnippet.code}</code></pre>
+                <div class="language-selector">
+                    <label for="language-select">Choisissez un langage :</label>
+                    <select id="language-select">
+                        ${helloWorldExamples.map(ex => `<option value="${ex.language}">${ex.language}</option>`).join('')}
+                    </select>
+                </div>
+                <pre><code class="code-editor" id="code-editor" contenteditable="true"></code></pre>
                 <div class="hint-container">
-                    <button class="button hint-button" id="hint-button">Indice</button>
+                    <button class="button hint-button" id="hint-button">Voir un exemple</button>
                     <div class="hint-text" id="hint-text" style="display: none;">
-                        <p><strong>Indice:</strong> ${selectedSnippet.hint}</p>
+                        <p><strong>Exemple :</strong> <span id="example-code"></span></p>
                     </div>
                 </div>
             </div>
             
             <div class="interaction-buttons">
                 <button class="button" id="verify-button">Vérifier</button>
-                <button class="button" id="solution-button" style="display: none;">Voir la solution</button>
                 <button class="button" id="continue-button" style="display: none;">Continuer</button>
             </div>
         </div>
@@ -113,6 +78,20 @@ function computerInteraction(container, emojiData, onComplete) {
             overflow: hidden;
         }
         
+        .language-selector {
+            padding: 10px;
+            background-color: #1e272c;
+            border-bottom: 1px solid #37474f;
+        }
+        
+        .language-selector select {
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #37474f;
+            background-color: #263238;
+            color: white;
+        }
+        
         .code-editor {
             font-family: monospace;
             color: #fff;
@@ -122,6 +101,7 @@ function computerInteraction(container, emojiData, onComplete) {
             overflow-x: auto;
             outline: none;
             font-size: 14px;
+            min-height: 100px;
         }
         
         .hint-container {
@@ -159,32 +139,44 @@ function computerInteraction(container, emojiData, onComplete) {
     document.head.appendChild(style);
 
     // Éléments interactifs
+    const languageSelect = document.getElementById('language-select');
     const codeEditor = document.getElementById('code-editor');
     const hintButton = document.getElementById('hint-button');
     const hintText = document.getElementById('hint-text');
+    const exampleCode = document.getElementById('example-code');
     const verifyButton = document.getElementById('verify-button');
-    const solutionButton = document.getElementById('solution-button');
     const continueButton = document.getElementById('continue-button');
 
-    // Événements
-    hintButton.addEventListener('click', () => {
-        hintText.style.display = hintText.style.display === 'none' ? 'block' : 'none';
-    });
+    // Initialiser l'éditeur avec le premier exemple
+    updateLanguageExample();
 
-    verifyButton.addEventListener('click', () => {
-        // Vérifier le code
-        const userCode = codeEditor.textContent;
-        const isCorrect = verifyCode(userCode, selectedSnippet.solution);
+    // Fonctions
+    function updateLanguageExample() {
+        const selectedLanguage = languageSelect.value;
+        const example = helloWorldExamples.find(ex => ex.language === selectedLanguage);
+        if (example) {
+            exampleCode.textContent = example.code;
+        }
+    }
 
-        if (isCorrect) {
+    function verifyHelloWorld() {
+        const userCode = codeEditor.textContent.trim();
+        const selectedLanguage = languageSelect.value;
+
+        // Vérification simple : le code contient "Hello, World" (ou variante)
+        const containsHelloWorld = /hello,?\s*world/i.test(userCode);
+
+        if (containsHelloWorld) {
             // Code correct
             codeEditor.classList.add('code-correct');
             verifyButton.style.display = 'none';
             continueButton.style.display = 'block';
 
             // Afficher un message de réussite
-            hintText.innerHTML = '<p><strong>Bravo!</strong> Vous avez corrigé le code avec succès!</p>';
+            hintText.innerHTML = '<p><strong>Bravo!</strong> Vous avez correctement écrit un programme "Hello World" !</p>';
             hintText.style.display = 'block';
+
+            return true;
         } else {
             // Code incorrect
             codeEditor.classList.add('code-incorrect');
@@ -192,59 +184,25 @@ function computerInteraction(container, emojiData, onComplete) {
                 codeEditor.classList.remove('code-incorrect');
             }, 1000);
 
-            // Afficher un message d'erreur et le bouton de solution
-            hintText.innerHTML = '<p><strong>Pas tout à fait.</strong> Essayez encore ou consultez la solution.</p>';
+            // Afficher un message d'erreur
+            hintText.innerHTML = '<p><strong>Pas tout à fait.</strong> Votre code devrait afficher "Hello, World!" à l\'écran.</p>';
             hintText.style.display = 'block';
-            solutionButton.style.display = 'block';
+
+            return false;
         }
+    }
+
+    // Événements
+    languageSelect.addEventListener('change', updateLanguageExample);
+
+    hintButton.addEventListener('click', () => {
+        hintText.style.display = hintText.style.display === 'none' ? 'block' : 'none';
     });
 
-    solutionButton.addEventListener('click', () => {
-        codeEditor.textContent = selectedSnippet.solution;
-        codeEditor.classList.add('code-correct');
-        solutionButton.style.display = 'none';
-        verifyButton.style.display = 'none';
-        continueButton.style.display = 'block';
-
-        hintText.innerHTML = '<p><strong>Solution:</strong> Voici le code corrigé.</p>';
-        hintText.style.display = 'block';
-    });
+    verifyButton.addEventListener('click', verifyHelloWorld);
 
     continueButton.addEventListener('click', () => {
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });
-
-    /**
-     * Vérifie si le code de l'utilisateur est similaire à la solution
-     * (Utilise une comparaison simplifiée en normalisant les espaces)
-     *
-     * @param {string} userCode - Code saisi par l'utilisateur
-     * @param {string} solutionCode - Code de la solution
-     * @returns {boolean} - true si le code est similaire à la solution
-     */
-    function verifyCode(userCode, solutionCode) {
-        // Normaliser les espaces et supprimer les sauts de ligne pour la comparaison
-        const normalizeCode = (code) => {
-            return code
-                .replace(/\s+/g, ' ')
-                .replace(/\n/g, '')
-                .trim();
-        };
-
-        const normalizedUserCode = normalizeCode(userCode);
-        const normalizedSolutionCode = normalizeCode(solutionCode);
-
-        // Vérifier si les erreurs spécifiques ont été corrigées
-        if (selectedSnippet.error.includes("boucle")) {
-            return !userCode.includes("<= tableau.length");
-        } else if (selectedSnippet.error.includes("=")) {
-            return !userCode.includes("nombre % i = 0");
-        } else if (selectedSnippet.error.includes("index")) {
-            return !userCode.includes("i = chaine.length") && !userCode.includes("i >= 0");
-        }
-
-        // Si la vérification spécifique échoue, comparer les codes normalisés
-        return normalizedUserCode === normalizedSolutionCode;
-    }
 }
