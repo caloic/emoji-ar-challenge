@@ -12,6 +12,18 @@ function getEmojiFromUrl() {
     return urlParams.get('emoji');
 }
 
+const interactions = {
+    'informatique': computerInteraction,
+    'cybersecurite': securityInteraction,
+    'gaming': gamingInteraction,
+    'architecture': architectureInteraction,
+    'audiovisuel': videoInteraction,
+    'design': designInteraction,
+    'ai': aiInteraction,
+    'marketing': marketingInteraction,
+    'business': businessInteraction
+};
+
 /**
  * Ouvre l'application d'appareil photo du téléphone si possible
  * Note: Cette fonction peut ne pas fonctionner sur tous les appareils
@@ -121,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Vérifier si un emoji est spécifié dans l'URL (pour les QR codes)
     const emojiFromUrl = getEmojiFromUrl();
+    console.log("Emoji from URL:", emojiFromUrl);
+
     if (emojiFromUrl && appConfig.emojiData[emojiFromUrl]) {
         // Masquer l'écran d'introduction
         introScreen.style.display = 'none';
@@ -135,19 +149,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mettre à jour l'interface utilisateur
         updateUI();
 
-        // Déclencher l'interaction associée à cet emoji
-        setTimeout(() => {
-            const emojiData = appConfig.emojiData[emojiFromUrl];
-            const interactionFunction = arController.interactions[emojiFromUrl];
+        // Récupérer la fonction d'interaction
+        const interactionFunction = interactions[emojiFromUrl];
+        const emojiData = appConfig.emojiData[emojiFromUrl];
 
-            if (interactionFunction && emojiData) {
-                // Afficher l'interaction
+        // Déclencher l'interaction
+        if (interactionFunction && emojiData) {
+            setTimeout(() => {
                 interactionContainer.style.display = 'flex';
                 interactionContainer.classList.add('fade-in');
 
-                // Appeler la fonction d'interaction
                 interactionFunction(interactionContainer, emojiData, () => {
-                    // Callback lorsque l'interaction est terminée
                     interactionContainer.classList.add('fade-out');
 
                     setTimeout(() => {
@@ -159,29 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         checkCompletion();
                     }, 500);
                 });
-            }
-        }, 500);
-    } else {
-        // Comportement normal quand aucun emoji n'est spécifié
-        // Événement du bouton de démarrage
-        startButton.addEventListener('click', () => {
-            // Masquer l'écran d'introduction avec une animation
-            introScreen.classList.add('fade-out');
-            setTimeout(() => {
-                introScreen.style.display = 'none';
-                // Afficher la barre de progression
-                progressBar.style.display = 'flex';
-                progressBar.classList.add('fade-in');
-                // Afficher les instructions si elles existent
-                const instructionContainer = document.querySelector('.instruction-container');
-                if (instructionContainer) {
-                    instructionContainer.style.display = 'block';
-                }
             }, 500);
-
-            // La ligne suivante n'est plus nécessaire car nous n'utilisons plus les marqueurs AR
-            // arController.start();
-        });
+        }
     }
 
     // Événement du bouton d'aide
