@@ -3,6 +3,15 @@
  * Gère l'initialisation de l'application et la coordination entre les différents modules
  */
 
+/**
+ * Récupère le paramètre emoji de l'URL
+ * @returns {string|null} - L'ID de l'emoji ou null si non trouvé
+ */
+function getEmojiFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('emoji');
+}
+
 // Attendre que le DOM soit chargé
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Application Chasse aux Emoji Secrets - Initialisation...");
@@ -82,20 +91,65 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialisation du générateur de carte
     const cardGenerator = new CardGenerator(emojiManager, appConfig);
 
-    // Événement du bouton de démarrage
-    startButton.addEventListener('click', () => {
-        // Masquer l'écran d'introduction avec une animation
-        introScreen.classList.add('fade-out');
-        setTimeout(() => {
-            introScreen.style.display = 'none';
-            // Afficher la barre de progression
-            progressBar.style.display = 'flex';
-            progressBar.classList.add('fade-in');
-        }, 500);
+    // Vérifier si un emoji est spécifié dans l'URL (pour les QR codes)
+    const emojiFromUrl = getEmojiFromUrl();
+    if (emojiFromUrl && appConfig.emojiData[emojiFromUrl]) {
+        // Masquer l'écran d'introduction
+        introScreen.style.display = 'none';
 
-        // Démarrer la détection AR
-        arController.start();
-    });
+        // Afficher la barre de progression
+        progressBar.style.display = 'flex';
+        progressBar.classList.add('fade-in');
+
+        // Marquer l'emoji comme trouvé
+        emojiManager.markAsFound(emojiFromUrl);
+
+        // Mettre à jour l'interface utilisateur
+        updateUI();
+
+        // Déclencher l'interaction associée à cet emoji
+        setTimeout(() => {
+            const emojiData = appConfig.emojiData[emojiFromUrl];
+            const interactionFunction = arController.interactions[emojiFromUrl];
+
+            if (interactionFunction && emojiData) {
+                // Afficher l'interaction
+                interactionContainer.style.display = 'flex';
+                interactionContainer.classList.add('fade-in');
+
+                // Appeler la fonction d'interaction
+                interactionFunction(interactionContainer, emojiData, () => {
+                    // Callback lorsque l'interaction est terminée
+                    interactionContainer.classList.add('fade-out');
+
+                    setTimeout(() => {
+                        interactionContainer.style.display = 'none';
+                        interactionContainer.classList.remove('fade-out');
+                        interactionContainer.innerHTML = '';
+
+                        // Vérifier si l'utilisateur a trouvé assez d'emojis
+                        checkCompletion();
+                    }, 500);
+                });
+            }
+        }, 500);
+    } else {
+        // Comportement normal quand aucun emoji n'est spécifié
+        // Événement du bouton de démarrage
+        startButton.addEventListener('click', () => {
+            // Masquer l'écran d'introduction avec une animation
+            introScreen.classList.add('fade-out');
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                // Afficher la barre de progression
+                progressBar.style.display = 'flex';
+                progressBar.classList.add('fade-in');
+            }, 500);
+
+            // Démarrer la détection AR
+            arController.start();
+        });
+    }
 
     // Événement du bouton d'aide
     helpButton.addEventListener('click', () => {
