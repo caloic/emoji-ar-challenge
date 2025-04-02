@@ -44,16 +44,19 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative; /* Pour le copyright */
+            overflow-y: auto; /* Permettre le défilement */
         }
 
         .intro-content {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
             max-width: 500px;
             margin: 0 auto;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 80px; /* Espace pour le bouton */
         }
 
         .intro-title {
@@ -76,7 +79,7 @@
         }
 
         .intro-steps {
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 20px;
@@ -95,6 +98,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            margin-top: 20px;
         }
 
         .primary-button {
@@ -164,12 +168,14 @@
         }
 
         .progress-container {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 20px;
             margin: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative; /* Pour le copyright */
+            min-height: 80vh; /* Pour assurer l'espace suffisant */
         }
 
         .progress-header {
@@ -193,7 +199,7 @@
         }
 
         .scan-instructions {
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 15px;
             margin: 20px 0;
@@ -215,7 +221,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: rgba(110, 142, 251, 0.9);
+            background-color: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
@@ -334,6 +340,25 @@
             line-height: 1.4;
         }
 
+        /* Copyright */
+        .copyright {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 20px;
+            padding: 10px;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+        }
+
+        /* Ajout pour le copyright dans l'écran de complétion */
+        .complete-screen .copyright {
+            position: relative;
+            margin-top: 30px;
+        }
+
         @keyframes bounce {
             0%, 100% {
                 transform: translateY(0);
@@ -394,6 +419,8 @@
             </button>
         </div>
     </div>
+
+    <div class="copyright">© 2025 Loïc CANO - Ynov Campus Montpellier - Tous droits réservés</div>
 </div>
 
 <!-- Écran de progression -->
@@ -427,12 +454,17 @@
         </div>
         <div class="scan-arrow">⬇️</div>
     </div>
+
+    <div class="copyright">© 2025 Loïc CANO - Ynov Campus Montpellier - Tous droits réservés</div>
 </div>
 
 <!-- Conteneur pour les interactions -->
 <div class="interaction-container" id="interaction-container" style="display: none;">
     <div class="interaction-wrapper" id="interaction-wrapper">
         <!-- Le contenu sera généré dynamiquement en fonction de l'emoji trouvé -->
+    </div>
+    <div class="copyright" style="color:white; position: fixed; bottom: 10px; left: 0; right: 0; z-index: 101;">
+        © 2025 Loïc CANO - Ynov Campus Montpellier - Tous droits réservés
     </div>
 </div>
 
@@ -452,6 +484,8 @@
     </div>
 
     <button class="button" id="continue-button">Continuer</button>
+
+    <div class="copyright">© 2025 Loïc CANO - Ynov Campus Montpellier - Tous droits réservés</div>
 </div>
 
 <!-- Fenêtre modale d'aide -->
@@ -478,14 +512,14 @@
                 <p>Sur Android : certains téléphones ont un lecteur QR code intégré, sinon utilisez l'appareil photo</p>
             </div>
         </div>
+        <div class="copyright" style="position: relative; margin-top: 20px; color: #666;">© 2025 Loïc CANO - Ynov Campus Montpellier</div>
     </div>
 </div>
 
-<!-- Boutons d'action fixes -->
+<!-- Boutons d'action fixes - MODIFIÉ : suppression du bouton inutile -->
 <div class="action-buttons" id="action-buttons" style="display: none;">
     <button class="action-button" id="help-button" aria-label="Aide">❓</button>
     <button class="action-button primary" id="camera-hint-button" aria-label="Scanner un QR code">📷</button>
-    <button class="action-button" id="progress-button" aria-label="Voir la progression">📊</button>
 </div>
 
 <!-- Scripts de l'application -->
