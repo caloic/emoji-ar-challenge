@@ -12,6 +12,28 @@ function getEmojiFromUrl() {
     return urlParams.get('emoji');
 }
 
+/**
+ * Ouvre l'application d'appareil photo du téléphone si possible
+ * Note: Cette fonction peut ne pas fonctionner sur tous les appareils
+ * en raison des restrictions de sécurité des navigateurs
+ */
+function openCamera() {
+    // Pour Android, essayer d'ouvrir l'application appareil photo native
+    if (/Android/i.test(navigator.userAgent)) {
+        window.location.href = "intent://media/camera/#Intent;scheme=content;package=com.android.camera;end";
+        return;
+    }
+
+    // Pour iOS, essayer d'ouvrir l'application appareil photo
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        window.location.href = "photos-redirect://";
+        return;
+    }
+
+    // Fallback: montrer une alerte avec des instructions
+    alert("Pour scanner un QR code, veuillez ouvrir l'appareil photo de votre téléphone et pointer vers un QR code.");
+}
+
 // Attendre que le DOM soit chargé
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Application Chasse aux Emoji Secrets - Initialisation...");
@@ -85,11 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialisation du gestionnaire d'emojis
     const emojiManager = new EmojiManager(appConfig.emojiData);
 
-    // Initialisation du contrôleur AR
+    // Initialisation du contrôleur AR (conservé pour les interactions)
     const arController = new ARController(emojiManager);
 
     // Initialisation du générateur de carte
     const cardGenerator = new CardGenerator(emojiManager, appConfig);
+
+    // Ajouter un bouton pour ouvrir l'appareil photo (si c'est possible de l'ajouter à l'UI)
+    const openCameraButton = document.getElementById('open-camera-button');
+    if (openCameraButton) {
+        openCameraButton.addEventListener('click', openCamera);
+    }
 
     // Vérifier si un emoji est spécifié dans l'URL (pour les QR codes)
     const emojiFromUrl = getEmojiFromUrl();
@@ -144,10 +172,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Afficher la barre de progression
                 progressBar.style.display = 'flex';
                 progressBar.classList.add('fade-in');
+                // Afficher les instructions si elles existent
+                const instructionContainer = document.querySelector('.instruction-container');
+                if (instructionContainer) {
+                    instructionContainer.style.display = 'block';
+                }
             }, 500);
 
-            // Démarrer la détection AR
-            arController.start();
+            // La ligne suivante n'est plus nécessaire car nous n'utilisons plus les marqueurs AR
+            // arController.start();
         });
     }
 
@@ -218,18 +251,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="interaction-emoji">🔍</div>
                 <h2 class="interaction-title">Comment jouer?</h2>
                 <div class="interaction-description">
-                    <p>Explorez l'Atrium à la recherche des 9 marqueurs.</p>
-                    <p>Pointez votre caméra sur les marqueurs pour découvrir les emojis cachés.</p>
-                    <p>Chaque emoji vous fait découvrir une filière d'Ynov Campus avec une interaction unique!</p>
-                    <p>Trouvez au moins 5 emojis pour obtenir votre carte d'identité digitale.</p>
+                    <p>Explorez l'Atrium à la recherche des 9 QR codes.</p>
+                    <p>Utilisez l'appareil photo de votre téléphone pour scanner les QR codes.</p>
+                    <p>Chaque QR code vous fait découvrir une filière d'Ynov Campus avec une interaction unique!</p>
+                    <p>Trouvez au moins 5 filières pour obtenir votre carte d'identité digitale.</p>
                 </div>
-                <button class="button" id="close-help">Compris!</button>
+                <button class="button" id="scan-qr-button">Scanner un QR Code</button>
+                <button class="button" id="close-help">Fermer</button>
             </div>
         `;
 
         interactionContainer.innerHTML = helpContent;
         interactionContainer.style.display = 'flex';
         interactionContainer.classList.add('fade-in');
+
+        // Bouton pour ouvrir l'appareil photo
+        document.getElementById('scan-qr-button').addEventListener('click', () => {
+            openCamera();
+        });
 
         document.getElementById('close-help').addEventListener('click', () => {
             interactionContainer.classList.add('fade-out');
@@ -290,6 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
         emojiManager,
         arController,
         cardGenerator,
-        showHelp
+        showHelp,
+        openCamera
     };
 });

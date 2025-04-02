@@ -34,10 +34,7 @@
     <link rel="apple-touch-icon" sizes="152x152" href="./assets/images/icons/ynov-logo-white.svg">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/icons/ynov-logo-white.svg">
 
-    <!-- AR Libraries -->
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+    <!-- Scripts externes -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
@@ -47,54 +44,38 @@
         <h1 class="intro-title">Chasse aux Emoji Secrets</h1>
         <div class="emoji-big">🔍</div>
         <p>Bienvenue à la chasse aux emojis secrets d'Ynov Campus Montpellier!</p>
-        <p>Partez à la découverte de 9 emojis cachés dans l'Atrium, chacun représentant une filière de l'école.</p>
-        <p>Pointez votre caméra sur les marqueurs pour faire apparaître les emojis et découvrir les interactions!</p>
-        <button class="start-button" id="start-button">Commencer l'aventure</button>
+        <p>Explorez l'Atrium et trouvez les 9 QR codes cachés, chacun représentant une filière de l'école.</p>
+        <p>Utilisez <strong>l'appareil photo de votre téléphone</strong> pour scanner les QR codes et découvrir les interactions!</p>
+        <div class="intro-buttons">
+            <button class="start-button" id="start-button">Voir ma progression</button>
+            <button class="camera-button" id="open-camera-button">Ouvrir l'appareil photo</button>
+        </div>
     </div>
 </div>
 
-<!-- Scène AR -->
-<div class="ar-scene">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;" vr-mode-ui="enabled: false">
-        <!-- Utiliser des marqueurs standard qui fonctionnent très bien -->
-        <a-marker preset="hiro" id="marker-informatique">
-            <a-entity id="emoji-informatique" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker preset="kanji" id="marker-cybersecurite">
-            <a-entity id="emoji-cybersecurite" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker type="barcode" value="1" id="marker-gaming">
-            <a-entity id="emoji-gaming" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker type="barcode" value="2" id="marker-architecture">
-            <a-entity id="emoji-architecture" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker type="barcode" value="3" id="marker-audiovisuel">
-            <a-entity id="emoji-audiovisuel" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker type="barcode" value="4" id="marker-design">
-            <a-entity id="emoji-design" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker type="barcode" value="5" id="marker-ai">
-            <a-entity id="emoji-ai" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker type="barcode" value="6" id="marker-marketing">
-            <a-entity id="emoji-marketing" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-marker type="barcode" value="7" id="marker-business">
-            <a-entity id="emoji-business" position="0 0.5 0" scale="1 1 1"></a-entity>
-        </a-marker>
-
-        <a-entity camera></a-entity>
-    </a-scene>
+<!-- Conteneur d'informations -->
+<div class="instruction-container">
+    <div class="qr-instructions">
+        <h2>Comment jouer?</h2>
+        <ol>
+            <li>Parcourez l'Atrium pour trouver les 9 QR codes cachés</li>
+            <li>Utilisez l'appareil photo de votre téléphone pour scanner chaque QR code</li>
+            <li>Découvrez une filière d'Ynov Campus avec une interaction unique</li>
+            <li>Collectez au moins 5 emojis pour obtenir votre carte d'identité digitale</li>
+        </ol>
+        <button class="camera-button" id="instruction-camera-button">Scanner un QR code</button>
+        <div class="emoji-preview">
+            <div class="emoji">💻</div>
+            <div class="emoji">🔒</div>
+            <div class="emoji">🎮</div>
+            <div class="emoji">🏠</div>
+            <div class="emoji">🎬</div>
+            <div class="emoji">🎨</div>
+            <div class="emoji">🤖</div>
+            <div class="emoji">📱</div>
+            <div class="emoji">💼</div>
+        </div>
+    </div>
 </div>
 
 <!-- Interface utilisateur -->
@@ -117,6 +98,9 @@
 
     <!-- Bouton d'aide -->
     <div class="help-button" id="help-button">?</div>
+
+    <!-- Bouton caméra flottant -->
+    <div class="camera-button-floating" id="floating-camera-button">📷</div>
 </div>
 
 <!-- Conteneur pour les interactions avec wrapper -->
@@ -173,5 +157,116 @@
         Cette application nécessite JavaScript pour fonctionner. Veuillez l'activer dans les paramètres de votre navigateur.
     </div>
 </noscript>
+
+<style>
+    .instruction-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        color: white;
+        display: none;
+    }
+
+    .qr-instructions {
+        text-align: center;
+    }
+
+    .qr-instructions h2 {
+        margin-bottom: 15px;
+    }
+
+    .qr-instructions ol {
+        text-align: left;
+        display: inline-block;
+        margin: 0 auto 20px;
+    }
+
+    .qr-instructions li {
+        margin-bottom: 10px;
+    }
+
+    .intro-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .camera-button {
+        background-color: #ffcc00;
+        color: #333;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .camera-button:before {
+        content: "📷";
+        font-size: 1.2rem;
+    }
+
+    .camera-button:hover {
+        background-color: #ffd740;
+        transform: translateY(-2px);
+    }
+
+    .camera-button-floating {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #ffcc00;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        z-index: 90;
+        transition: all 0.2s;
+    }
+
+    .camera-button-floating:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (min-width: 768px) {
+        .intro-buttons {
+            flex-direction: row;
+        }
+    }
+</style>
+
+<script>
+    // Afficher les instructions quand on clique sur "Voir ma progression"
+    document.getElementById('start-button').addEventListener('click', function() {
+        document.getElementById('intro-screen').style.display = 'none';
+        document.getElementById('progress-bar').style.display = 'flex';
+        document.querySelector('.instruction-container').style.display = 'block';
+    });
+
+    // Configurer les boutons d'appareil photo
+    document.querySelectorAll('#open-camera-button, #instruction-camera-button, #floating-camera-button').forEach(button => {
+        button.addEventListener('click', function() {
+            // Cette fonction est définie dans main.js
+            window.app.openCamera();
+        });
+    });
+</script>
 </body>
 </html>
