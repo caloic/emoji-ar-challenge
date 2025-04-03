@@ -7,5 +7,6 @@
     <orderEntry type="library" name="html2canvas" level="application" />
     <orderEntry type="library" name="qrcode-generator" level="application" />
     <orderEntry type="library" name="html2canvas" level="application" />
+    <orderEntry type="library" name="qrcode-generator" level="application" />
   </component>
 </module>

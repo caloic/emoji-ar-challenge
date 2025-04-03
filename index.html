@@ -589,6 +589,7 @@
 
         // Afficher l'écran de progression
         function showProgressScreen() {
+            console.log("Affichage de l'écran de progression");
             introScreen.style.display = 'none';
             progressScreen.style.display = 'block';
             actionButtons.style.display = 'flex';
@@ -599,6 +600,7 @@
 
         // Mettre à jour l'affichage des emojis trouvés
         function updateEmojiDisplay() {
+            console.log("Mise à jour de l'affichage des emojis");
             if (typeof window.app !== 'undefined' && window.app.emojiManager) {
                 const foundCount = document.getElementById('found-count');
                 foundCount.textContent = window.app.emojiManager.getFoundCount();
@@ -612,6 +614,8 @@
                         item.classList.remove('found');
                     }
                 });
+            } else {
+                console.warn("window.app ou window.app.emojiManager n'est pas encore disponible");
             }
         }
 
@@ -629,7 +633,9 @@
         const emojiParam = urlParams.get('emoji');
 
         if (emojiParam) {
+            console.log("Emoji détecté dans l'URL depuis index.html:", emojiParam);
             // Si on a un emoji en paramètre, aller directement à l'écran de progression
+            // MAIS ne pas déclencher l'interaction ici, laisser main.js s'en occuper
             showProgressScreen();
         }
     });

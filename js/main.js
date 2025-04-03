@@ -12,6 +12,7 @@ function getEmojiFromUrl() {
     return urlParams.get('emoji');
 }
 
+// Mapping des interactions aux fonctions
 const interactions = {
     'informatique': computerInteraction,
     'cybersecurite': securityInteraction,
@@ -62,7 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const shareButton = document.getElementById('share-button');
 
     // Cache le progressBar au début
-    progressBar.style.display = 'none';
+    if (progressBar) {
+        progressBar.style.display = 'none';
+    }
 
     // Configuration de l'application
     const appConfig = {
@@ -136,69 +139,112 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Emoji from URL:", emojiFromUrl);
 
     if (emojiFromUrl && appConfig.emojiData[emojiFromUrl]) {
+        console.log("Emoji valide trouvé dans l'URL:", emojiFromUrl);
+
         // Masquer l'écran d'introduction
-        introScreen.style.display = 'none';
+        if (introScreen) {
+            console.log("Masquage de l'écran d'introduction");
+            introScreen.style.display = 'none';
+        } else {
+            console.error("Élément introScreen non trouvé");
+        }
 
         // Afficher la barre de progression
-        progressBar.style.display = 'flex';
-        progressBar.classList.add('fade-in');
+        if (progressBar) {
+            console.log("Affichage de la barre de progression");
+            progressBar.style.display = 'flex';
+            progressBar.classList.add('fade-in');
+        } else {
+            console.error("Élément progressBar non trouvé");
+        }
 
         // Marquer l'emoji comme trouvé
+        console.log("Marquage de l'emoji comme trouvé");
         emojiManager.markAsFound(emojiFromUrl);
 
         // Mettre à jour l'interface utilisateur
+        console.log("Mise à jour de l'interface utilisateur");
         updateUI();
+
+        // Vérification de la disponibilité de la fonction d'interaction
+        console.log("Vérification des interactions disponibles:", Object.keys(interactions));
 
         // Récupérer la fonction d'interaction
         const interactionFunction = interactions[emojiFromUrl];
-        const emojiData = appConfig.emojiData[emojiFromUrl];
+        console.log("Fonction d'interaction trouvée pour", emojiFromUrl, ":", !!interactionFunction);
 
-        // Déclencher l'interaction
-        if (interactionFunction && emojiData) {
+        const emojiData = appConfig.emojiData[emojiFromUrl];
+        console.log("Données de l'emoji trouvées:", !!emojiData);
+
+        // Déclencher l'interaction avec un délai plus important
+        if (interactionFunction && emojiData && interactionContainer) {
+            console.log("Préparation de l'interaction avec délai");
+
+            // Utiliser un délai plus long pour s'assurer que tout est chargé
             setTimeout(() => {
+                console.log("Démarrage de l'interaction pour", emojiFromUrl);
+
                 interactionContainer.style.display = 'flex';
                 interactionContainer.classList.add('fade-in');
 
-                interactionFunction(interactionContainer, emojiData, () => {
-                    interactionContainer.classList.add('fade-out');
+                // Appeler directement la fonction d'interaction
+                try {
+                    interactionFunction(interactionContainer, emojiData, () => {
+                        console.log("Interaction terminée");
 
-                    setTimeout(() => {
-                        interactionContainer.style.display = 'none';
-                        interactionContainer.classList.remove('fade-out');
-                        interactionContainer.innerHTML = '';
+                        interactionContainer.classList.add('fade-out');
 
-                        // Vérifier si l'utilisateur a trouvé assez d'emojis
-                        checkCompletion();
-                    }, 500);
-                });
-            }, 500);
+                        setTimeout(() => {
+                            interactionContainer.style.display = 'none';
+                            interactionContainer.classList.remove('fade-out');
+                            interactionContainer.innerHTML = '';
+
+                            // Vérifier si l'utilisateur a trouvé assez d'emojis
+                            checkCompletion();
+                        }, 500);
+                    });
+                } catch (error) {
+                    console.error("Erreur lors du lancement de l'interaction:", error);
+                }
+            }, 1500); // Augmenter le délai à 1500ms pour s'assurer que tout est initialisé
+        } else {
+            console.error("Impossible de déclencher l'interaction, fonction ou données manquantes");
+            if (!interactionContainer) console.error("Élément interactionContainer non trouvé");
         }
     }
 
     // Événement du bouton d'aide
-    helpButton.addEventListener('click', () => {
-        // Afficher une aide rapide
-        showHelp();
-    });
+    if (helpButton) {
+        helpButton.addEventListener('click', () => {
+            // Afficher une aide rapide
+            showHelp();
+        });
+    }
 
     // Événement du bouton continuer (après avoir obtenu la carte)
-    continueButton.addEventListener('click', () => {
-        // Cacher l'écran de félicitations
-        completeScreen.classList.add('fade-out');
-        setTimeout(() => {
-            completeScreen.style.display = 'none';
-        }, 500);
-    });
+    if (continueButton) {
+        continueButton.addEventListener('click', () => {
+            // Cacher l'écran de félicitations
+            completeScreen.classList.add('fade-out');
+            setTimeout(() => {
+                completeScreen.style.display = 'none';
+            }, 500);
+        });
+    }
 
     // Événement du bouton télécharger
-    downloadButton.addEventListener('click', () => {
-        downloadCard();
-    });
+    if (downloadButton) {
+        downloadButton.addEventListener('click', () => {
+            downloadCard();
+        });
+    }
 
     // Événement du bouton partager
-    shareButton.addEventListener('click', () => {
-        shareCard();
-    });
+    if (shareButton) {
+        shareButton.addEventListener('click', () => {
+            shareCard();
+        });
+    }
 
     // Fonction pour télécharger la carte
     function downloadCard() {
@@ -274,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Écouteur pour la détection d'emoji
     document.addEventListener('emojiFound', (event) => {
         const { emojiId } = event.detail;
-        const emojiData = appConfig.emojiData[emojiId];
+        console.log("Événement emojiFound détecté pour:", emojiId);
 
         // Mettre à jour l'interface utilisateur
         updateUI();
@@ -285,35 +331,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mise à jour de l'interface utilisateur
     function updateUI() {
+        console.log("Mise à jour de l'UI - Emojis trouvés:", emojiManager.getFoundCount());
+
         // Mettre à jour le compteur
         const foundCount = document.getElementById('found-count');
-        foundCount.textContent = emojiManager.getFoundCount();
+        if (foundCount) {
+            foundCount.textContent = emojiManager.getFoundCount();
+        }
 
         // Mettre à jour les icônes d'emoji
         const emojiIcons = document.querySelectorAll('.emoji-icon');
         emojiIcons.forEach(icon => {
             const emojiId = icon.getAttribute('data-emoji');
-            if (emojiManager.isFound(emojiId)) {
+            if (emojiId && emojiManager.isFound(emojiId)) {
                 icon.classList.add('emoji-found');
+                console.log("Marquage de l'emoji", emojiId, "comme trouvé dans l'UI");
             }
         });
     }
 
     // Vérifier si l'utilisateur a trouvé assez d'emojis
     function checkCompletion() {
+        console.log("Vérification de la complétion:", emojiManager.getFoundCount(), "/", appConfig.minEmojisRequired);
+        console.log("Carte déjà générée:", emojiManager.isCardGenerated());
+
         if (emojiManager.getFoundCount() >= appConfig.minEmojisRequired && !emojiManager.isCardGenerated()) {
+            console.log("Conditions remplies pour générer la carte");
+
             // Générer la carte
             cardGenerator.generateCard();
             emojiManager.setCardGenerated(true);
 
             // Afficher l'écran de félicitations
             const digitalCard = document.getElementById('digital-card');
-            digitalCard.innerHTML = cardGenerator.getCardHTML();
+            if (digitalCard) {
+                digitalCard.innerHTML = cardGenerator.getCardHTML();
+                console.log("Contenu de la carte généré");
+            } else {
+                console.error("Élément digital-card non trouvé");
+            }
 
-            completeScreen.style.display = 'flex';
-            completeScreen.classList.add('fade-in');
+            if (completeScreen) {
+                completeScreen.style.display = 'flex';
+                completeScreen.classList.add('fade-in');
+                console.log("Écran de félicitations affiché");
+            } else {
+                console.error("Élément complete-screen non trouvé");
+            }
         }
     }
+
+    // Vérifier que toutes les interactions sont disponibles
+    console.log("Vérification des interactions disponibles:");
+    Object.keys(interactions).forEach(key => {
+        console.log(`- ${key}: ${typeof interactions[key] === 'function' ? 'OK' : 'MANQUANT'}`);
+    });
 
     // Exposer quelques fonctions/objets pour le debug
     window.app = {
