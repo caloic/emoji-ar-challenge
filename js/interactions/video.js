@@ -85,9 +85,11 @@ function videoInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-buttons">
-                <button class="button" id="continue-button">Continuer</button>
-            </div>
+            <div class="interaction-content-spacer"></div>
+        </div>
+        
+        <div class="interaction-footer">
+            <button class="button continue-btn" id="continue-button">Continuer</button>
         </div>
     `;
 
@@ -192,6 +194,7 @@ function videoInteraction(container, emojiData, onComplete) {
             flex-wrap: wrap;
             gap: 8px;
             margin-bottom: 15px;
+            justify-content: center;
         }
         
         .effect-button {
@@ -203,6 +206,8 @@ function videoInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
+            min-height: 44px;
+            min-width: 120px;
         }
         
         .effect-button:hover {
@@ -238,6 +243,7 @@ function videoInteraction(container, emojiData, onComplete) {
             display: flex;
             justify-content: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
         
         .control-button {
@@ -249,6 +255,8 @@ function videoInteraction(container, emojiData, onComplete) {
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
+            min-height: 44px;
+            min-width: 100px;
         }
         
         .control-button:hover {
@@ -272,9 +280,46 @@ function videoInteraction(container, emojiData, onComplete) {
             background-color: #f55a4e;
         }
         
-        #continue-button {
-            background-color: #fdbb2d;
+        .interaction-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(178, 31, 31, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .continue-btn {
+            background-color: #fdbb2d !important;
             color: #333;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            width: 80%;
+            max-width: 300px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .interaction-content-spacer {
+            height: 70px; /* Espace pour le footer fixe */
         }
 
         /* Amélioration pour les mobiles */
@@ -304,6 +349,10 @@ function videoInteraction(container, emojiData, onComplete) {
                 flex: 1;
                 min-width: 120px;
                 min-height: 44px;
+            }
+            
+            .interaction-content-spacer {
+                height: 80px;
             }
         }
     `;

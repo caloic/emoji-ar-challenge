@@ -54,11 +54,13 @@ function securityInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-buttons">
-                <button class="button" id="hint-button">Demander un indice</button>
-                <button class="button" id="solution-button" style="display: none;">Voir la solution</button>
-                <button class="button" id="continue-button" style="display: none;">Continuer</button>
-            </div>
+            <div class="interaction-content-spacer"></div>
+        </div>
+        
+        <div class="interaction-footer">
+            <button class="button" id="hint-button">Demander un indice</button>
+            <button class="button" id="solution-button" style="display: none;">Voir la solution</button>
+            <button class="button continue-btn" id="continue-button" style="display: none;">Continuer</button>
         </div>
     `;
 
@@ -153,6 +155,92 @@ function securityInteraction(container, emojiData, onComplete) {
         .input-incorrect {
             border: 2px solid #f44336 !important;
             background-color: rgba(244, 67, 54, 0.1);
+        }
+        
+        .interaction-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(15, 52, 96, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .continue-btn {
+            background-color: #4caf50 !important;
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .interaction-content-spacer {
+            height: 70px; /* Espace pour le footer fixe */
+        }
+        
+        /* Adaptations pour mobile */
+        @media (max-width: 480px) {
+            .crypto-clues {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .clue-item {
+                margin: 0;
+            }
+            
+            .interaction-footer {
+                flex-direction: column;
+            }
+            
+            .interaction-footer .button {
+                width: 100%;
+                min-height: 44px;
+                margin-bottom: 5px;
+            }
+            
+            .continue-btn {
+                order: -1; /* Place le bouton continuer en premier */
+            }
+            
+            .interaction-content-spacer {
+                height: 150px; /* Plus d'espace pour les boutons sur mobile */
+            }
+            
+            .solution-input-container {
+                flex-direction: column;
+            }
+            
+            .solution-input {
+                border-radius: 5px;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            
+            .solution-input-container .button {
+                border-radius: 5px;
+                width: 100%;
+            }
         }
     `;
 

@@ -96,9 +96,11 @@ function designInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-buttons">
-                <button class="button" id="continue-button">Continuer</button>
-            </div>
+            <div class="interaction-content-spacer"></div>
+        </div>
+        
+        <div class="interaction-footer">
+            <button class="button continue-btn" id="continue-button">Continuer</button>
         </div>
     `;
 
@@ -152,6 +154,7 @@ function designInteraction(container, emojiData, onComplete) {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            justify-content: center;
         }
         
         .tool-button {
@@ -187,11 +190,13 @@ function designInteraction(container, emojiData, onComplete) {
         .color-palette {
             display: flex;
             gap: 8px;
+            justify-content: center;
         }
         
         .palette-name {
             font-size: 0.8rem;
             margin-bottom: 5px;
+            text-align: center;
         }
         
         .color-swatch {
@@ -228,6 +233,7 @@ function designInteraction(container, emojiData, onComplete) {
             transition: all 0.2s;
             font-weight: 600;
             flex: 1;
+            min-height: 44px;
         }
         
         .action-button:hover {
@@ -245,8 +251,46 @@ function designInteraction(container, emojiData, onComplete) {
             color: white;
         }
         
-        #continue-button {
-            background-color: #654ea3;
+        .interaction-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(101, 78, 163, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .continue-btn {
+            background-color: #eaafc8 !important;
+            color: #333;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            width: 80%;
+            max-width: 300px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .interaction-content-spacer {
+            height: 70px; /* Espace pour le footer fixe */
         }
 
         /* Améliorations pour mobile */
@@ -269,6 +313,10 @@ function designInteraction(container, emojiData, onComplete) {
             .action-button {
                 min-height: 44px;
                 font-size: 0.9rem;
+            }
+            
+            .interaction-content-spacer {
+                height: 80px;
             }
         }
     `;

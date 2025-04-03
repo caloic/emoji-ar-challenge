@@ -145,9 +145,11 @@ function marketingInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-buttons">
-                <button class="button" id="continue-button">Continuer</button>
-            </div>
+            <div class="interaction-content-spacer"></div>
+        </div>
+        
+        <div class="interaction-footer">
+            <button class="button continue-btn" id="continue-button">Continuer</button>
         </div>
     `;
 
@@ -264,6 +266,7 @@ function marketingInteraction(container, emojiData, onComplete) {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            justify-content: center;
         }
         
         .template-button {
@@ -274,6 +277,11 @@ function marketingInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
+            min-height: 44px;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .template-button:hover {
@@ -355,6 +363,7 @@ function marketingInteraction(container, emojiData, onComplete) {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            justify-content: center;
         }
         
         .filter-button {
@@ -365,6 +374,11 @@ function marketingInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.8rem;
+            min-height: 40px;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .filter-button:hover {
@@ -392,6 +406,7 @@ function marketingInteraction(container, emojiData, onComplete) {
             transition: all 0.2s;
             font-weight: 600;
             flex: 1;
+            min-height: 44px;
         }
         
         #reset-button {
@@ -413,8 +428,46 @@ function marketingInteraction(container, emojiData, onComplete) {
             transform: translateY(-2px);
         }
         
-        #continue-button {
-            background-color: #1BCEDF;
+        .interaction-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(91, 36, 122, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .continue-btn {
+            background-color: #1BCEDF !important;
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            width: 80%;
+            max-width: 300px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .interaction-content-spacer {
+            height: 70px; /* Espace pour le footer fixe */
         }
 
         /* Améliorations pour mobile */
@@ -444,6 +497,10 @@ function marketingInteraction(container, emojiData, onComplete) {
             .emoji-button {
                 min-width: 44px;
                 min-height: 44px;
+            }
+            
+            .interaction-content-spacer {
+                height: 80px;
             }
         }
     `;

@@ -48,10 +48,12 @@ function computerInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-buttons">
-                <button class="button" id="verify-button">Vérifier</button>
-                <button class="button" id="continue-button" style="display: none;">Continuer</button>
-            </div>
+            <div class="interaction-content-spacer"></div>
+        </div>
+        
+        <div class="interaction-footer" id="interaction-footer">
+            <button class="button" id="verify-button">Vérifier</button>
+            <button class="button continue-btn" id="continue-button" style="display: none;">Continuer</button>
         </div>
     `;
 
@@ -64,6 +66,7 @@ function computerInteraction(container, emojiData, onComplete) {
         .informatique-card {
             background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
             color: white;
+            padding-bottom: 30px;
         }
         
         .challenge-title {
@@ -146,12 +149,41 @@ function computerInteraction(container, emojiData, onComplete) {
             color: #fff;
         }
         
-        .interaction-buttons {
+        .interaction-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(52, 152, 219, 0.9);
+            padding: 15px;
             display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            justify-content: center;
             gap: 10px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .continue-btn {
+            background-color: #2ecc71 !important;
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
         
         .code-correct {
@@ -160,6 +192,10 @@ function computerInteraction(container, emojiData, onComplete) {
         
         .code-incorrect {
             background-color: rgba(244, 67, 54, 0.2) !important;
+        }
+        
+        .interaction-content-spacer {
+            height: 70px; /* Espace pour le footer fixe */
         }
         
         /* Amélioration pour le mobile */
@@ -173,12 +209,24 @@ function computerInteraction(container, emojiData, onComplete) {
                 flex-direction: column;
             }
             
-            .interaction-buttons {
+            .interaction-footer {
                 flex-direction: column;
+                padding: 10px 15px;
             }
             
-            .interaction-buttons .button {
+            .interaction-footer .button {
                 width: 100%;
+                min-height: 44px;
+                margin-bottom: 5px;
+            }
+            
+            .continue-btn {
+                order: -1; /* Place le bouton continuer en premier */
+                margin-bottom: 5px;
+            }
+            
+            .interaction-content-spacer {
+                height: 130px; /* Plus d'espace pour les boutons sur mobile */
             }
         }
     `;
@@ -221,15 +269,23 @@ function computerInteraction(container, emojiData, onComplete) {
     });
 
     verifyButton.addEventListener('click', () => {
+        validateSolution();
+    });
+
+    continueButton.addEventListener('click', () => {
+        // Appeler le callback pour terminer l'interaction
+        onComplete();
+    });
+
+    // Fonction pour valider la solution
+    function validateSolution() {
         const userCode = codeEditor.value.trim();
-        const correctCode = challenge.fixedCode.trim();
 
-        // Normaliser les espaces dans les deux codes pour la comparaison
-        const normalizedUserCode = userCode.replace(/\s+/g, ' ');
-        const normalizedCorrectCode = correctCode.replace(/\s+/g, ' ');
+        // Vérifier spécifiquement si l'utilisateur a corrigé la balise <p> fermante
+        const correctionMade = userCode.includes("</p>");
 
-        if (normalizedUserCode === normalizedCorrectCode || userCode === correctCode) {
-            // Code correct
+        if (correctionMade) {
+            // Code correct si la correction de la balise fermante est présente
             codeEditor.classList.add('code-correct');
             hintText.style.display = 'none';
             solutionText.style.display = 'block';
@@ -246,12 +302,7 @@ function computerInteraction(container, emojiData, onComplete) {
             hintText.style.display = 'block';
             solutionButton.style.display = 'block';
         }
-    });
-
-    continueButton.addEventListener('click', () => {
-        // Appeler le callback pour terminer l'interaction
-        onComplete();
-    });
+    }
 
     // Afficher automatiquement la solution après un certain temps
     setTimeout(() => {

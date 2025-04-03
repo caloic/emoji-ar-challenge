@@ -73,9 +73,11 @@ function architectureInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-buttons">
-                <button class="button" id="continue-button">Continuer</button>
-            </div>
+            <div class="interaction-content-spacer"></div>
+        </div>
+        
+        <div class="interaction-footer">
+            <button class="button continue-btn" id="continue-button">Continuer</button>
         </div>
     `;
 
@@ -116,6 +118,7 @@ function architectureInteraction(container, emojiData, onComplete) {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
+            margin-bottom: 15px;
         }
         
         .style-button {
@@ -126,6 +129,8 @@ function architectureInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
+            min-height: 40px;
+            min-width: 90px;
         }
         
         .style-button:hover {
@@ -155,6 +160,48 @@ function architectureInteraction(container, emojiData, onComplete) {
             font-size: 0.9rem;
             color: #666;
         }
+        
+        .interaction-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(142, 197, 252, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .continue-btn {
+            background-color: #38ef7d !important;
+            color: #333;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            width: 80%;
+            max-width: 300px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .interaction-content-spacer {
+            height: 70px; /* Espace pour le footer fixe */
+        }
 
         /* Améliorations pour mobile */
         @media (max-width: 480px) {
@@ -168,6 +215,10 @@ function architectureInteraction(container, emojiData, onComplete) {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+            }
+            
+            .interaction-content-spacer {
+                height: 80px;
             }
         }
     `;

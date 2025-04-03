@@ -123,9 +123,11 @@ function businessInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-buttons">
-                <button class="button" id="continue-button">Continuer</button>
-            </div>
+            <div class="interaction-content-spacer"></div>
+        </div>
+        
+        <div class="interaction-footer">
+            <button class="button continue-btn" id="continue-button">Continuer</button>
         </div>
     `;
 
@@ -142,10 +144,11 @@ function businessInteraction(container, emojiData, onComplete) {
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             margin: 20px 0;
             color: #333;
+            padding: 15px;
         }
         
         .simulator-step {
-            padding: 20px;
+            padding: 5px;
         }
         
         .step-title {
@@ -266,6 +269,7 @@ function businessInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 15px;
+            min-height: 44px;
         }
         
         .select-button:hover {
@@ -376,6 +380,7 @@ function businessInteraction(container, emojiData, onComplete) {
             display: block;
             margin: 0 auto;
             min-width: 150px;
+            min-height: 44px;
         }
         
         .action-button:hover {
@@ -482,8 +487,34 @@ function businessInteraction(container, emojiData, onComplete) {
             }
         }
         
-        #continue-button {
-            background-color: #0f0c29;
+        .interaction-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(36, 36, 62, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        
+        .continue-btn {
+            background-color: #0f0c29 !important;
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            width: 80%;
+            max-width: 300px;
+        }
+        
+        .interaction-content-spacer {
+            height: 70px; /* Espace pour le footer fixe */
         }
 
         /* Améliorations pour mobile */
@@ -512,6 +543,10 @@ function businessInteraction(container, emojiData, onComplete) {
             
             .investment-amount {
                 font-size: 1.5rem;
+            }
+            
+            .interaction-content-spacer {
+                height: 80px;
             }
         }
     `;
