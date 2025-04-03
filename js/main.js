@@ -26,25 +26,12 @@ const interactions = {
 };
 
 /**
- * Ouvre l'application d'appareil photo du téléphone si possible
- * Note: Cette fonction peut ne pas fonctionner sur tous les appareils
- * en raison des restrictions de sécurité des navigateurs
+ * Affiche un message explicatif pour scanner un QR code
+ * Version simplifiée qui affiche seulement des instructions
  */
 function openCamera() {
-    // Pour Android, essayer d'ouvrir l'application appareil photo native
-    if (/Android/i.test(navigator.userAgent)) {
-        window.location.href = "intent://media/camera/#Intent;scheme=content;package=com.android.camera;end";
-        return;
-    }
-
-    // Pour iOS, essayer d'ouvrir l'application appareil photo
-    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        window.location.href = "photos-redirect://";
-        return;
-    }
-
-    // Fallback: montrer une alerte avec des instructions
-    alert("Pour scanner un QR code, veuillez ouvrir l'appareil photo de votre téléphone et pointer vers un QR code.");
+    // Message explicatif simple pour tous les appareils
+    alert("Pour scanner un QR code :\n\n1. Quittez cette application\n2. Ouvrez l'appareil photo de votre téléphone\n3. Pointez vers un QR code\n4. Appuyez sur la notification qui apparaît\n5. Revenez à cette application pour voir votre progression");
 }
 
 // Attendre que le DOM soit chargé

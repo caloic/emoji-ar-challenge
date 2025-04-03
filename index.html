@@ -507,20 +507,10 @@
             helpModal.classList.remove('active');
         }
 
-        // Fonction pour donner des instructions sur comment ouvrir l'appareil photo
+        // Fonction simplifiée pour afficher des instructions sur comment scanner un QR code
         function showCameraInstructions() {
-            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-            if (isIOS) {
-                alert("Pour scanner un QR code sur iPhone :\n\n1. Quittez cette page\n2. Ouvrez l'application Appareil Photo\n3. Pointez vers un QR code\n4. Appuyez sur la notification qui apparaît");
-            } else {
-                // Essaie d'ouvrir directement l'appareil photo sur Android
-                if (typeof window.app !== 'undefined' && typeof window.app.openCamera === 'function') {
-                    window.app.openCamera();
-                } else {
-                    alert("Pour scanner un QR code :\n\n1. Ouvrez l'appareil photo de votre téléphone\n2. Pointez vers un QR code\n3. Appuyez sur la notification qui apparaît");
-                }
-            }
+            // Message unifié pour tous les appareils
+            alert("Pour scanner un QR code :\n\n1. Quittez cette application\n2. Ouvrez l'appareil photo de votre téléphone\n3. Pointez vers un QR code\n4. Appuyez sur la notification qui apparaît\n5. Revenez à cette application pour voir votre progression");
         }
 
         // Afficher l'écran de progression
