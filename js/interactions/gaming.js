@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function gamingInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Créer le contenu de l'interaction
     const content = `
         <div class="interaction-card gaming-card">
@@ -26,11 +32,9 @@ function gamingInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer">
-            <button class="button continue-btn" id="continue-button">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button continue-btn" id="continue-button">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -40,6 +44,16 @@ function gamingInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
+        .gaming-card {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a69bd 100%);
+            color: white;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
+        }
+        
         .game-container {
             position: relative;
             width: 100%;
@@ -54,6 +68,7 @@ function gamingInteraction(container, emojiData, onComplete) {
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             cursor: pointer;
+            max-width: 100%;
         }
         
         .game-controls {
@@ -68,7 +83,7 @@ function gamingInteraction(container, emojiData, onComplete) {
             background-color: #4a69bd;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 12px 20px;
             border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
@@ -86,13 +101,13 @@ function gamingInteraction(container, emojiData, onComplete) {
             transform: translateY(1px);
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(74, 105, 189, 0.95);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -110,6 +125,7 @@ function gamingInteraction(container, emojiData, onComplete) {
             animation: pulse 2s infinite;
             width: 80%;
             max-width: 300px;
+            min-height: 50px;
         }
         
         @keyframes pulse {
@@ -123,10 +139,6 @@ function gamingInteraction(container, emojiData, onComplete) {
                 transform: scale(1);
             }
         }
-        
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
-        }
 
         /* Améliorations pour mobile */
         @media (max-width: 480px) {
@@ -138,17 +150,23 @@ function gamingInteraction(container, emojiData, onComplete) {
             .game-controls {
                 flex-wrap: wrap;
                 margin-bottom: 20px;
+                width: 100%;
             }
             
             .control-button {
                 flex: 1;
                 min-width: 90px;
-                min-height: 44px;
+                min-height: 50px;
                 margin-bottom: 10px;
             }
             
-            .interaction-content-spacer {
-                height: 80px;
+            .interaction-button-container {
+                padding: 15px;
+            }
+            
+            .continue-btn {
+                width: 100%;
+                min-height: 50px;
             }
         }
     `;
@@ -435,6 +453,12 @@ function gamingInteraction(container, emojiData, onComplete) {
     continueButton.addEventListener('click', () => {
         // Arrêter l'animation
         cancelAnimationFrame(animationFrame);
+
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
+
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });

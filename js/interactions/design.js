@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function designInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Outils de dessin disponibles
     const drawingTools = [
         {
@@ -96,11 +102,9 @@ function designInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer">
-            <button class="button continue-btn" id="continue-button">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button continue-btn" id="continue-button">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -110,6 +114,16 @@ function designInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
+        .design-card {
+            background: linear-gradient(135deg, #654ea3 0%, #eaafc8 100%);
+            color: white;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
+        }
+        
         .canvas-container {
             background-color: white;
             border-radius: 10px;
@@ -169,6 +183,8 @@ function designInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             font-size: 1.2rem;
             transition: all 0.2s;
+            min-height: 44px;
+            min-width: 44px;
         }
         
         .tool-button:hover {
@@ -206,6 +222,8 @@ function designInteraction(container, emojiData, onComplete) {
             border: 2px solid #ddd;
             cursor: pointer;
             transition: all 0.2s;
+            min-height: 25px;
+            min-width: 25px;
         }
         
         .color-swatch:hover {
@@ -251,13 +269,13 @@ function designInteraction(container, emojiData, onComplete) {
             color: white;
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(101, 78, 163, 0.95);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -275,6 +293,7 @@ function designInteraction(container, emojiData, onComplete) {
             animation: pulse 2s infinite;
             width: 80%;
             max-width: 300px;
+            min-height: 50px;
         }
         
         @keyframes pulse {
@@ -288,10 +307,6 @@ function designInteraction(container, emojiData, onComplete) {
                 transform: scale(1);
             }
         }
-        
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
-        }
 
         /* Améliorations pour mobile */
         @media (max-width: 480px) {
@@ -300,23 +315,28 @@ function designInteraction(container, emojiData, onComplete) {
             }
             
             .tool-button {
-                width: 35px;
-                height: 35px;
+                width: 44px;
+                height: 44px;
                 font-size: 1rem;
             }
             
             .color-swatch {
-                width: 20px;
-                height: 20px;
+                width: 30px;
+                height: 30px;
             }
             
             .action-button {
-                min-height: 44px;
+                min-height: 50px;
                 font-size: 0.9rem;
             }
             
-            .interaction-content-spacer {
-                height: 80px;
+            .interaction-button-container {
+                padding: 15px;
+            }
+            
+            .continue-btn {
+                width: 100%;
+                min-height: 50px;
             }
         }
     `;
@@ -653,6 +673,11 @@ function designInteraction(container, emojiData, onComplete) {
     downloadButton.addEventListener('click', downloadDrawing);
 
     continueButton.addEventListener('click', () => {
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
+
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });

@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function architectureInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Styles d'intérieur disponibles
     const interiorStyles = [
         {
@@ -73,11 +79,9 @@ function architectureInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer">
-            <button class="button continue-btn" id="continue-button">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button continue-btn" id="continue-button">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -87,6 +91,16 @@ function architectureInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
+        .architecture-card {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            color: #333;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
+        }
+        
         .interior-container {
             background-color: white;
             border-radius: 10px;
@@ -119,6 +133,7 @@ function architectureInteraction(container, emojiData, onComplete) {
             flex-wrap: wrap;
             gap: 8px;
             margin-bottom: 15px;
+            justify-content: center;
         }
         
         .style-button {
@@ -129,7 +144,7 @@ function architectureInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
-            min-height: 40px;
+            min-height: 44px;
             min-width: 90px;
         }
         
@@ -161,13 +176,13 @@ function architectureInteraction(container, emojiData, onComplete) {
             color: #666;
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(142, 197, 252, 0.95);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -185,6 +200,7 @@ function architectureInteraction(container, emojiData, onComplete) {
             animation: pulse 2s infinite;
             width: 80%;
             max-width: 300px;
+            min-height: 50px;
         }
         
         @keyframes pulse {
@@ -198,10 +214,6 @@ function architectureInteraction(container, emojiData, onComplete) {
                 transform: scale(1);
             }
         }
-        
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
-        }
 
         /* Améliorations pour mobile */
         @media (max-width: 480px) {
@@ -210,15 +222,20 @@ function architectureInteraction(container, emojiData, onComplete) {
             }
             
             .style-button {
-                min-height: 40px;
+                min-height: 44px;
                 min-width: 90px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
             }
             
-            .interaction-content-spacer {
-                height: 80px;
+            .interaction-button-container {
+                padding: 15px;
+            }
+            
+            .continue-btn {
+                width: 100%;
+                min-height: 50px;
             }
         }
     `;
@@ -432,6 +449,11 @@ function architectureInteraction(container, emojiData, onComplete) {
 
     // Événement pour le bouton continuer
     continueButton.addEventListener('click', () => {
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
+
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });

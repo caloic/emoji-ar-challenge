@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function businessInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Liste des startups disponibles
     const startups = [
         {
@@ -123,11 +129,9 @@ function businessInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer">
-            <button class="button continue-btn" id="continue-button">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button continue-btn" id="continue-button">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -137,6 +141,16 @@ function businessInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
+        .business-card {
+            background: linear-gradient(135deg, #24243e 0%, #302b63 50%, #0f0c29 100%);
+            color: white;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
+        }
+        
         .startup-simulator {
             background-color: white;
             border-radius: 10px;
@@ -380,7 +394,7 @@ function businessInteraction(container, emojiData, onComplete) {
             display: block;
             margin: 0 auto;
             min-width: 150px;
-            min-height: 44px;
+            min-height: 50px;
         }
         
         .action-button:hover {
@@ -487,13 +501,13 @@ function businessInteraction(container, emojiData, onComplete) {
             }
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(36, 36, 62, 0.95);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -511,10 +525,7 @@ function businessInteraction(container, emojiData, onComplete) {
             animation: pulse 2s infinite;
             width: 80%;
             max-width: 300px;
-        }
-        
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
+            min-height: 50px;
         }
 
         /* Améliorations pour mobile */
@@ -528,7 +539,7 @@ function businessInteraction(container, emojiData, onComplete) {
             }
             
             .action-button, .select-button {
-                min-height: 44px;
+                min-height: 50px;
                 width: 100%;
             }
             
@@ -545,8 +556,13 @@ function businessInteraction(container, emojiData, onComplete) {
                 font-size: 1.5rem;
             }
             
-            .interaction-content-spacer {
-                height: 80px;
+            .interaction-button-container {
+                padding: 15px;
+            }
+            
+            .continue-btn {
+                width: 100%;
+                min-height: 50px;
             }
         }
     `;
@@ -697,6 +713,11 @@ function businessInteraction(container, emojiData, onComplete) {
 
     // Événement pour le bouton continuer
     continueButton.addEventListener('click', () => {
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
+
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });

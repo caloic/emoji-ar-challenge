@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function videoInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Effets cinématographiques disponibles
     const filmEffects = [
         {
@@ -85,11 +91,9 @@ function videoInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer">
-            <button class="button continue-btn" id="continue-button">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button continue-btn" id="continue-button">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -99,6 +103,16 @@ function videoInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
+        .video-card {
+            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            color: white;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
+        }
+        
         .video-container {
             background-color: #222;
             border-radius: 10px;
@@ -280,13 +294,13 @@ function videoInteraction(container, emojiData, onComplete) {
             background-color: #f55a4e;
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(178, 31, 31, 0.95);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -304,6 +318,7 @@ function videoInteraction(container, emojiData, onComplete) {
             animation: pulse 2s infinite;
             width: 80%;
             max-width: 300px;
+            min-height: 50px;
         }
         
         @keyframes pulse {
@@ -316,10 +331,6 @@ function videoInteraction(container, emojiData, onComplete) {
             100% {
                 transform: scale(1);
             }
-        }
-        
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
         }
 
         /* Amélioration pour les mobiles */
@@ -334,7 +345,7 @@ function videoInteraction(container, emojiData, onComplete) {
             }
             
             .effect-button {
-                min-height: 40px;
+                min-height: 44px;
                 min-width: 100px;
                 display: flex;
                 align-items: center;
@@ -351,8 +362,13 @@ function videoInteraction(container, emojiData, onComplete) {
                 min-height: 44px;
             }
             
-            .interaction-content-spacer {
-                height: 80px;
+            .interaction-button-container {
+                padding: 15px;
+            }
+            
+            .continue-btn {
+                width: 100%;
+                min-height: 50px;
             }
         }
     `;
@@ -489,6 +505,11 @@ function videoInteraction(container, emojiData, onComplete) {
         // Arrêter le flux de la caméra si actif
         if (cameraStream) {
             cameraStream.getTracks().forEach(track => track.stop());
+        }
+
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
         }
 
         // Appeler le callback pour terminer l'interaction

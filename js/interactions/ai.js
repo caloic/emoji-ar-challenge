@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function aiInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Base de données de questions et réponses du chatbot
     const chatbotDatabase = {
         questions: [
@@ -151,11 +157,9 @@ function aiInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer">
-            <button class="button continue-btn" id="continue-button">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button continue-btn" id="continue-button">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -165,13 +169,23 @@ function aiInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
+        .ai-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
+        }
+        
         .chatbot-container {
             background-color: white;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             margin: 20px 0;
-            max-height: 400px;
+            max-height: 70vh;
             display: flex;
             flex-direction: column;
             color: #333;
@@ -350,7 +364,7 @@ function aiInteraction(container, emojiData, onComplete) {
             background-color: #e3f2fd;
             border: 1px solid #bbdefb;
             border-radius: 20px;
-            padding: 8px 15px;
+            padding: 10px 15px;
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
@@ -403,13 +417,13 @@ function aiInteraction(container, emojiData, onComplete) {
             border-top: 1px solid #ddd;
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(30, 60, 114, 0.95);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -427,6 +441,7 @@ function aiInteraction(container, emojiData, onComplete) {
             animation: pulse 2s infinite;
             width: 80%;
             max-width: 300px;
+            min-height: 50px;
         }
         
         @keyframes pulse {
@@ -440,10 +455,6 @@ function aiInteraction(container, emojiData, onComplete) {
                 transform: scale(1);
             }
         }
-        
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
-        }
 
         /* Améliorations pour mobile */
         @media (max-width: 480px) {
@@ -452,21 +463,27 @@ function aiInteraction(container, emojiData, onComplete) {
             }
             
             .option-button {
-                min-height: 44px;
+                min-height: 50px;
                 min-width: 130px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 text-align: center;
                 padding: 10px 15px;
+                font-size: 0.85rem;
             }
             
             .chat-messages {
                 max-height: 250px;
             }
             
-            .interaction-content-spacer {
-                height: 80px;
+            .interaction-button-container {
+                padding: 15px;
+            }
+            
+            .continue-btn {
+                width: 100%;
+                min-height: 50px;
             }
         }
     `;
@@ -741,6 +758,11 @@ function aiInteraction(container, emojiData, onComplete) {
 
     // Événement pour le bouton continuer
     continueButton.addEventListener('click', () => {
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
+
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });
