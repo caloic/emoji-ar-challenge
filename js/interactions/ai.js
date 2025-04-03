@@ -163,11 +163,6 @@ function aiInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
-        .ai-card {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-        }
-        
         .chatbot-container {
             background-color: white;
             border-radius: 10px;
@@ -177,6 +172,7 @@ function aiInteraction(container, emojiData, onComplete) {
             max-height: 400px;
             display: flex;
             flex-direction: column;
+            color: #333;
         }
         
         .chat-header {
@@ -396,6 +392,26 @@ function aiInteraction(container, emojiData, onComplete) {
             margin-top: 10px;
             padding-top: 10px;
             border-top: 1px solid #ddd;
+        }
+
+        /* Améliorations pour mobile */
+        @media (max-width: 480px) {
+            .options-container {
+                justify-content: center;
+            }
+            
+            .option-button {
+                min-height: 44px;
+                min-width: 120px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .chat-messages {
+                max-height: 250px;
+            }
         }
     `;
 

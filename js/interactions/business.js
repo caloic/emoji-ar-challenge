@@ -135,11 +135,6 @@ function businessInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
-        .business-card {
-            background: linear-gradient(135deg, #24243e 0%, #302b63 50%, #0f0c29 100%);
-            color: white;
-        }
-        
         .startup-simulator {
             background-color: white;
             border-radius: 10px;
@@ -228,11 +223,13 @@ function businessInteraction(container, emojiData, onComplete) {
             display: flex;
             align-items: center;
             gap: 10px;
+            color: #333;
         }
         
         .detail-description {
             font-size: 0.9rem;
             line-height: 1.4;
+            color: #333;
         }
         
         .risk-indicator {
@@ -343,6 +340,7 @@ function businessInteraction(container, emojiData, onComplete) {
             font-weight: 600;
             margin-bottom: 8px;
             text-align: center;
+            color: #333;
         }
         
         .meter-bar {
@@ -423,6 +421,7 @@ function businessInteraction(container, emojiData, onComplete) {
             font-size: 1.5rem;
             font-weight: 700;
             margin: 10px 0;
+            color: #333;
         }
         
         .result-profit {
@@ -485,6 +484,35 @@ function businessInteraction(container, emojiData, onComplete) {
         
         #continue-button {
             background-color: #0f0c29;
+        }
+
+        /* Améliorations pour mobile */
+        @media (max-width: 480px) {
+            .startups-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .startup-logo {
+                font-size: 2rem;
+            }
+            
+            .action-button, .select-button {
+                min-height: 44px;
+                width: 100%;
+            }
+            
+            .risk-reward-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stat-item {
+                padding: 0 5px;
+            }
+            
+            .investment-amount {
+                font-size: 1.5rem;
+            }
         }
     `;
 

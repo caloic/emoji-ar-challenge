@@ -97,17 +97,13 @@ function videoInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
-        .video-card {
-            background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
-            color: white;
-        }
-        
         .video-container {
             background-color: #222;
             border-radius: 10px;
             padding: 15px;
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: white;
         }
         
         .film-frame {
@@ -155,6 +151,7 @@ function videoInteraction(container, emojiData, onComplete) {
         .scene-title {
             font-weight: bold;
             margin-bottom: 5px;
+            color: white;
         }
         
         .scene-action {
@@ -177,6 +174,7 @@ function videoInteraction(container, emojiData, onComplete) {
             text-align: center;
             padding: 20px;
             border-radius: 5px;
+            color: white;
         }
         
         .film-effects {
@@ -277,6 +275,36 @@ function videoInteraction(container, emojiData, onComplete) {
         #continue-button {
             background-color: #fdbb2d;
             color: #333;
+        }
+
+        /* Amélioration pour les mobiles */
+        @media (max-width: 480px) {
+            .film-frame {
+                height: 180px;
+                border-width: 10px;
+            }
+            
+            .effects-buttons {
+                justify-content: center;
+            }
+            
+            .effect-button {
+                min-height: 40px;
+                min-width: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .director-controls {
+                flex-wrap: wrap;
+            }
+            
+            .control-button {
+                flex: 1;
+                min-width: 120px;
+                min-height: 44px;
+            }
         }
     `;
 

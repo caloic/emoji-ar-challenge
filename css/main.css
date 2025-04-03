@@ -303,13 +303,17 @@ footer {
 .interaction-wrapper {
     padding: 20px;
     width: 100%;
-    max-height: 100vh;
+    max-height: 85vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
 }
 
+/* Style de base pour toutes les cartes d'interaction */
 .interaction-card {
     background-color: white;
     border-radius: 20px;
@@ -322,6 +326,64 @@ footer {
     overflow-y: auto; /* Permet de défiler le contenu de la carte */
     -webkit-overflow-scrolling: touch; /* Défilement fluide sur iOS */
     touch-action: pan-y; /* Permet le défilement vertical tactile */
+    color: #333;
+}
+
+/* Styles spécifiques pour chaque type de carte avec un fond coloré */
+/* Ces styles doivent surcharger le style de base */
+
+/* Informatique (💻) */
+.interaction-card.informatique-card {
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+    color: white;
+}
+
+/* Cybersécurité (🔒) */
+.interaction-card.cybersecurite-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+}
+
+/* Gaming (🎮) */
+.interaction-card.gaming-card {
+    background: linear-gradient(135deg, #2c3e50 0%, #4a69bd 100%);
+    color: white;
+}
+
+/* Architecture (🏠) */
+.interaction-card.architecture-card {
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    color: #333; /* Fond clair, texte foncé */
+}
+
+/* Audiovisuel (🎬) */
+.interaction-card.video-card {
+    background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+    color: white;
+}
+
+/* Design (🎨) */
+.interaction-card.design-card {
+    background: linear-gradient(135deg, #654ea3 0%, #eaafc8 100%);
+    color: white;
+}
+
+/* IA (🤖) */
+.interaction-card.ai-card {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+}
+
+/* Marketing (📱) */
+.interaction-card.marketing-card {
+    background: linear-gradient(135deg, #5B247A 0%, #1BCEDF 100%);
+    color: white;
+}
+
+/* Business (💼) */
+.interaction-card.business-card {
+    background: linear-gradient(135deg, #24243e 0%, #302b63 50%, #0f0c29 100%);
+    color: white;
 }
 
 .interaction-emoji {
@@ -348,8 +410,20 @@ footer {
     touch-action: pan-y;
 }
 
+/* Correction pour les conteneurs internes avec fond blanc */
+.interaction-card .effect-info,
+.interaction-card .startup-details,
+.interaction-card .code-container,
+.interaction-card .chat-messages,
+.interaction-card .post-editor,
+.interaction-card .card-content,
+.interaction-card .interior-container,
+.interaction-card .canvas-container {
+    color: #333; /* Texte foncé sur fond clair */
+}
+
 .button {
-    background-color: #a777e3;
+    background-color: #6e8efb;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -360,6 +434,7 @@ footer {
     transition: transform 0.2s, background-color 0.2s;
     touch-action: manipulation;
     min-height: 44px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .button:hover {
@@ -423,6 +498,16 @@ footer {
     touch-action: pan-y;
     max-height: 60vh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Amélioration du défilement des conteneurs */
+.code-container, .crypto-container, .startup-simulator,
+.chatbot-container, .interior-container, .filter-selector,
+.canvas-container, .video-container, .social-post-creator {
+    overflow-y: auto;
+    max-height: 70vh;
+    -webkit-overflow-scrolling: touch;
 }
 
 #drawing-canvas, .game-container canvas {
@@ -444,6 +529,52 @@ footer {
     min-width: 40px;
     min-height: 40px;
     touch-action: manipulation;
+}
+
+/* Correction pour la carte d'identité digitale */
+.digital-id-card {
+    color: white; /* Texte blanc sur la carte d'identité */
+}
+
+.digital-id-card .card-emoji-item {
+    background-color: rgba(255, 255, 255, 0.2); /* Fond semi-transparent pour les emojis */
+}
+
+/* S'assurer que les messages d'aide ont un bon contraste */
+.help-modal .help-content {
+    background-color: white;
+    color: #333;
+}
+
+/* Classes pour assurer le contraste */
+.text-dark {
+    color: #333 !important;
+}
+
+.text-light {
+    color: #fff !important;
+}
+
+/* Correction pour les codes et exemples */
+.code-example, pre, code {
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+/* Améliorer l'accessibilité des formulaires */
+input, textarea, select {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Correction pour les cases à cocher et boutons radio */
+input[type="checkbox"], input[type="radio"] {
+    width: 22px;
+    height: 22px;
 }
 
 /* Responsive design - Media queries */
@@ -468,6 +599,47 @@ footer {
         width: 50px;
         height: 50px;
         font-size: 1.7rem;
+    }
+
+    /* Améliorer l'expérience mobile pour les interactions */
+    .interaction-container {
+        padding: 10px;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch; /* Défilement fluide sur iOS */
+    }
+
+    /* Rendre les cartes d'interaction plus adaptées au mobile */
+    .interaction-card {
+        max-width: 100%;
+        width: 100%;
+        max-height: none;
+        padding: 15px;
+        margin: 0;
+        border-radius: 15px;
+    }
+
+    /* Ajuster la taille du texte pour le mobile */
+    .interaction-title {
+        font-size: 1.4rem;
+    }
+
+    .interaction-description p {
+        font-size: 0.95rem;
+    }
+
+    /* Améliorer les boutons pour le tactile */
+    .button, .control-button, .action-button, .tool-button, .effect-button {
+        min-height: 44px; /* Taille minimale pour les cibles tactiles */
+        padding: 10px 15px;
+        margin: 5px;
+    }
+
+    /* Améliorer les slides et conteneurs de défilement */
+    .carousel, .scroll-container, .drawing-tools, .style-selector, .effect-selector {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        overflow-x: auto;
+        padding-bottom: 10px; /* Espace pour ne pas que le scroll soit coupé */
     }
 }
 
@@ -499,9 +671,10 @@ footer {
     .interaction-buttons {
         position: sticky;
         bottom: 0;
-        background-color: white;
+        background-color: transparent; /* Changé pour éviter que le fond blanc masque le contenu */
         padding-top: 10px;
-        margin-bottom: 0;
+        padding-bottom: 20px; /* Ajouté pour éviter que le contenu soit masqué par la barre de navigation mobile */
+        margin-bottom: 20px;
         z-index: 10;
         display: flex;
         justify-content: center;
@@ -527,6 +700,13 @@ footer {
     .start-button {
         padding: 12px 25px;
         font-size: 1.1rem;
+    }
+
+    /* Empêcher le zoom sur les entrées pour iOS */
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        font-size: 16px; /* Évite le zoom automatique sur iOS */
     }
 }
 

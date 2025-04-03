@@ -157,16 +157,12 @@ function marketingInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
-        .marketing-card {
-            background: linear-gradient(135deg, #5B247A 0%, #1BCEDF 100%);
-            color: white;
-        }
-        
         .social-post-creator {
             display: flex;
             flex-direction: column;
             gap: 20px;
             margin: 20px 0;
+            color: #333;
         }
         
         @media (min-width: 768px) {
@@ -247,7 +243,6 @@ function marketingInteraction(container, emojiData, onComplete) {
             flex-direction: column;
             gap: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            color: #333;
         }
         
         .editor-section {
@@ -420,6 +415,36 @@ function marketingInteraction(container, emojiData, onComplete) {
         
         #continue-button {
             background-color: #1BCEDF;
+        }
+
+        /* Améliorations pour mobile */
+        @media (max-width: 480px) {
+            .post-preview {
+                padding: 10px;
+                min-height: 300px;
+            }
+            
+            .post-content {
+                width: 250px;
+                height: 280px;
+            }
+            
+            .template-selector, .filter-selector {
+                justify-content: center;
+            }
+            
+            .template-button, .filter-button {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 80px;
+            }
+            
+            .emoji-button {
+                min-width: 44px;
+                min-height: 44px;
+            }
         }
     `;
 

@@ -38,11 +38,6 @@ function gamingInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
-        .gaming-card {
-            background: linear-gradient(135deg, #2c3e50 0%, #4a69bd 100%);
-            color: white;
-        }
-        
         .game-container {
             position: relative;
             width: 100%;
@@ -88,6 +83,23 @@ function gamingInteraction(container, emojiData, onComplete) {
         
         #continue-button {
             background-color: #4a69bd;
+        }
+
+        /* Améliorations pour mobile */
+        @media (max-width: 480px) {
+            #game-canvas {
+                width: 100%;
+                height: auto;
+            }
+            
+            .game-controls {
+                flex-wrap: wrap;
+            }
+            
+            .control-button {
+                min-width: 80px;
+                min-height: 44px;
+            }
         }
     `;
 

@@ -16,7 +16,7 @@ function securityInteraction(container, emojiData, onComplete) {
 
     // Créer le contenu de l'interaction
     const content = `
-        <div class="interaction-card">
+        <div class="interaction-card cybersecurite-card">
             <div class="interaction-emoji">${emojiData.emoji}</div>
             <h2 class="interaction-title">${emojiData.title}</h2>
             <div class="interaction-description">

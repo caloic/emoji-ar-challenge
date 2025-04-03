@@ -108,11 +108,6 @@ function designInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
-        .design-card {
-            background: linear-gradient(135deg, #654ea3 0%, #eaafc8 100%);
-            color: white;
-        }
-        
         .canvas-container {
             background-color: white;
             border-radius: 10px;
@@ -252,6 +247,29 @@ function designInteraction(container, emojiData, onComplete) {
         
         #continue-button {
             background-color: #654ea3;
+        }
+
+        /* Améliorations pour mobile */
+        @media (max-width: 480px) {
+            #drawing-canvas {
+                height: 250px;
+            }
+            
+            .tool-button {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .color-swatch {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .action-button {
+                min-height: 44px;
+                font-size: 0.9rem;
+            }
         }
     `;
 

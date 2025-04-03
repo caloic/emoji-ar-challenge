@@ -85,16 +85,13 @@ function architectureInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
-        .architecture-card {
-            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-        }
-        
         .interior-container {
             background-color: white;
             border-radius: 10px;
             padding: 15px;
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: #333;
         }
         
         #interior-canvas {
@@ -157,6 +154,21 @@ function architectureInteraction(container, emojiData, onComplete) {
         .style-description {
             font-size: 0.9rem;
             color: #666;
+        }
+
+        /* Améliorations pour mobile */
+        @media (max-width: 480px) {
+            .style-buttons {
+                justify-content: center;
+            }
+            
+            .style-button {
+                min-height: 40px;
+                min-width: 90px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
         }
     `;
 
