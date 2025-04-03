@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function computerInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Défi HTML avec des balises échappées pour un affichage correct sur tous les appareils
     const challenge = {
         language: "HTML",
@@ -48,12 +54,10 @@ function computerInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer" id="interaction-footer">
-            <button class="button" id="verify-button">Vérifier</button>
-            <button class="button continue-btn" id="continue-button" style="display: none;">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button verify-button" id="verify-button">Vérifier</button>
+                <button class="button continue-btn" id="continue-button" style="display: none;">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -66,7 +70,11 @@ function computerInteraction(container, emojiData, onComplete) {
         .informatique-card {
             background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
             color: white;
-            padding-bottom: 30px;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
         }
         
         .challenge-title {
@@ -149,18 +157,37 @@ function computerInteraction(container, emojiData, onComplete) {
             color: #fff;
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(52, 152, 219, 0.9);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             gap: 10px;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
             z-index: 100;
+        }
+        
+        .verify-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            min-width: 150px;
+        }
+        
+        .verify-button:hover {
+            transform: scale(1.05);
+            background-color: #2980b9;
         }
         
         .continue-btn {
@@ -172,6 +199,7 @@ function computerInteraction(container, emojiData, onComplete) {
             border-radius: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             animation: pulse 2s infinite;
+            min-width: 150px;
         }
         
         @keyframes pulse {
@@ -194,10 +222,6 @@ function computerInteraction(container, emojiData, onComplete) {
             background-color: rgba(244, 67, 54, 0.2) !important;
         }
         
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
-        }
-        
         /* Amélioration pour le mobile */
         @media (max-width: 480px) {
             .code-editor {
@@ -209,24 +233,14 @@ function computerInteraction(container, emojiData, onComplete) {
                 flex-direction: column;
             }
             
-            .interaction-footer {
-                flex-direction: column;
-                padding: 10px 15px;
+            .interaction-button-container {
+                padding: 15px;
             }
             
-            .interaction-footer .button {
+            .verify-button, .continue-btn {
                 width: 100%;
-                min-height: 44px;
-                margin-bottom: 5px;
-            }
-            
-            .continue-btn {
-                order: -1; /* Place le bouton continuer en premier */
-                margin-bottom: 5px;
-            }
-            
-            .interaction-content-spacer {
-                height: 130px; /* Plus d'espace pour les boutons sur mobile */
+                min-height: 50px;
+                padding: 12px 20px;
             }
         }
     `;
@@ -273,6 +287,11 @@ function computerInteraction(container, emojiData, onComplete) {
     });
 
     continueButton.addEventListener('click', () => {
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
+
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });

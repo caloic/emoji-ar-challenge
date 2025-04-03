@@ -7,6 +7,12 @@
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function securityInteraction(container, emojiData, onComplete) {
+    // Masquer les boutons d'action en bas
+    const actionButtons = document.getElementById('action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+
     // Message binaire à déchiffrer
     const cryptoMessage = {
         encrypted: "01011001 01001110 01001111 01010110",
@@ -46,7 +52,7 @@ function securityInteraction(container, emojiData, onComplete) {
                 
                 <div class="solution-input-container">
                     <input type="text" id="solution-input" class="solution-input" placeholder="Votre réponse ici..." maxlength="50">
-                    <button id="validate-button" class="button">Valider</button>
+                    <button id="validate-button" class="validate-button">Valider</button>
                 </div>
                 
                 <div class="crypto-hint" id="crypto-hint" style="display: none;">
@@ -54,13 +60,11 @@ function securityInteraction(container, emojiData, onComplete) {
                 </div>
             </div>
             
-            <div class="interaction-content-spacer"></div>
-        </div>
-        
-        <div class="interaction-footer">
-            <button class="button" id="hint-button">Demander un indice</button>
-            <button class="button" id="solution-button" style="display: none;">Voir la solution</button>
-            <button class="button continue-btn" id="continue-button" style="display: none;">Continuer</button>
+            <div class="interaction-button-container">
+                <button class="button hint-button" id="hint-button">Demander un indice</button>
+                <button class="button solution-button" id="solution-button" style="display: none;">Voir la solution</button>
+                <button class="button continue-btn" id="continue-button" style="display: none;">Continuer</button>
+            </div>
         </div>
     `;
 
@@ -70,6 +74,16 @@ function securityInteraction(container, emojiData, onComplete) {
     // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
+        .cybersecurite-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e2e2e2;
+            padding: 20px;
+            padding-bottom: 100px; /* Espace pour les boutons */
+            min-height: 100vh; /* Assurer que la carte remplit toute la hauteur */
+            position: relative; /* Pour le positionnement absolu des boutons */
+            box-sizing: border-box;
+        }
+        
         .crypto-container {
             background-color: #1a1a2e;
             border-radius: 8px;
@@ -95,6 +109,7 @@ function securityInteraction(container, emojiData, onComplete) {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 10px;
         }
         
         .clue-item {
@@ -102,7 +117,6 @@ function securityInteraction(container, emojiData, onComplete) {
             border-radius: 5px;
             padding: 10px;
             flex: 1;
-            margin: 0 5px;
             text-align: center;
             transition: all 0.3s ease;
         }
@@ -119,15 +133,17 @@ function securityInteraction(container, emojiData, onComplete) {
         .solution-input-container {
             display: flex;
             margin-bottom: 15px;
+            gap: 10px;
         }
         
         .solution-input {
             flex: 1;
-            padding: 10px;
+            padding: 12px 15px;
             border: none;
-            border-radius: 5px 0 0 5px;
+            border-radius: 5px;
             font-family: 'Courier New', monospace;
             font-size: 1rem;
+            min-height: 50px;
         }
         
         .solution-input:focus {
@@ -135,8 +151,15 @@ function securityInteraction(container, emojiData, onComplete) {
             box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
         }
         
-        .solution-input-container .button {
-            border-radius: 0 5px 5px 0;
+        .validate-button {
+            background-color: #0f3460;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 100px;
         }
         
         .crypto-hint {
@@ -157,18 +180,35 @@ function securityInteraction(container, emojiData, onComplete) {
             background-color: rgba(244, 67, 54, 0.1);
         }
         
-        .interaction-footer {
+        .interaction-button-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(15, 52, 96, 0.95);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
             z-index: 100;
+        }
+        
+        .hint-button, .solution-button {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 140px;
+            min-height: 50px;
+        }
+        
+        .hint-button:hover, .solution-button:hover {
+            background-color: rgba(255, 255, 255, 0.25);
         }
         
         .continue-btn {
@@ -180,6 +220,8 @@ function securityInteraction(container, emojiData, onComplete) {
             border-radius: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             animation: pulse 2s infinite;
+            min-width: 150px;
+            min-height: 50px;
         }
         
         @keyframes pulse {
@@ -194,10 +236,6 @@ function securityInteraction(container, emojiData, onComplete) {
             }
         }
         
-        .interaction-content-spacer {
-            height: 70px; /* Espace pour le footer fixe */
-        }
-        
         /* Adaptations pour mobile */
         @media (max-width: 480px) {
             .crypto-clues {
@@ -209,22 +247,17 @@ function securityInteraction(container, emojiData, onComplete) {
                 margin: 0;
             }
             
-            .interaction-footer {
-                flex-direction: column;
+            .interaction-button-container {
+                flex-wrap: wrap;
+                padding: 15px;
             }
             
-            .interaction-footer .button {
+            .hint-button, .solution-button, .continue-btn {
+                flex: 1;
+                min-width: 0;
                 width: 100%;
-                min-height: 44px;
-                margin-bottom: 5px;
-            }
-            
-            .continue-btn {
-                order: -1; /* Place le bouton continuer en premier */
-            }
-            
-            .interaction-content-spacer {
-                height: 150px; /* Plus d'espace pour les boutons sur mobile */
+                min-height: 50px;
+                padding: 12px 15px;
             }
             
             .solution-input-container {
@@ -237,9 +270,10 @@ function securityInteraction(container, emojiData, onComplete) {
                 width: 100%;
             }
             
-            .solution-input-container .button {
+            .validate-button {
                 border-radius: 5px;
                 width: 100%;
+                min-height: 50px;
             }
         }
     `;
@@ -303,7 +337,7 @@ function securityInteraction(container, emojiData, onComplete) {
         // Afficher la solution
         solutionInput.value = cryptoMessage.solution;
         solutionInput.classList.add('input-correct');
-        validateButton.style.display = 'none';
+        validateButton.disabled = true;
         solutionButton.style.display = 'none';
         continueButton.style.display = 'block';
 
@@ -313,6 +347,11 @@ function securityInteraction(container, emojiData, onComplete) {
     });
 
     continueButton.addEventListener('click', () => {
+        // Réafficher les boutons d'action en bas
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
+
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });
@@ -327,8 +366,10 @@ function securityInteraction(container, emojiData, onComplete) {
         if (userSolution === correctSolution) {
             // Solution correcte
             solutionInput.classList.add('input-correct');
-            validateButton.style.display = 'none';
+            validateButton.disabled = true;
             continueButton.style.display = 'block';
+            hintButton.style.display = 'none';
+            solutionButton.style.display = 'none';
 
             // Afficher un message de réussite
             cryptoHint.style.display = 'block';
