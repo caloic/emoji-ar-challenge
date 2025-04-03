@@ -50,6 +50,7 @@ function computerInteraction(container, emojiData, onComplete) {
                     <div class="solution-text" id="solution-text" style="display: none;">
                         <p>${challenge.solution}</p>
                         <p>${challenge.explanation}</p>
+                        <pre class="code-display">${challenge.fixedCode}</pre>
                     </div>
                 </div>
             </div>
@@ -120,6 +121,19 @@ function computerInteraction(container, emojiData, onComplete) {
         
         .code-editor:focus {
             outline: 1px solid #3498db;
+        }
+        
+        .code-display {
+            font-family: 'Courier New', monospace;
+            background-color: #1e272c;
+            padding: 10px;
+            border-radius: 4px;
+            color: #e6e6e6;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.4;
+            margin-top: 10px;
         }
         
         .hint-container {
