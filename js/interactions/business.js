@@ -1,6 +1,6 @@
 /**
  * Interaction pour l'emoji Tech & Business (💼)
- * Simulation amusante d'investissement dans une startup virtuelle
+ * Simulation simplifiée d'investissement dans une startup - Optimisée pour mobile
  *
  * @param {HTMLElement} container - Conteneur de l'interaction
  * @param {Object} emojiData - Données de l'emoji (emoji, titre, description)
@@ -13,53 +13,52 @@ function businessInteraction(container, emojiData, onComplete) {
         actionButtons.style.display = 'none';
     }
 
-    // Liste des startups disponibles
+    // Liste des startups disponibles - Simplifiée avec des données claires
     const startups = [
         {
             name: "EcoTech",
-            description: "Solutions technologiques pour l'environnement et le développement durable.",
-            domain: "Écologie",
-            logo: "🌱",
-            risk: "medium",
-            baseGrowth: 25,
-            growthVariance: 20
+            description: "Produits durables et technologies vertes",
+            icon: "🌱",
+            category: "Écologie",
+            riskLevel: "moyen",
+            potential: 65,
+            multiplier: { min: 0.8, max: 1.7 }
         },
         {
-            name: "HealthAI",
-            description: "Intelligence artificielle appliquée au secteur de la santé.",
-            domain: "Santé",
-            logo: "🩺",
-            risk: "high",
-            baseGrowth: 45,
-            growthVariance: 40
+            name: "MediHealth",
+            description: "Intelligence artificielle pour la santé",
+            icon: "⚕️",
+            category: "Santé",
+            riskLevel: "élevé",
+            potential: 85,
+            multiplier: { min: 0.6, max: 2.2 }
         },
         {
-            name: "SecureNet",
-            description: "Sécurité informatique et protection des données personnelles.",
-            domain: "Cybersécurité",
-            logo: "🔒",
-            risk: "low",
-            baseGrowth: 15,
-            growthVariance: 10
+            name: "CyberShield",
+            description: "Protection des données personnelles",
+            icon: "🔒",
+            category: "Cybersécurité",
+            riskLevel: "faible",
+            potential: 50,
+            multiplier: { min: 0.9, max: 1.4 }
         },
         {
-            name: "VRLearn",
-            description: "Plateforme éducative en réalité virtuelle pour les étudiants.",
-            domain: "Éducation",
-            logo: "🎓",
-            risk: "medium",
-            baseGrowth: 30,
-            growthVariance: 25
-        },
-        {
-            name: "SmartHome",
-            description: "Objets connectés et domotique pour la maison intelligente.",
-            domain: "IoT",
-            logo: "🏠",
-            risk: "low",
-            baseGrowth: 20,
-            growthVariance: 15
+            name: "LearnVR",
+            description: "Éducation en réalité virtuelle",
+            icon: "🎓",
+            category: "Éducation",
+            riskLevel: "moyen",
+            potential: 70,
+            multiplier: { min: 0.7, max: 1.8 }
         }
+    ];
+
+    // Montants d'investissement prédéfinis pour simplifier le choix
+    const investmentOptions = [
+        { label: "10K€", value: 10000 },
+        { label: "25K€", value: 25000 },
+        { label: "50K€", value: 50000 },
+        { label: "100K€", value: 100000 }
     ];
 
     // Créer le contenu de l'interaction
@@ -69,63 +68,55 @@ function businessInteraction(container, emojiData, onComplete) {
             <h2 class="interaction-title">${emojiData.title}</h2>
             <div class="interaction-description">
                 <p>${emojiData.description}</p>
-                <p>Investissez dans une startup et voyez comment évolue votre investissement!</p>
+                <p>Choisissez une startup, investissez et découvrez votre rentabilité!</p>
             </div>
             
-            <div class="startup-simulator">
+            <div class="business-simulator">
+                <!-- Étape 1: Sélection de la startup -->
                 <div class="simulator-step" id="startup-selection">
-                    <h3 class="step-title">Choisissez une startup</h3>
+                    <h3 class="step-title">Sélectionnez une startup</h3>
                     <div class="startups-grid" id="startups-grid">
-                        <!-- Startups générées dynamiquement -->
-                    </div>
-                    <div class="startup-details" id="startup-details">
-                        <div class="details-placeholder">Sélectionnez une startup pour voir les détails</div>
+                        <!-- Généré dynamiquement -->
                     </div>
                 </div>
                 
+                <!-- Étape 2: Choix d'investissement -->
                 <div class="simulator-step" id="investment-step" style="display: none;">
-                    <h3 class="step-title">Montant de l'investissement</h3>
-                    <div class="investment-controls">
-                        <div class="investment-slider-container">
-                            <input type="range" id="investment-slider" min="10000" max="100000" step="5000" value="50000" class="investment-slider">
-                            <div class="slider-labels">
-                                <span>10K€</span>
-                                <span>100K€</span>
-                            </div>
-                        </div>
-                        <div class="investment-amount">
-                            <span id="investment-value">50,000</span> €
+                    <div class="step-header">
+                        <button class="back-button" id="back-to-startups">
+                            <span>←</span>
+                        </button>
+                        <h3 class="step-title">Montant d'investissement</h3>
+                    </div>
+                    
+                    <div class="startup-summary" id="startup-summary">
+                        <!-- Généré dynamiquement -->
+                    </div>
+                    
+                    <div class="investment-options">
+                        <div class="options-title">Choisissez votre investissement:</div>
+                        <div class="amount-buttons" id="amount-buttons">
+                            <!-- Généré dynamiquement -->
                         </div>
                     </div>
-                    <div class="risk-reward-container">
-                        <div class="risk-meter">
-                            <div class="meter-label">Risque</div>
-                            <div class="meter-bar">
-                                <div class="meter-fill" id="risk-meter-fill"></div>
-                            </div>
-                        </div>
-                        <div class="reward-meter">
-                            <div class="meter-label">Potentiel</div>
-                            <div class="meter-bar">
-                                <div class="meter-fill" id="reward-meter-fill"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="action-button" id="invest-button">Investir</button>
+                    
+                    <button class="action-button primary-button" id="invest-button">Investir maintenant</button>
                 </div>
                 
+                <!-- Étape 3: Résultats -->
                 <div class="simulator-step" id="results-step" style="display: none;">
-                    <h3 class="step-title">Résultats de l'investissement</h3>
-                    <div class="results-animation" id="results-animation">
-                        <div class="startup-logo" id="result-logo"></div>
-                        <div class="growth-graph">
-                            <canvas id="growth-canvas" width="280" height="150"></canvas>
-                        </div>
+                    <div class="step-header">
+                        <button class="back-button" id="back-to-investment">
+                            <span>←</span>
+                        </button>
+                        <h3 class="step-title">Résultats à 1 an</h3>
                     </div>
-                    <div class="investment-results" id="investment-results">
-                        <!-- Résultats générés dynamiquement -->
+                    
+                    <div class="results-container" id="results-container">
+                        <!-- Généré dynamiquement -->
                     </div>
-                    <button class="action-button" id="restart-button">Nouvel investissement</button>
+                    
+                    <button class="action-button primary-button" id="restart-button">Nouvel investissement</button>
                 </div>
             </div>
             
@@ -138,7 +129,7 @@ function businessInteraction(container, emojiData, onComplete) {
     // Insérer le contenu dans le conteneur
     container.innerHTML = content;
 
-    // Appliquer des styles spécifiques à cette interaction
+    // Appliquer des styles spécifiques à cette interaction - Optimisés pour mobile
     const style = document.createElement('style');
     style.textContent = `
         .business-card {
@@ -151,354 +142,304 @@ function businessInteraction(container, emojiData, onComplete) {
             box-sizing: border-box;
         }
         
-        .startup-simulator {
-            background-color: white;
-            border-radius: 10px;
+        .business-simulator {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
             margin: 20px 0;
-            color: #333;
-            padding: 15px;
+            color: white;
         }
         
         .simulator-step {
-            padding: 5px;
+            padding: 20px;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .back-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
         
         .step-title {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 15px;
-            color: #24243e;
             text-align: center;
+            flex: 1;
         }
         
         .startups-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: 1fr;
             gap: 15px;
-            margin-bottom: 20px;
         }
         
         .startup-card {
-            border: 2px solid #eee;
-            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             padding: 15px;
-            text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid transparent;
+            min-height: 100px;
         }
         
-        .startup-card:hover {
-            border-color: #302b63;
+        .startup-card:hover, .startup-card:active {
+            background-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
         }
         
-        .startup-card.selected {
-            border-color: #302b63;
-            background-color: #f0f0f7;
-        }
-        
-        .startup-logo {
-            font-size: 2.5rem;
+        .startup-header {
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
+        }
+        
+        .startup-icon {
+            font-size: 2rem;
+            margin-right: 10px;
+            background-color: rgba(255, 255, 255, 0.15);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .startup-info {
+            flex: 1;
         }
         
         .startup-name {
             font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
+            font-size: 1.1rem;
+            margin-bottom: 3px;
         }
         
-        .startup-domain {
+        .startup-category {
             font-size: 0.8rem;
-            color: #666;
+            opacity: 0.8;
         }
         
-        .startup-details {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 15px;
-            min-height: 100px;
-        }
-        
-        .details-placeholder {
-            color: #999;
-            text-align: center;
-            padding: 20px 0;
-        }
-        
-        .details-content {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .detail-title {
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #333;
-        }
-        
-        .detail-description {
+        .startup-description {
             font-size: 0.9rem;
             line-height: 1.4;
-            color: #333;
         }
         
-        .risk-indicator {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
+        .startup-metrics {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .metric {
+            display: flex;
+            align-items: center;
+        }
+        
+        .metric-icon {
+            margin-right: 5px;
+            font-size: 1rem;
+        }
+        
+        .metric-value {
             font-weight: 600;
-            margin-left: 5px;
         }
         
         .risk-low {
-            background-color: #e8f5e9;
-            color: #2e7d32;
+            color: #4caf50;
         }
         
         .risk-medium {
-            background-color: #fff8e1;
-            color: #f57f17;
+            color: #ffeb3b;
         }
         
         .risk-high {
-            background-color: #ffebee;
-            color: #c62828;
+            color: #ff5252;
         }
         
-        .select-button {
-            background-color: #302b63;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 15px;
-            min-height: 44px;
-        }
-        
-        .select-button:hover {
-            background-color: #24243e;
-            transform: translateY(-2px);
-        }
-        
-        .investment-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .investment-slider-container {
-            width: 80%;
-            margin-bottom: 15px;
-        }
-        
-        .investment-slider {
-            width: 100%;
-            height: 10px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: #eee;
-            outline: none;
-            border-radius: 5px;
-        }
-        
-        .investment-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #302b63;
-            cursor: pointer;
-        }
-        
-        .slider-labels {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 5px;
-        }
-        
-        .investment-amount {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #24243e;
-            margin-bottom: 20px;
-        }
-        
-        .risk-reward-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .risk-meter, .reward-meter {
-            flex: 1;
-            background-color: #f5f5f5;
-            border-radius: 8px;
-            padding: 10px;
-        }
-        
-        .meter-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            text-align: center;
-            color: #333;
-        }
-        
-        .meter-bar {
-            height: 15px;
-            background-color: #eee;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .meter-fill {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-        
-        #risk-meter-fill {
-            background-color: #ff5252;
-        }
-        
-        #reward-meter-fill {
-            background-color: #4caf50;
-        }
-        
-        .action-button {
-            background-color: #302b63;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: block;
-            margin: 0 auto;
-            min-width: 150px;
-            min-height: 50px;
-        }
-        
-        .action-button:hover {
-            background-color: #24243e;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .results-animation {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        #result-logo {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            animation: pulse 2s infinite;
-        }
-        
-        .growth-graph {
-            width: 100%;
-            margin-bottom: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 10px;
-        }
-        
-        .investment-results {
-            background-color: #f0f0f7;
-            border-radius: 8px;
+        .startup-summary {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             padding: 15px;
             margin-bottom: 20px;
         }
         
-        .result-summary {
+        .investment-options {
+            margin-bottom: 20px;
+        }
+        
+        .options-title {
+            font-size: 1rem;
+            margin-bottom: 10px;
             text-align: center;
+        }
+        
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .amount-button {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-height: 60px;
+        }
+        
+        .amount-button:hover, .amount-button:active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .amount-button.selected {
+            border-color: #7c4dff;
+            background-color: rgba(124, 77, 255, 0.3);
+        }
+        
+        .action-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+        
+        .primary-button {
+            background-color: #7c4dff;
+        }
+        
+        .primary-button:hover, .primary-button:active {
+            background-color: #6039e0;
+            transform: translateY(-2px);
+        }
+        
+        .results-container {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .result-header {
             margin-bottom: 15px;
         }
         
-        .result-amount {
+        .result-startup {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .result-startup-icon {
             font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .result-investment {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .result-value {
+            font-size: 2.2rem;
             font-weight: 700;
-            margin: 10px 0;
-            color: #333;
+            margin: 20px 0;
+        }
+        
+        .result-comparison {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            margin-bottom: 15px;
         }
         
         .result-profit {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
             font-weight: 600;
-            margin: 10px 0;
+            margin-left: 10px;
         }
         
         .profit-positive {
-            background-color: #e8f5e9;
-            color: #2e7d32;
+            color: #4caf50;
         }
         
         .profit-negative {
-            background-color: #ffebee;
-            color: #c62828;
+            color: #ff5252;
         }
         
         .result-message {
             font-style: italic;
-            color: #666;
-        }
-        
-        .result-stats {
-            display: flex;
-            justify-content: space-around;
             margin-top: 15px;
-            border-top: 1px solid #ddd;
-            padding-top: 15px;
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
         
-        .stat-item {
-            text-align: center;
+        .result-progress {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
         }
         
-        .stat-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #24243e;
+        .result-progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
         
-        .stat-label {
-            font-size: 0.8rem;
-            color: #666;
+        .positive-fill {
+            background-color: #4caf50;
         }
         
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .negative-fill {
+            background-color: #ff5252;
         }
         
         .interaction-button-container {
@@ -527,33 +468,45 @@ function businessInteraction(container, emojiData, onComplete) {
             max-width: 300px;
             min-height: 50px;
         }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
 
-        /* Améliorations pour mobile */
+        /* Ajustements pour mobile */
         @media (max-width: 480px) {
+            .simulator-step {
+                padding: 15px;
+            }
+            
             .startups-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .startup-logo {
-                font-size: 2rem;
-            }
-            
-            .action-button, .select-button {
-                min-height: 50px;
-                width: 100%;
-            }
-            
-            .risk-reward-container {
-                flex-direction: column;
                 gap: 10px;
             }
             
-            .stat-item {
-                padding: 0 5px;
+            .startup-card {
+                padding: 12px;
             }
             
-            .investment-amount {
-                font-size: 1.5rem;
+            .startup-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.6rem;
+            }
+            
+            .startup-name {
+                font-size: 1rem;
+            }
+            
+            .action-button {
+                min-height: 54px;
             }
             
             .interaction-button-container {
@@ -562,156 +515,254 @@ function businessInteraction(container, emojiData, onComplete) {
             
             .continue-btn {
                 width: 100%;
-                min-height: 50px;
             }
         }
     `;
 
     document.head.appendChild(style);
 
-    // Éléments interactifs
-    const startupsGrid = document.getElementById('startups-grid');
-    const startupDetails = document.getElementById('startup-details');
+    // Variables d'état
+    let selectedStartup = null;
+    let selectedAmount = null;
+    let investmentResult = null;
 
+    // Éléments d'interface
+    const startupsGrid = document.getElementById('startups-grid');
     const startupSelection = document.getElementById('startup-selection');
     const investmentStep = document.getElementById('investment-step');
     const resultsStep = document.getElementById('results-step');
-
-    const investmentSlider = document.getElementById('investment-slider');
-    const investmentValue = document.getElementById('investment-value');
-    const riskMeterFill = document.getElementById('risk-meter-fill');
-    const rewardMeterFill = document.getElementById('reward-meter-fill');
-
+    const startupSummary = document.getElementById('startup-summary');
+    const amountButtons = document.getElementById('amount-buttons');
     const investButton = document.getElementById('invest-button');
+    const resultsContainer = document.getElementById('results-container');
+    const backToStartups = document.getElementById('back-to-startups');
+    const backToInvestment = document.getElementById('back-to-investment');
     const restartButton = document.getElementById('restart-button');
     const continueButton = document.getElementById('continue-button');
 
-    // Variables d'état
-    let selectedStartup = null;
-    let investmentAmount = 50000;
-    let investmentResult = null;
-
-    // Créer les cartes de startups
-    startups.forEach((startup) => {
+    // Générer les cartes de startups
+    startups.forEach(startup => {
         const card = document.createElement('div');
         card.className = 'startup-card';
-        card.dataset.name = startup.name;
+
+        // Définir les classes de risque
+        let riskClass, riskIcon;
+        switch(startup.riskLevel) {
+            case 'faible':
+                riskClass = 'risk-low';
+                riskIcon = '🔍'; // Icône de risque faible
+                break;
+            case 'moyen':
+                riskClass = 'risk-medium';
+                riskIcon = '⚠️'; // Icône de risque moyen
+                break;
+            case 'élevé':
+                riskClass = 'risk-high';
+                riskIcon = '🔥'; // Icône de risque élevé
+                break;
+        }
 
         card.innerHTML = `
-            <div class="startup-logo">${startup.logo}</div>
-            <div class="startup-name">${startup.name}</div>
-            <div class="startup-domain">${startup.domain}</div>
+            <div class="startup-header">
+                <div class="startup-icon">${startup.icon}</div>
+                <div class="startup-info">
+                    <div class="startup-name">${startup.name}</div>
+                    <div class="startup-category">${startup.category}</div>
+                </div>
+            </div>
+            <div class="startup-description">${startup.description}</div>
+            <div class="startup-metrics">
+                <div class="metric">
+                    <span class="metric-icon ${riskClass}">${riskIcon}</span>
+                    <span class="metric-value">Risque ${startup.riskLevel}</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-icon">⭐</span>
+                    <span class="metric-value">Potentiel ${startup.potential}%</span>
+                </div>
+            </div>
         `;
 
         card.addEventListener('click', () => {
-            // Mettre à jour la sélection
-            document.querySelectorAll('.startup-card').forEach(c => {
-                c.classList.remove('selected');
-            });
-            card.classList.add('selected');
-
             selectedStartup = startup;
-
-            // Afficher les détails
-            showStartupDetails(startup);
+            showInvestmentStep();
         });
 
         startupsGrid.appendChild(card);
     });
 
-    /**
-     * Affiche les détails d'une startup
-     * @param {Object} startup - Données de la startup
-     */
-    function showStartupDetails(startup) {
-        let riskClass = '';
-        let riskText = '';
+    // Générer les boutons de montant
+    investmentOptions.forEach(option => {
+        const button = document.createElement('div');
+        button.className = 'amount-button';
+        button.textContent = option.label;
 
-        switch (startup.risk) {
-            case 'low':
-                riskClass = 'risk-low';
-                riskText = 'Faible';
-                break;
-            case 'medium':
-                riskClass = 'risk-medium';
-                riskText = 'Moyen';
-                break;
-            case 'high':
-                riskClass = 'risk-high';
-                riskText = 'Élevé';
-                break;
-        }
+        button.addEventListener('click', () => {
+            // Désélectionner tous les boutons
+            document.querySelectorAll('.amount-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
 
-        startupDetails.innerHTML = `
-            <div class="details-content">
-                <div class="detail-title">
-                    ${startup.logo} ${startup.name}
-                    <span class="risk-indicator ${riskClass}">${riskText}</span>
-                </div>
-                <div class="detail-description">
-                    ${startup.description}
-                </div>
-                <button class="select-button" id="select-startup-button">Sélectionner cette startup</button>
-            </div>
-        `;
+            // Sélectionner ce bouton
+            button.classList.add('selected');
 
-        // Ajouter l'événement pour le bouton de sélection
-        document.getElementById('select-startup-button').addEventListener('click', () => {
-            // Passer à l'étape d'investissement
-            startupSelection.style.display = 'none';
-            investmentStep.style.display = 'block';
+            // Mettre à jour le montant sélectionné
+            selectedAmount = option.value;
 
-            // Initialiser les compteurs de risque/récompense
-            updateRiskRewardMeters();
+            // Activer le bouton d'investissement
+            investButton.disabled = false;
+            investButton.classList.add('primary-button');
         });
-    }
 
-    // Événement pour le curseur d'investissement
-    investmentSlider.addEventListener('input', () => {
-        investmentAmount = parseInt(investmentSlider.value);
-        investmentValue.textContent = investmentAmount.toLocaleString();
+        amountButtons.appendChild(button);
     });
 
-    // Événement pour le bouton d'investissement
-    investButton.addEventListener('click', () => {
-        // Simuler le résultat de l'investissement
-        simulateInvestment();
+    // Fonction pour afficher l'étape d'investissement
+    function showInvestmentStep() {
+        // Mettre à jour le récapitulatif de la startup
+        startupSummary.innerHTML = `
+            <div class="startup-header">
+                <div class="startup-icon" style="font-size:1.5rem">${selectedStartup.icon}</div>
+                <div class="startup-info">
+                    <div class="startup-name">${selectedStartup.name}</div>
+                    <div class="startup-category">${selectedStartup.category}</div>
+                </div>
+            </div>
+            <div class="startup-description">${selectedStartup.description}</div>
+        `;
 
-        // Passer à l'étape des résultats
+        // Afficher l'étape d'investissement
+        startupSelection.style.display = 'none';
+        investmentStep.style.display = 'block';
+
+        // Désactiver le bouton d'investissement jusqu'à ce qu'un montant soit sélectionné
+        investButton.disabled = true;
+        investButton.classList.remove('primary-button');
+    }
+
+    // Fonction pour simuler l'investissement
+    function simulateInvestment() {
+        // Vérifier que les sélections sont faites
+        if (!selectedStartup || !selectedAmount) return;
+
+        // Générer un multiplicateur aléatoire basé sur le profil de risque
+        const multiplierRange = selectedStartup.multiplier;
+        const multiplier = multiplierRange.min + (Math.random() * (multiplierRange.max - multiplierRange.min));
+
+        // Calculer la valeur finale
+        const finalValue = Math.round(selectedAmount * multiplier);
+        const profit = finalValue - selectedAmount;
+        const percentageChange = ((finalValue - selectedAmount) / selectedAmount * 100).toFixed(1);
+        const isPositive = profit >= 0;
+
+        // Sauvegarder le résultat
+        investmentResult = {
+            startupName: selectedStartup.name,
+            startupIcon: selectedStartup.icon,
+            initialInvestment: selectedAmount,
+            finalValue: finalValue,
+            profit: profit,
+            percentageChange: percentageChange,
+            isPositive: isPositive
+        };
+
+        // Générer un message basé sur le résultat
+        let resultMessage;
+        if (percentageChange >= 50) {
+            resultMessage = "Félicitations! Votre investissement a été extrêmement fructueux.";
+        } else if (percentageChange >= 20) {
+            resultMessage = "Beau travail! Votre investissement a été très rentable.";
+        } else if (percentageChange >= 0) {
+            resultMessage = "Votre investissement est rentable.";
+        } else if (percentageChange >= -20) {
+            resultMessage = "Votre investissement a subi une légère perte.";
+        } else {
+            resultMessage = "Votre investissement a malheureusement subi une forte perte.";
+        }
+
+        investmentResult.message = resultMessage;
+
+        // Afficher les résultats
+        showResults();
+    }
+
+    // Fonction pour afficher les résultats
+    function showResults() {
+        // Préparer le contenu des résultats
+        resultsContainer.innerHTML = `
+            <div class="result-header">
+                <div class="result-startup">
+                    <span class="result-startup-icon">${investmentResult.startupIcon}</span>
+                    <span>${investmentResult.startupName}</span>
+                </div>
+                <div class="result-investment">Investissement: ${investmentResult.initialInvestment.toLocaleString()}€</div>
+            </div>
+            
+            <div class="result-value">${investmentResult.finalValue.toLocaleString()}€</div>
+            
+            <div class="result-progress">
+                <div class="result-progress-fill ${investmentResult.isPositive ? 'positive-fill' : 'negative-fill'}" 
+                     style="width: 0%;"></div>
+            </div>
+            
+            <div class="result-comparison">
+                <span>Rendement:</span>
+                <span class="result-profit ${investmentResult.isPositive ? 'profit-positive' : 'profit-negative'}">
+                    ${investmentResult.isPositive ? '+' : ''}${investmentResult.profit.toLocaleString()}€ 
+                    (${investmentResult.isPositive ? '+' : ''}${investmentResult.percentageChange}%)
+                </span>
+            </div>
+            
+            <div class="result-message">${investmentResult.message}</div>
+        `;
+
+        // Afficher l'étape des résultats
         investmentStep.style.display = 'none';
         resultsStep.style.display = 'block';
 
-        // Afficher les résultats
-        displayResults();
+        // Animer la barre de progression
+        setTimeout(() => {
+            const progressFill = resultsContainer.querySelector('.result-progress-fill');
+            const percentage = Math.abs(parseFloat(investmentResult.percentageChange));
+            const normalizedWidth = Math.min(100, Math.max(10, percentage * 2)); // Limiter entre 10% et 100%
+
+            progressFill.style.width = `${normalizedWidth}%`;
+        }, 300);
+    }
+
+    // Événements
+    investButton.addEventListener('click', () => {
+        if (selectedAmount) {
+            simulateInvestment();
+        }
     });
 
-    // Événement pour le bouton de redémarrage
+    backToStartups.addEventListener('click', () => {
+        investmentStep.style.display = 'none';
+        startupSelection.style.display = 'block';
+    });
+
+    backToInvestment.addEventListener('click', () => {
+        resultsStep.style.display = 'none';
+        investmentStep.style.display = 'block';
+    });
+
     restartButton.addEventListener('click', () => {
-        // Réinitialiser l'application
+        // Réinitialiser l'état
         selectedStartup = null;
-        investmentAmount = 50000;
+        selectedAmount = null;
         investmentResult = null;
 
-        // Réinitialiser le curseur
-        investmentSlider.value = 50000;
-        investmentValue.textContent = '50,000';
-
-        // Désélectionner la startup
-        document.querySelectorAll('.startup-card').forEach(card => {
-            card.classList.remove('selected');
+        // Désélectionner tous les boutons de montant
+        document.querySelectorAll('.amount-button').forEach(btn => {
+            btn.classList.remove('selected');
         });
 
-        // Revenir à l'étape de sélection
+        // Revenir à la sélection de startup
         resultsStep.style.display = 'none';
         startupSelection.style.display = 'block';
-
-        // Réinitialiser les détails
-        startupDetails.innerHTML = `
-            <div class="details-placeholder">Sélectionnez une startup pour voir les détails</div>
-        `;
     });
 
-    // Événement pour le bouton continuer
     continueButton.addEventListener('click', () => {
         // Réafficher les boutons d'action en bas
         if (actionButtons) {
@@ -721,235 +772,4 @@ function businessInteraction(container, emojiData, onComplete) {
         // Appeler le callback pour terminer l'interaction
         onComplete();
     });
-
-    /**
-     * Met à jour les indicateurs de risque et de récompense
-     */
-    function updateRiskRewardMeters() {
-        if (!selectedStartup) return;
-
-        // Définir le niveau de risque en fonction de la startup
-        let riskLevel = 0;
-        switch (selectedStartup.risk) {
-            case 'low':
-                riskLevel = 30;
-                break;
-            case 'medium':
-                riskLevel = 60;
-                break;
-            case 'high':
-                riskLevel = 90;
-                break;
-        }
-
-        // Définir le niveau de récompense potentielle
-        const rewardLevel = selectedStartup.baseGrowth + selectedStartup.growthVariance;
-
-        // Mettre à jour les barres
-        riskMeterFill.style.width = `${riskLevel}%`;
-        rewardMeterFill.style.width = `${rewardLevel}%`;
-    }
-
-    /**
-     * Simule le résultat de l'investissement
-     */
-    function simulateInvestment() {
-        const baseGrowth = selectedStartup.baseGrowth;
-        const variance = selectedStartup.growthVariance;
-
-        // Calculer un pourcentage de croissance aléatoire
-        const growthPercentage = baseGrowth + (Math.random() * 2 - 1) * variance;
-
-        // Nombre de périodes (mois)
-        const periods = 12;
-
-        // Valeurs mensuelles
-        const monthlyValues = [];
-        let currentValue = investmentAmount;
-
-        for (let i = 0; i <= periods; i++) {
-            monthlyValues.push({
-                month: i,
-                value: currentValue
-            });
-
-            // Application d'une petite variation mensuelle
-            const monthlyGrowth = growthPercentage / periods;
-            const monthlyVariance = variance / (periods * 2);
-            const adjustedGrowth = monthlyGrowth + (Math.random() * 2 - 1) * monthlyVariance;
-
-            currentValue = currentValue * (1 + adjustedGrowth / 100);
-        }
-
-        // Valeur finale arrondie
-        const finalValue = Math.round(monthlyValues[periods].value);
-        const profit = finalValue - investmentAmount;
-        const profitPercentage = (profit / investmentAmount * 100).toFixed(1);
-
-        // Stocker le résultat
-        investmentResult = {
-            initialInvestment: investmentAmount,
-            finalValue: finalValue,
-            profit: profit,
-            profitPercentage: profitPercentage,
-            monthlyValues: monthlyValues,
-            growthPercentage: growthPercentage.toFixed(1)
-        };
-    }
-
-    /**
-     * Affiche les résultats de l'investissement
-     */
-    function displayResults() {
-        // Afficher le logo de la startup
-        document.getElementById('result-logo').textContent = selectedStartup.logo;
-
-        // Créer le graphique de croissance
-        drawGrowthChart();
-
-        // Afficher les informations de résultat
-        const profitClass = investmentResult.profit >= 0 ? 'profit-positive' : 'profit-negative';
-        const profitSign = investmentResult.profit >= 0 ? '+' : '';
-        const resultMessage = getResultMessage(investmentResult.profitPercentage);
-
-        document.getElementById('investment-results').innerHTML = `
-            <div class="result-summary">
-                <div class="startup-name">${selectedStartup.name}</div>
-                <div class="result-amount">${investmentResult.finalValue.toLocaleString()} €</div>
-                <div class="result-profit ${profitClass}">
-                    ${profitSign}${investmentResult.profit.toLocaleString()} € (${profitSign}${investmentResult.profitPercentage}%)
-                </div>
-                <div class="result-message">${resultMessage}</div>
-            </div>
-            <div class="result-stats">
-                <div class="stat-item">
-                    <div class="stat-value">${investmentResult.initialInvestment.toLocaleString()} €</div>
-                    <div class="stat-label">Investissement</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">${investmentResult.growthPercentage}%</div>
-                    <div class="stat-label">Croissance</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">12 mois</div>
-                    <div class="stat-label">Période</div>
-                </div>
-            </div>
-        `;
-    }
-
-    /**
-     * Dessine le graphique de croissance
-     */
-    function drawGrowthChart() {
-        const canvas = document.getElementById('growth-canvas');
-        const ctx = canvas.getContext('2d');
-
-        const values = investmentResult.monthlyValues;
-        const minValue = Math.min(...values.map(v => v.value)) * 0.9;
-        const maxValue = Math.max(...values.map(v => v.value)) * 1.1;
-        const valueRange = maxValue - minValue;
-
-        // Effacer le canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Dessiner les axes
-        ctx.strokeStyle = '#ddd';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(40, 10);
-        ctx.lineTo(40, 130);
-        ctx.lineTo(270, 130);
-        ctx.stroke();
-
-        // Dessiner la courbe de croissance
-        ctx.strokeStyle = investmentResult.profit >= 0 ? '#4caf50' : '#f44336';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-
-        values.forEach((point, index) => {
-            const x = 40 + (230 / values.length) * index;
-            const y = 130 - ((point.value - minValue) / valueRange) * 100;
-
-            if (index === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        });
-
-        ctx.stroke();
-
-        // Ajouter une ombre sous la courbe
-        const gradient = ctx.createLinearGradient(0, 0, 0, 130);
-        gradient.addColorStop(0, investmentResult.profit >= 0 ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)');
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.moveTo(40, 130);
-
-        values.forEach((point, index) => {
-            const x = 40 + (230 / values.length) * index;
-            const y = 130 - ((point.value - minValue) / valueRange) * 100;
-            ctx.lineTo(x, y);
-        });
-
-        ctx.lineTo(40 + 230, 130);
-        ctx.closePath();
-        ctx.fill();
-
-        // Ajouter des points sur la courbe
-        values.forEach((point, index) => {
-            const x = 40 + (230 / values.length) * index;
-            const y = 130 - ((point.value - minValue) / valueRange) * 100;
-
-            ctx.fillStyle = '#fff';
-            ctx.beginPath();
-            ctx.arc(x, y, 3, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = investmentResult.profit >= 0 ? '#4caf50' : '#f44336';
-            ctx.beginPath();
-            ctx.arc(x, y, 2, 0, Math.PI * 2);
-            ctx.fill();
-        });
-
-        // Ajouter les étiquettes
-        ctx.fillStyle = '#666';
-        ctx.font = '10px Arial';
-        ctx.textAlign = 'right';
-        ctx.fillText(Math.round(maxValue).toLocaleString() + ' €', 35, 15);
-        ctx.fillText(Math.round(minValue).toLocaleString() + ' €', 35, 130);
-
-        ctx.textAlign = 'center';
-        ctx.fillText('0', 40, 145);
-        ctx.fillText('12', 270, 145);
-        ctx.fillText('Mois', 155, 145);
-    }
-
-    /**
-     * Obtient un message en fonction du pourcentage de profit
-     * @param {number} profitPercentage - Pourcentage de profit
-     * @returns {string} - Message correspondant
-     */
-    function getResultMessage(profitPercentage) {
-        const percentage = parseFloat(profitPercentage);
-
-        if (percentage >= 30) {
-            return "Félicitations! Votre investissement a été extrêmement fructueux.";
-        } else if (percentage >= 15) {
-            return "Beau travail! Votre investissement a été très rentable.";
-        } else if (percentage >= 5) {
-            return "Bien joué! Votre investissement est rentable.";
-        } else if (percentage >= 0) {
-            return "Votre investissement est légèrement rentable.";
-        } else if (percentage >= -10) {
-            return "Votre investissement a subi une légère perte.";
-        } else if (percentage >= -25) {
-            return "Votre investissement a subi une perte significative.";
-        } else {
-            return "Votre investissement a malheureusement subi une forte perte.";
-        }
-    }
 }
