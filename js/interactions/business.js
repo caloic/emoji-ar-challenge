@@ -1,7 +1,5 @@
 /**
  * Interaction pour l'emoji Tech & Business (💼)
- * Simulation simplifiée d'investissement dans une startup - Optimisée pour mobile
- * Correction des problèmes de défilement
  *
  * @param {HTMLElement} container - Conteneur de l'interaction
  * @param {Object} emojiData - Données de l'emoji (emoji, titre, description)
@@ -66,63 +64,61 @@ function businessInteraction(container, emojiData, onComplete) {
         { label: "100K€", value: 100000 }
     ];
 
-    // Créer le contenu de l'interaction avec un design plus grid et visuel
+    // Créer le contenu de l'interaction - Version simplifiée
     const content = `
         <div class="interaction-card business-card">
             <div class="interaction-emoji">${emojiData.emoji}</div>
             <h2 class="interaction-title">${emojiData.title}</h2>
             <div class="interaction-description">
                 <p>${emojiData.description}</p>
-                <p>Investissez dans une startup et découvrez comment évolue votre investissement!</p>
+                <p>Investissez dans une startup et découvrez votre rentabilité!</p>
             </div>
             
-            <div class="business-simulator-container">
-                <!-- Étape 1: Sélection de la startup -->
-                <div class="simulator-step" id="startup-selection">
-                    <h3 class="step-title">Choisissez une startup</h3>
-                    <div class="startups-grid" id="startups-grid">
-                        <!-- Cartes de startups générées dynamiquement -->
+            <!-- Étape 1: Sélection de la startup -->
+            <div id="startup-selection" class="startup-selection">
+                <h3 class="section-title">Choisissez une startup</h3>
+                <div id="startups-grid" class="startups-grid">
+                    <!-- Les startups seront générées ici -->
+                </div>
+            </div>
+            
+            <!-- Étape 2: Choix du montant -->
+            <div id="investment-step" class="investment-step" style="display:none;">
+                <div class="nav-header">
+                    <button id="back-to-startups" class="back-button">← Retour</button>
+                    <h3 class="section-title">Choisir le montant</h3>
+                </div>
+                
+                <div id="startup-summary" class="startup-summary">
+                    <!-- Résumé de la startup sélectionnée -->
+                </div>
+                
+                <div class="amount-selection">
+                    <p class="selection-label">Sélectionnez votre investissement:</p>
+                    <div id="amount-buttons" class="amount-buttons">
+                        <!-- Boutons de montants -->
                     </div>
                 </div>
                 
-                <!-- Étape 2: Choix d'investissement -->
-                <div class="simulator-step" id="investment-step" style="display: none;">
-                    <div class="step-header">
-                        <button class="back-button" id="back-to-startups">
-                            <span>←</span>
-                        </button>
-                        <h3 class="step-title">Montant d'investissement</h3>
-                    </div>
-                    
-                    <div class="startup-summary" id="startup-summary">
-                        <!-- Générée dynamiquement -->
-                    </div>
-                    
-                    <div class="investment-options">
-                        <div class="options-title">Choisissez votre investissement:</div>
-                        <div class="amount-buttons" id="amount-buttons">
-                            <!-- Montants générés dynamiquement -->
-                        </div>
-                    </div>
-                    
-                    <button class="action-button primary-button" id="invest-button">Investir</button>
+                <button id="invest-button" class="action-button" disabled>
+                    Investir maintenant
+                </button>
+            </div>
+            
+            <!-- Étape 3: Résultats -->
+            <div id="results-step" class="results-step" style="display:none;">
+                <div class="nav-header">
+                    <button id="back-to-investment" class="back-button">← Retour</button>
+                    <h3 class="section-title">Résultats à 1 an</h3>
                 </div>
                 
-                <!-- Étape 3: Résultats -->
-                <div class="simulator-step" id="results-step" style="display: none;">
-                    <div class="step-header">
-                        <button class="back-button" id="back-to-investment">
-                            <span>←</span>
-                        </button>
-                        <h3 class="step-title">Résultats à 1 an</h3>
-                    </div>
-                    
-                    <div class="results-container" id="results-container">
-                        <!-- Générés dynamiquement -->
-                    </div>
-                    
-                    <button class="action-button primary-button" id="restart-button">Nouvel investissement</button>
+                <div id="results-container" class="results-container">
+                    <!-- Résultats générés dynamiquement -->
                 </div>
+                
+                <button id="restart-button" class="action-button primary-button">
+                    Nouvel investissement
+                </button>
             </div>
             
             <div class="interaction-button-container">
@@ -134,7 +130,7 @@ function businessInteraction(container, emojiData, onComplete) {
     // Insérer le contenu dans le conteneur
     container.innerHTML = content;
 
-    // Appliquer des styles spécifiques à cette interaction - Optimisés pour empêcher les conflits de défilement
+    // Appliquer des styles spécifiques à cette interaction
     const style = document.createElement('style');
     style.textContent = `
         .business-card {
@@ -142,62 +138,21 @@ function businessInteraction(container, emojiData, onComplete) {
             color: white;
             padding: 20px;
             padding-bottom: 100px;
-            position: relative;
-            box-sizing: border-box;
-            touch-action: pan-y; /* Autoriser seulement le défilement vertical */
-            min-height: 100vh;
-        }
-        
-        .business-simulator-container {
-            position: relative;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            overflow: visible; /* Important pour éviter les problèmes de défilement */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            margin: 20px 0 80px 0; /* Marge supplémentaire en bas */
-            color: white;
-        }
-        
-        .simulator-step {
-            padding: 20px;
-            width: 100%;
             box-sizing: border-box;
         }
         
-        .step-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .back-button {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 10px;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-        
-        .step-title {
+        .section-title {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 15px;
             text-align: center;
-            flex: 1;
         }
         
         .startups-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
+            margin-bottom: 30px;
         }
         
         .startup-card {
@@ -205,88 +160,58 @@ function businessInteraction(container, emojiData, onComplete) {
             border-radius: 12px;
             padding: 15px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             border: 2px solid transparent;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            touch-action: manipulation; /* Important pour les éléments tactiles */
         }
         
         .startup-card:active {
-            transform: scale(0.97);
-            background-color: rgba(255, 255, 255, 0.18);
-        }
-        
-        .startup-card.selected {
-            border-color: rgba(255, 255, 255, 0.4);
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.2);
         }
         
         .startup-icon {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+            font-size: 2rem;
             text-align: center;
+            margin-bottom: 10px;
         }
         
         .startup-name {
             font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 3px;
             text-align: center;
+            margin-bottom: 5px;
         }
         
         .startup-category {
-            font-size: 0.9rem;
-            opacity: 0.8;
             text-align: center;
-            margin-bottom: 8px;
+            opacity: 0.7;
+            font-size: 0.9rem;
         }
         
-        .startup-metrics {
+        .nav-header {
             display: flex;
-            justify-content: center;
-            margin-top: auto;
-            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
         }
         
-        .risk-badge {
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            text-transform: uppercase;
-        }
-        
-        .risk-low {
-            background-color: rgba(76, 175, 80, 0.3);
-        }
-        
-        .risk-medium {
-            background-color: rgba(255, 152, 0, 0.3);
-        }
-        
-        .risk-high {
-            background-color: rgba(244, 67, 54, 0.3);
+        .back-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
         
         .startup-summary {
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             text-align: center;
         }
         
-        .investment-options {
-            margin-bottom: 20px;
-        }
-        
-        .options-title {
-            font-size: 1rem;
-            margin-bottom: 10px;
+        .selection-label {
+            margin-bottom: 15px;
             text-align: center;
         }
         
@@ -294,24 +219,18 @@ function businessInteraction(container, emojiData, onComplete) {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
+            margin-bottom: 20px;
         }
         
         .amount-button {
             background-color: rgba(255, 255, 255, 0.1);
             border: 2px solid transparent;
             border-radius: 10px;
-            padding: 12px 5px;
+            padding: 12px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
             font-size: 1.1rem;
             font-weight: 600;
-            min-height: 50px;
-            touch-action: manipulation;
-        }
-        
-        .amount-button:active {
-            transform: scale(0.97);
         }
         
         .amount-button.selected {
@@ -323,45 +242,43 @@ function businessInteraction(container, emojiData, onComplete) {
             background-color: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
+            width: 100%;
             padding: 15px;
             border-radius: 12px;
-            font-weight: 600;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            margin-top: 10px;
-            min-height: 54px;
-            touch-action: manipulation;
+            margin-bottom: 30px;
+        }
+        
+        .action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .primary-button {
             background-color: #7c4dff;
         }
         
-        .primary-button:active {
-            transform: scale(0.98);
-        }
-        
         .results-container {
-            text-align: center;
-            padding: 20px;
             background-color: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
+            padding: 20px;
             margin-bottom: 20px;
+            text-align: center;
         }
         
         .result-value {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin: 20px 0;
+            margin: 15px 0;
         }
         
         .result-profit {
             display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
             font-weight: 600;
-            padding: 5px 10px;
-            border-radius: 15px;
         }
         
         .profit-positive {
@@ -375,30 +292,7 @@ function businessInteraction(container, emojiData, onComplete) {
         .result-message {
             font-style: italic;
             margin-top: 15px;
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        .result-progress {
-            height: 10px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        
-        .result-progress-fill {
-            height: 100%;
-            border-radius: 5px;
-            transition: width 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-        
-        .positive-fill {
-            background-color: #4caf50;
-        }
-        
-        .negative-fill {
-            background-color: #ff5252;
+            opacity: 0.8;
         }
         
         .interaction-button-container {
@@ -410,9 +304,7 @@ function businessInteraction(container, emojiData, onComplete) {
             padding: 20px;
             display: flex;
             justify-content: center;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
             z-index: 100;
-            touch-action: manipulation;
         }
         
         .continue-btn {
@@ -423,205 +315,107 @@ function businessInteraction(container, emojiData, onComplete) {
             font-size: 1.1rem;
             border-radius: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            width: 80%;
+            width: 100%;
             max-width: 300px;
-            min-height: 54px;
-            touch-action: manipulation;
-        }
-        
-        /* Corrections pour éviter les problèmes de défilement sur mobile */
-        body.with-active-interaction {
-            overflow: auto !important;
-            position: static !important;
-            height: auto !important;
-            touch-action: pan-y !important;
-        }
-        
-        .interaction-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1000;
-            overflow-y: auto !important;
-            -webkit-overflow-scrolling: touch;
-            touch-action: pan-y !important;
-            height: 100% !important;
-        }
-        
-        .interaction-wrapper {
-            min-height: 100%;
-            padding-bottom: 100px;
-            touch-action: pan-y !important;
-            overflow-y: visible !important;
-        }
-        
-        /* Adaptations pour petits écrans */
-        @media (max-width: 480px) {
-            .startups-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .startup-card {
-                padding: 12px;
-                min-height: auto;
-            }
-            
-            .startup-icon {
-                font-size: 1.6rem;
-            }
-            
-            .startup-name {
-                font-size: 1rem;
-            }
-            
-            .action-button {
-                min-height: 54px;
-            }
-            
-            .interaction-button-container {
-                padding: 15px;
-            }
-            
-            .continue-btn {
-                width: 100%;
-            }
         }
     `;
 
     document.head.appendChild(style);
 
-    // Variables d'état
-    let selectedStartup = null;
-    let selectedAmount = null;
-    let investmentResult = null;
-
-    // Éléments interactifs
-    const startupsGrid = document.getElementById('startups-grid');
+    // Récupérer les éléments du DOM
     const startupSelection = document.getElementById('startup-selection');
+    const startupsGrid = document.getElementById('startups-grid');
     const investmentStep = document.getElementById('investment-step');
-    const resultsStep = document.getElementById('results-step');
     const startupSummary = document.getElementById('startup-summary');
+    const resultsStep = document.getElementById('results-step');
+    const resultsContainer = document.getElementById('results-container');
     const amountButtons = document.getElementById('amount-buttons');
     const investButton = document.getElementById('invest-button');
-    const resultsContainer = document.getElementById('results-container');
     const backToStartups = document.getElementById('back-to-startups');
     const backToInvestment = document.getElementById('back-to-investment');
     const restartButton = document.getElementById('restart-button');
     const continueButton = document.getElementById('continue-button');
 
-    // Empêcher les problèmes de défilement
-    document.body.classList.add('with-active-interaction');
+    // Variables d'état
+    let selectedStartup = null;
+    let selectedAmount = null;
 
-    // Générer les cartes de startups - Version simplifiée et visuelle
-    startups.forEach(startup => {
-        const card = document.createElement('div');
-        card.className = 'startup-card';
-
-        // Définir la classe de risque
-        let riskClass;
-        switch(startup.riskLevel) {
-            case 'faible':
-                riskClass = 'risk-low';
-                break;
-            case 'moyen':
-                riskClass = 'risk-medium';
-                break;
-            case 'élevé':
-                riskClass = 'risk-high';
-                break;
-        }
-
-        // Structure simplifiée - plus visuelle
-        card.innerHTML = `
-            <div class="startup-icon">${startup.icon}</div>
-            <div class="startup-name">${startup.name}</div>
-            <div class="startup-category">${startup.category}</div>
-            <div class="startup-metrics">
-                <span class="risk-badge ${riskClass}">Risque ${startup.riskLevel}</span>
+    // MISE À JOUR DE L'INTERFACE: Générer les startups avec des HTML strings
+    let startupsHTML = '';
+    startups.forEach((startup, index) => {
+        startupsHTML += `
+            <div class="startup-card" data-index="${index}">
+                <div class="startup-icon">${startup.icon}</div>
+                <div class="startup-name">${startup.name}</div>
+                <div class="startup-category">${startup.category}</div>
             </div>
         `;
+    });
+    startupsGrid.innerHTML = startupsHTML;
 
-        // Gestion des événements tactiles
-        card.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Désélectionner toutes les cartes
-            document.querySelectorAll('.startup-card').forEach(c => {
-                c.classList.remove('selected');
-            });
-
-            // Sélectionner cette carte
-            card.classList.add('selected');
-            selectedStartup = startup;
-
-            // Montrer l'étape d'investissement
-            showInvestmentStep();
+    // Ajouter les événements de clic APRÈS avoir inséré le HTML
+    document.querySelectorAll('.startup-card').forEach((card, index) => {
+        card.addEventListener('click', function() {
+            console.log("Startup clicked:", startups[index].name);
+            selectedStartup = startups[index];
+            showInvestmentStep(selectedStartup);
         });
-
-        startupsGrid.appendChild(card);
     });
 
-    // Générer les boutons de montant
-    investmentOptions.forEach(option => {
-        const button = document.createElement('div');
-        button.className = 'amount-button';
-        button.textContent = option.label;
+    // MISE À JOUR DE L'INTERFACE: Générer les boutons de montant
+    let amountsHTML = '';
+    investmentOptions.forEach((option, index) => {
+        amountsHTML += `
+            <div class="amount-button" data-index="${index}" data-value="${option.value}">
+                ${option.label}
+            </div>
+        `;
+    });
+    amountButtons.innerHTML = amountsHTML;
 
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Désélectionner tous les boutons
+    // Ajouter les événements aux boutons de montant
+    document.querySelectorAll('.amount-button').forEach((button) => {
+        button.addEventListener('click', function() {
             document.querySelectorAll('.amount-button').forEach(btn => {
                 btn.classList.remove('selected');
             });
+            this.classList.add('selected');
 
-            // Sélectionner ce bouton
-            button.classList.add('selected');
-
-            // Mettre à jour le montant sélectionné
-            selectedAmount = option.value;
-
-            // Activer le bouton d'investissement
+            selectedAmount = parseInt(this.getAttribute('data-value'));
             investButton.disabled = false;
             investButton.classList.add('primary-button');
         });
-
-        amountButtons.appendChild(button);
     });
 
     // Fonction pour afficher l'étape d'investissement
-    function showInvestmentStep() {
-        // Mettre à jour le récapitulatif de la startup
+    function showInvestmentStep(startup) {
+        // Créer le récapitulatif de la startup sélectionnée
         startupSummary.innerHTML = `
-            <div class="startup-icon" style="font-size:2.5rem; margin-bottom:15px;">${selectedStartup.icon}</div>
-            <div class="startup-name" style="font-size:1.3rem; margin-bottom:5px;">${selectedStartup.name}</div>
-            <div class="startup-category">${selectedStartup.category}</div>
-            <div class="startup-description" style="margin-top:10px;">${selectedStartup.description}</div>
+            <div class="summary-icon" style="font-size: 2.5rem; margin-bottom: 10px;">${startup.icon}</div>
+            <div class="summary-name" style="font-size: 1.3rem; font-weight: 600; margin-bottom: 5px;">${startup.name}</div>
+            <div class="summary-category" style="opacity: 0.7;">${startup.category}</div>
+            <div class="summary-description" style="margin-top: 10px;">${startup.description}</div>
         `;
 
-        // Afficher l'étape d'investissement
+        // Passer à l'étape suivante
         startupSelection.style.display = 'none';
         investmentStep.style.display = 'block';
 
-        // Désactiver le bouton d'investissement jusqu'à ce qu'un montant soit sélectionné
+        // Réinitialiser la sélection de montant
+        document.querySelectorAll('.amount-button').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
         investButton.disabled = true;
         investButton.classList.remove('primary-button');
-
-        // Faire défiler vers le haut
-        container.scrollTo(0, 0);
     }
 
     // Fonction pour simuler l'investissement
     function simulateInvestment() {
-        // Vérifier les sélections
+        // Vérifier que les sélections sont faites
         if (!selectedStartup || !selectedAmount) return;
 
-        // Facteur base sur le potentiel et le risque
+        // Facteurs basés sur le niveau de risque
         const riskFactors = {
             'faible': { min: 0.9, max: 1.4 },
             'moyen': { min: 0.7, max: 1.8 },
@@ -630,170 +424,83 @@ function businessInteraction(container, emojiData, onComplete) {
 
         const risk = riskFactors[selectedStartup.riskLevel];
 
-        // Générer un résultat aléatoire
+        // Génération aléatoire du résultat
         const multiplier = risk.min + (Math.random() * (risk.max - risk.min));
         const finalValue = Math.round(selectedAmount * multiplier);
         const profit = finalValue - selectedAmount;
-        const percentageChange = ((finalValue - selectedAmount) / selectedAmount * 100).toFixed(1);
+        const percentageChange = ((profit / selectedAmount) * 100).toFixed(1);
         const isPositive = profit >= 0;
 
-        // Sauvegarder le résultat
-        investmentResult = {
-            startup: selectedStartup,
-            initialInvestment: selectedAmount,
-            finalValue: finalValue,
-            profit: profit,
-            percentageChange: percentageChange,
-            isPositive: isPositive
-        };
-
-        // Générer un message
+        // Message basé sur le résultat
         let resultMessage;
         if (percentageChange >= 50) {
-            resultMessage = "Félicitations! Votre investissement a été extrêmement fructueux.";
+            resultMessage = "Incroyable! Votre investissement a été extrêmement rentable.";
         } else if (percentageChange >= 20) {
-            resultMessage = "Beau travail! Votre investissement a été très rentable.";
+            resultMessage = "Excellent! Votre investissement a bien performé.";
         } else if (percentageChange >= 0) {
-            resultMessage = "Votre investissement est rentable.";
+            resultMessage = "Bien joué! Votre investissement est rentable.";
         } else if (percentageChange >= -20) {
-            resultMessage = "Votre investissement a subi une légère perte.";
+            resultMessage = "Votre investissement a connu une légère perte.";
         } else {
-            resultMessage = "Votre investissement a malheureusement subi une forte perte.";
+            resultMessage = "Malheureusement, votre investissement a subi une forte perte.";
         }
-
-        investmentResult.message = resultMessage;
 
         // Afficher les résultats
-        showResults();
-    }
-
-    // Fonction pour afficher les résultats
-    function showResults() {
-        // Préparer l'affichage des résultats
         resultsContainer.innerHTML = `
-            <div style="margin-bottom:20px;">
-                <div class="startup-icon" style="font-size:2.5rem; margin-bottom:10px;">${investmentResult.startup.icon}</div>
-                <div class="startup-name" style="font-size:1.3rem;">${investmentResult.startup.name}</div>
-                <div style="opacity:0.8; margin:5px 0;">Investissement: ${investmentResult.initialInvestment.toLocaleString()}€</div>
+            <div style="margin-bottom:15px;">
+                <div style="font-size:2rem; margin-bottom:10px;">${selectedStartup.icon}</div>
+                <div style="font-size:1.2rem; font-weight:600;">${selectedStartup.name}</div>
+                <div style="opacity:0.7; margin-top:5px;">Investissement: ${selectedAmount.toLocaleString()}€</div>
             </div>
             
-            <div class="result-value">${investmentResult.finalValue.toLocaleString()}€</div>
-            
-            <div class="result-progress">
-                <div class="result-progress-fill ${investmentResult.isPositive ? 'positive-fill' : 'negative-fill'}" 
-                     style="width: 0%;"></div>
-            </div>
+            <div class="result-value">${finalValue.toLocaleString()}€</div>
             
             <div style="margin:15px 0;">
-                <div class="result-profit ${investmentResult.isPositive ? 'profit-positive' : 'profit-negative'}">
-                    ${investmentResult.isPositive ? '+' : ''}${investmentResult.profit.toLocaleString()}€ 
-                    (${investmentResult.isPositive ? '+' : ''}${investmentResult.percentageChange}%)
-                </div>
+                <span class="result-profit ${isPositive ? 'profit-positive' : 'profit-negative'}">
+                    ${isPositive ? '+' : ''}${profit.toLocaleString()}€ (${isPositive ? '+' : ''}${percentageChange}%)
+                </span>
             </div>
             
-            <div class="result-message">${investmentResult.message}</div>
+            <div class="result-message">${resultMessage}</div>
         `;
 
-        // Afficher l'étape des résultats
+        // Passer à l'étape des résultats
         investmentStep.style.display = 'none';
         resultsStep.style.display = 'block';
-
-        // Animer la barre de progression
-        setTimeout(() => {
-            const progressFill = resultsContainer.querySelector('.result-progress-fill');
-            const percentage = Math.abs(parseFloat(investmentResult.percentageChange));
-            const normalizedWidth = Math.min(100, Math.max(10, percentage * 2));
-
-            progressFill.style.width = `${normalizedWidth}%`;
-        }, 300);
-
-        // Faire défiler vers le haut
-        container.scrollTo(0, 0);
     }
 
-    // Gérer les événements de l'interface
-    investButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (selectedAmount) {
-            simulateInvestment();
-        }
+    // Configurer tous les événements
+    investButton.addEventListener('click', function() {
+        simulateInvestment();
     });
 
-    backToStartups.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    backToStartups.addEventListener('click', function() {
         investmentStep.style.display = 'none';
         startupSelection.style.display = 'block';
-
-        // Faire défiler vers le haut
-        container.scrollTo(0, 0);
     });
 
-    backToInvestment.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    backToInvestment.addEventListener('click', function() {
         resultsStep.style.display = 'none';
         investmentStep.style.display = 'block';
-
-        // Faire défiler vers le haut
-        container.scrollTo(0, 0);
     });
 
-    restartButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    restartButton.addEventListener('click', function() {
         // Réinitialiser les sélections
         selectedStartup = null;
         selectedAmount = null;
-        investmentResult = null;
 
-        // Désélectionner tous les boutons et cartes
-        document.querySelectorAll('.startup-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-
-        document.querySelectorAll('.amount-button').forEach(btn => {
-            btn.classList.remove('selected');
-        });
-
-        // Revenir à la sélection de startup
+        // Retourner à la sélection de startup
         resultsStep.style.display = 'none';
         startupSelection.style.display = 'block';
-
-        // Faire défiler vers le haut
-        container.scrollTo(0, 0);
     });
 
-    continueButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        // Nettoyer le correctif de défilement
-        document.body.classList.remove('with-active-interaction');
-
+    continueButton.addEventListener('click', function() {
         // Réafficher les boutons d'action
         if (actionButtons) {
             actionButtons.style.display = 'flex';
         }
 
-        // Appeler le callback de fin
+        // Terminer l'interaction
         onComplete();
     });
-
-    // Empêcher la propagation des événements de défilement
-    container.addEventListener('touchmove', (e) => {
-        e.stopPropagation();
-    }, { passive: true });
-
-    // S'assurer que les événements de clic sont bien gérés
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('.startup-card, .amount-button, .action-button, .back-button')) {
-            e.stopPropagation();
-        }
-    }, { capture: true });
 }
