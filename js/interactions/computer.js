@@ -1,55 +1,22 @@
 /**
  * Interaction pour l'emoji Informatique (💻)
- * Mini-défi: corriger une erreur dans un petit programme
+ * Mini-défi: corriger une erreur dans un code HTML simple
  *
  * @param {HTMLElement} container - Conteneur de l'interaction
  * @param {Object} emojiData - Données de l'emoji (emoji, titre, description)
  * @param {Function} onComplete - Fonction à appeler lorsque l'interaction est terminée
  */
 function computerInteraction(container, emojiData, onComplete) {
-    // Liste de codes avec erreurs à corriger
-    const codeChallenges = [
-        {
-            language: "Python",
-            title: "Trouvez l'erreur",
-            buggyCode: "def salutation():\n    message = \"Hello, World!\"\nprint(message)",
-            fixedCode: "def salutation():\n    message = \"Hello, World!\"\n    print(message)",
-            errorHint: "Indice: Regardez l'indentation. En Python, l'indentation est cruciale!",
-            solution: "La solution: Le print() doit être indenté pour faire partie de la fonction.",
-            explanation: "En Python, l'indentation définit les blocs de code. Ici, la ligne 'print(message)' devait être indentée pour être dans la fonction."
-        },
-        {
-            language: "JavaScript",
-            title: "Trouvez l'erreur",
-            buggyCode: "function afficherMessage() {\n    const mesage = \"Hello, World!\";\n    console.log(mesage);\n}",
-            fixedCode: "function afficherMessage() {\n    const message = \"Hello, World!\";\n    console.log(message);\n}",
-            errorHint: "Indice: Regardez attentivement les noms de variables.",
-            solution: "La solution: 'mesage' est mal orthographié, il fallait écrire 'message'.",
-            explanation: "En JavaScript, les variables sont sensibles à la casse. Ici, la variable 'mesage' a été mal orthographiée et ne correspondait pas à 'message'."
-        },
-        {
-            language: "HTML",
-            title: "Trouvez l'erreur",
-            buggyCode: "<h1>Mon titre</h1>\n<p>Ceci est un paragraphe.<p>\n<div>Section importante</div>",
-            fixedCode: "<h1>Mon titre</h1>\n<p>Ceci est un paragraphe.</p>\n<div>Section importante</div>",
-            errorHint: "Indice: Regardez si toutes les balises sont correctement fermées.",
-            solution: "La solution: La balise <p> n'était pas fermée correctement. Il fallait </p> à la fin du paragraphe.",
-            explanation: "En HTML, chaque balise ouvrante doit avoir une balise fermante correspondante. Ici, la balise <p> n'était pas fermée correctement."
-        },
-        {
-            language: "Java",
-            title: "Trouvez l'erreur",
-            buggyCode: "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\")\n    }\n}",
-            fixedCode: "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
-            errorHint: "Indice: En Java, chaque instruction doit se terminer d'une certaine façon.",
-            solution: "La solution: Il manque un point-virgule (;) après println(\"Hello, World!\").",
-            explanation: "En Java, chaque instruction doit se terminer par un point-virgule. Ici, le point-virgule était manquant après l'instruction System.out.println()."
-        }
-    ];
-
-    // Sélectionner un défi aléatoire
-    const randomIndex = Math.floor(Math.random() * codeChallenges.length);
-    const challenge = codeChallenges[randomIndex];
+    // Défi HTML avec des balises échappées pour un affichage correct sur tous les appareils
+    const challenge = {
+        language: "HTML",
+        title: "Trouvez l'erreur",
+        buggyCode: "&lt;h1&gt;Mon titre&lt;/h1&gt;\n&lt;p&gt;Ceci est un paragraphe.&lt;p&gt;\n&lt;div&gt;Section importante&lt;/div&gt;",
+        fixedCode: "&lt;h1&gt;Mon titre&lt;/h1&gt;\n&lt;p&gt;Ceci est un paragraphe.&lt;/p&gt;\n&lt;div&gt;Section importante&lt;/div&gt;",
+        errorHint: "Indice: Regardez si toutes les balises sont correctement fermées.",
+        solution: "La solution: La balise &lt;p&gt; n'était pas fermée correctement. Il fallait &lt;/p&gt; à la fin du paragraphe.",
+        explanation: "En HTML, chaque balise ouvrante doit avoir une balise fermante correspondante. Ici, la balise &lt;p&gt; n'était pas fermée correctement avec &lt;/p&gt;."
+    };
 
     // Créer le contenu de l'interaction
     const content = `
@@ -58,14 +25,16 @@ function computerInteraction(container, emojiData, onComplete) {
             <h2 class="interaction-title">${emojiData.title}</h2>
             <div class="interaction-description">
                 <p>${emojiData.description}</p>
-                <p>Pour démontrer vos compétences en codage, trouvez et corrigez l'erreur dans ce code ${challenge.language} !</p>
+                <p>Pour démontrer vos compétences en codage, trouvez et corrigez l'erreur dans ce code HTML !</p>
             </div>
             
             <div class="code-container">
                 <div class="language-selector">
-                    <h3 class="challenge-title">${challenge.title} (${challenge.language})</h3>
+                    <h3 class="challenge-title">${challenge.title} (HTML)</h3>
                 </div>
-                <pre id="code-editor" class="code-editor" contenteditable="true" spellcheck="false">${challenge.buggyCode}</pre>
+                <div class="code-editor-wrapper">
+                    <textarea id="code-editor" class="code-editor" spellcheck="false">${challenge.buggyCode}</textarea>
+                </div>
                 <div class="hint-container">
                     <button class="button hint-button" id="hint-button">Besoin d'un indice?</button>
                     <button class="button solution-button" id="solution-button" style="display:none;">Voir la solution</button>
@@ -117,20 +86,24 @@ function computerInteraction(container, emojiData, onComplete) {
             border-bottom: 1px solid #37474f;
         }
         
+        .code-editor-wrapper {
+            padding: 0;
+            position: relative;
+        }
+        
         .code-editor {
             font-family: 'Courier New', monospace;
             color: #fff;
             padding: 15px;
             width: 100%;
-            white-space: pre;
-            overflow-x: auto;
+            box-sizing: border-box;
+            height: 150px;
+            overflow-y: auto;
             outline: none;
-            font-size: 14px;
-            min-height: 120px;
+            font-size: 16px;
             background-color: #263238;
             border: none;
             resize: none;
-            cursor: text;
             line-height: 1.5;
         }
         
@@ -156,6 +129,7 @@ function computerInteraction(container, emojiData, onComplete) {
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
+            flex: 1;
         }
         
         .hint-button:hover, .solution-button:hover {
@@ -191,7 +165,7 @@ function computerInteraction(container, emojiData, onComplete) {
         /* Amélioration pour le mobile */
         @media (max-width: 480px) {
             .code-editor {
-                font-size: 13px;
+                font-size: 16px;
                 line-height: 1.4;
             }
             
@@ -199,9 +173,12 @@ function computerInteraction(container, emojiData, onComplete) {
                 flex-direction: column;
             }
             
-            .hint-button, .solution-button {
+            .interaction-buttons {
+                flex-direction: column;
+            }
+            
+            .interaction-buttons .button {
                 width: 100%;
-                padding: 10px;
             }
         }
     `;
@@ -217,17 +194,11 @@ function computerInteraction(container, emojiData, onComplete) {
     const verifyButton = document.getElementById('verify-button');
     const continueButton = document.getElementById('continue-button');
 
-    // Assurer que l'élément est éditable
+    // Assurer que l'élément est éditable et a le focus
     if (codeEditor) {
-        codeEditor.focus();
-
-        // Placer le curseur à la fin du contenu
-        const range = document.createRange();
-        const sel = window.getSelection();
-        range.selectNodeContents(codeEditor);
-        range.collapse(false);
-        sel.removeAllRanges();
-        sel.addRange(range);
+        setTimeout(() => {
+            codeEditor.focus();
+        }, 500);
     }
 
     // Définir les événements
@@ -242,7 +213,7 @@ function computerInteraction(container, emojiData, onComplete) {
 
         if (solutionText.style.display === 'block') {
             // Si la solution est affichée, mettre le code correct dans l'éditeur
-            codeEditor.textContent = challenge.fixedCode;
+            codeEditor.value = challenge.fixedCode;
             codeEditor.classList.add('code-correct');
             verifyButton.style.display = 'none';
             continueButton.style.display = 'block';
@@ -250,12 +221,12 @@ function computerInteraction(container, emojiData, onComplete) {
     });
 
     verifyButton.addEventListener('click', () => {
-        const userCode = codeEditor.textContent.trim();
+        const userCode = codeEditor.value.trim();
         const correctCode = challenge.fixedCode.trim();
 
-        // Méthode de vérification simple - comparer les codes après normalisation
-        const normalizedUserCode = userCode.replace(/\s+/g, ' ').replace(/\s*([{}()[\],;])\s*/g, '$1');
-        const normalizedCorrectCode = correctCode.replace(/\s+/g, ' ').replace(/\s*([{}()[\],;])\s*/g, '$1');
+        // Normaliser les espaces dans les deux codes pour la comparaison
+        const normalizedUserCode = userCode.replace(/\s+/g, ' ');
+        const normalizedCorrectCode = correctCode.replace(/\s+/g, ' ');
 
         if (normalizedUserCode === normalizedCorrectCode || userCode === correctCode) {
             // Code correct
@@ -282,13 +253,10 @@ function computerInteraction(container, emojiData, onComplete) {
         onComplete();
     });
 
-    // Au bout de 3 essais infructueux, proposer automatiquement la solution
-    let attempts = 0;
-
-    codeEditor.addEventListener('input', () => {
-        attempts++;
-        if (attempts >= 3 && solutionButton.style.display === 'none') {
+    // Afficher automatiquement la solution après un certain temps
+    setTimeout(() => {
+        if (solutionButton.style.display === 'none') {
             solutionButton.style.display = 'block';
         }
-    });
+    }, 30000); // Après 30 secondes
 }
