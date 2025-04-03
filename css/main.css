@@ -577,6 +577,107 @@ input[type="checkbox"], input[type="radio"] {
     height: 22px;
 }
 
+/* Version améliorée et responsive du modal d'aide */
+.help-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    padding: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    overflow-y: auto;
+}
+
+.help-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.help-content {
+    background-color: white;
+    color: #333;
+    border-radius: 20px;
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: auto;
+}
+
+.help-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #6e8efb;
+}
+
+.help-steps {
+    margin-bottom: 15px;
+}
+
+.help-steps ol {
+    padding-left: 20px;
+}
+
+.help-steps li {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.qr-instructions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.qr-phone-img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.qr-steps {
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.qr-steps p {
+    margin-bottom: 5px;
+}
+
 /* Responsive design - Media queries */
 @media (max-width: 768px) {
     .title {
@@ -640,6 +741,33 @@ input[type="checkbox"], input[type="radio"] {
         scroll-behavior: smooth;
         overflow-x: auto;
         padding-bottom: 10px; /* Espace pour ne pas que le scroll soit coupé */
+    }
+
+    /* Ajustements help modal responsif */
+    .help-content {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .help-title {
+        font-size: 1.1rem;
+    }
+
+    .help-steps li {
+        font-size: 0.9rem;
+    }
+
+    .close-button {
+        top: 5px;
+        right: 5px;
+    }
+
+    .qr-phone-img {
+        width: 80px;
+    }
+
+    .qr-steps {
+        font-size: 0.8rem;
     }
 }
 
@@ -710,6 +838,25 @@ input[type="checkbox"], input[type="radio"] {
     }
 }
 
+@media (max-width: 320px) {
+    .help-content {
+        padding: 12px;
+    }
+
+    .help-title {
+        font-size: 1rem;
+    }
+
+    .help-steps {
+        margin-bottom: 10px;
+    }
+
+    .help-steps li {
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+    }
+}
+
 /* Orientation paysage sur mobile */
 @media (max-height: 500px) and (orientation: landscape) {
     .interaction-card {
@@ -756,5 +903,42 @@ input[type="checkbox"], input[type="radio"] {
 
     .start-button {
         margin-top: 15px;
+    }
+
+    /* Help modal en paysage */
+    .help-modal {
+        align-items: flex-start;
+    }
+
+    .help-content {
+        max-height: 90vh;
+        margin-top: 5vh;
+    }
+
+    .qr-instructions {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .qr-phone-img {
+        width: 60px;
+        margin-bottom: 0;
+    }
+}
+
+/* Ajustements supplémentaires pour les petits écrans */
+@media (max-height: 600px) {
+    .help-content {
+        max-height: 85vh;
+        padding: 15px;
+    }
+
+    .help-steps li {
+        margin-bottom: 5px;
+    }
+
+    .qr-instructions {
+        margin: 10px 0;
     }
 }

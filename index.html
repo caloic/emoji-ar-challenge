@@ -256,70 +256,6 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .help-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 200;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .help-modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .help-content {
-            background-color: white;
-            color: #333;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 500px;
-            width: 100%;
-            position: relative;
-        }
-
-        .help-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: #6e8efb;
-        }
-
-        .help-steps {
-            margin-bottom: 20px;
-        }
-
-        .help-steps ol {
-            padding-left: 25px;
-        }
-
-        .help-steps li {
-            margin-bottom: 8px;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #999;
-        }
-
         .qr-instructions {
             display: flex;
             flex-direction: column;
@@ -464,7 +400,7 @@
         <!-- Le contenu sera généré dynamiquement en fonction de l'emoji trouvé -->
     </div>
     <div class="copyright" style="color:white; position: fixed; bottom: 10px; left: 0; right: 0; z-index: 101;">
-        © 2025 Loïc CANO - B2 Informatique - Montpellier Ynov Campus 
+        © 2025 Loïc CANO - B2 Informatique - Montpellier Ynov Campus
     </div>
 </div>
 
@@ -488,7 +424,7 @@
     <div class="copyright">© 2025 Loïc CANO - B2 Informatique - Montpellier Ynov Campus </div>
 </div>
 
-<!-- Fenêtre modale d'aide -->
+<!-- Fenêtre modale d'aide - AMÉLIORÉE POUR MOBILE -->
 <div class="help-modal" id="help-modal">
     <div class="help-content">
         <button class="close-button" id="close-help">×</button>

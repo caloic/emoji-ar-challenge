@@ -281,26 +281,179 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fonction pour afficher l'aide
+    // Fonction pour afficher l'aide - VERSION AMÉLIORÉE
     function showHelp() {
         const helpContent = `
             <div class="interaction-card">
                 <div class="interaction-emoji">🔍</div>
                 <h2 class="interaction-title">Comment jouer?</h2>
                 <div class="interaction-description">
-                    <p>Explorez l'Atrium à la recherche des 9 QR codes.</p>
-                    <p>Utilisez l'appareil photo de votre téléphone pour scanner les QR codes.</p>
-                    <p>Chaque QR code vous fait découvrir une filière d'Ynov Campus avec une interaction unique!</p>
-                    <p>Trouvez au moins 5 filières pour obtenir votre carte d'identité digitale.</p>
+                    <div class="help-steps">
+                        <ol>
+                            <li>Parcourez l'Atrium pour trouver les 9 QR codes cachés</li>
+                            <li>Ouvrez l'appareil photo de votre téléphone</li>
+                            <li>Pointez-le vers un QR code et cliquez sur la notification</li>
+                            <li>Découvrez une filière Ynov et collectez son emoji</li>
+                            <li>Trouvez au moins 5 emojis pour obtenir votre carte d'identité digitale</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="qr-instructions">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmU4ZWZiIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iNSIgeT0iNSIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE5IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48cGF0aCBkPSJNMTIgM3YyIj48L3BhdGg+PHBhdGggZD0iTTkgMjFoNiI+PC9wYXRoPjwvc3ZnPg==" class="qr-phone-img" alt="Phone icon">
+                        <div class="qr-steps">
+                            <p>Sur iPhone : ouvrez directement l'appareil photo</p>
+                            <p>Sur Android : utilisez l'appareil photo ou un lecteur QR code</p>
+                        </div>
+                    </div>
                 </div>
-                <button class="button" id="scan-qr-button">Scanner un QR Code</button>
-                <button class="button" id="close-help">Fermer</button>
+                <div class="help-buttons">
+                    <button class="button" id="scan-qr-button">Scanner un QR Code</button>
+                    <button class="button" id="close-help">Fermer</button>
+                </div>
             </div>
         `;
 
         interactionContainer.innerHTML = helpContent;
         interactionContainer.style.display = 'flex';
         interactionContainer.classList.add('fade-in');
+
+        // Ajouter des styles spécifiques pour cette interaction
+        const style = document.createElement('style');
+        style.textContent = `
+            .interaction-card {
+                max-width: 500px;
+                width: 95%;
+                margin: 0 auto;
+                max-height: 90vh;
+                overflow-y: auto;
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
+            .interaction-title {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+            
+            .interaction-description {
+                margin-bottom: 20px;
+            }
+            
+            .help-steps ol {
+                padding-left: 20px;
+            }
+            
+            .help-steps li {
+                margin-bottom: 8px;
+                text-align: left;
+            }
+            
+            .qr-instructions {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 15px 0;
+                background-color: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            
+            .qr-phone-img {
+                width: 80px;
+                height: auto;
+                margin-bottom: 10px;
+            }
+            
+            .qr-steps {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            
+            .qr-steps p {
+                margin-bottom: 5px;
+            }
+            
+            .help-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .help-buttons .button {
+                min-width: 120px;
+                min-height: 44px; /* Taille minimale pour cibles tactiles */
+                font-size: 0.95rem;
+            }
+            
+            @media (max-width: 480px) {
+                .interaction-card {
+                    padding: 15px;
+                }
+                
+                .interaction-title {
+                    font-size: 1.2rem;
+                }
+                
+                .help-steps li {
+                    font-size: 0.9rem;
+                    margin-bottom: 6px;
+                }
+                
+                .qr-phone-img {
+                    width: 70px;
+                }
+                
+                .qr-steps {
+                    font-size: 0.85rem;
+                }
+            }
+            
+            @media (max-width: 350px) {
+                .interaction-card {
+                    padding: 12px;
+                }
+                
+                .interaction-title {
+                    font-size: 1.1rem;
+                }
+                
+                .help-steps li {
+                    font-size: 0.85rem;
+                    margin-bottom: 5px;
+                }
+            }
+            
+            @media (max-height: 600px) {
+                .interaction-card {
+                    max-height: 85vh;
+                }
+                
+                .interaction-title {
+                    margin-bottom: 10px;
+                }
+                
+                .help-steps li {
+                    margin-bottom: 5px;
+                }
+            }
+            
+            @media (max-height: 480px) and (orientation: landscape) {
+                .qr-instructions {
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10px;
+                    text-align: left;
+                }
+                
+                .qr-phone-img {
+                    width: 60px;
+                    margin-bottom: 0;
+                }
+            }
+        `;
+
+        document.head.appendChild(style);
 
         // Bouton pour ouvrir l'appareil photo
         document.getElementById('scan-qr-button').addEventListener('click', () => {
@@ -313,6 +466,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 interactionContainer.style.display = 'none';
                 interactionContainer.classList.remove('fade-out');
                 interactionContainer.innerHTML = '';
+                // Supprimer le style spécifique
+                document.head.removeChild(style);
             }, 500);
         });
     }
