@@ -82,7 +82,7 @@ class CardGenerator {
         this.cardHTML = `
             <div class="digital-id-card" style="background: ${theme.bgGradient}; color: ${theme.fontColor};">
                 <div class="card-header">
-                    <img src="assets/images/icons/ynov-logo-white.svg" alt="Ynov Campus" class="card-logo" style="height: 30px; width: auto; max-width: 100px; object-fit: contain;">
+                    <img src="assets/images/icons/logo_ynov_campus.png" alt="Ynov Campus" class="card-logo" style="height: 30px; width: auto; max-width: 100px; object-fit: contain;">
                     <div class="card-title">Carte d'Identité Digitale</div>
                 </div>
                 
