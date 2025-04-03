@@ -1,6 +1,6 @@
 /**
  * Interaction pour l'emoji Création & Digital Design (🎨)
- * Offre une toile virtuelle pour créer une œuvre digitale en quelques secondes
+ * Permet de créer un poster digital en combinant des formes, couleurs et textes
  *
  * @param {HTMLElement} container - Conteneur de l'interaction
  * @param {Object} emojiData - Données de l'emoji (emoji, titre, description)
@@ -13,57 +13,111 @@ function designInteraction(container, emojiData, onComplete) {
         actionButtons.style.display = 'none';
     }
 
-    // Outils de dessin disponibles
-    const drawingTools = [
+    // Modèles de posters disponibles
+    const posterTemplates = [
         {
-            name: "Pinceau",
-            icon: "🖌️",
-            size: 10,
-            type: "brush"
+            name: "Minimaliste",
+            background: "#ffffff",
+            color: "#000000",
+            accent: "#ff3366"
         },
         {
-            name: "Stylo",
-            icon: "✒️",
-            size: 3,
-            type: "pen"
+            name: "Rétro",
+            background: "#f5e9be",
+            color: "#2d4059",
+            accent: "#ea5455"
         },
         {
-            name: "Spray",
-            icon: "💨",
-            size: 20,
-            type: "spray"
+            name: "Tech",
+            background: "#1e1e2e",
+            color: "#ffffff",
+            accent: "#00d9ff"
         },
         {
-            name: "Formes",
-            icon: "⭐",
-            size: 30,
-            type: "shapes"
-        },
-        {
-            name: "Gomme",
-            icon: "🧽",
-            size: 15,
-            type: "eraser"
+            name: "Nature",
+            background: "#e0f2e9",
+            color: "#335c67",
+            accent: "#66c29a"
         }
     ];
 
-    // Palettes de couleurs disponibles
-    const colorPalettes = [
+    // Éléments de design disponibles
+    const designElements = [
         {
-            name: "Primaire",
-            colors: ["#ff0000", "#0000ff", "#ffff00", "#000000", "#ffffff"]
+            type: "shape",
+            name: "Cercle",
+            draw: (ctx, x, y, size, color) => {
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+            }
         },
         {
-            name: "Pastel",
-            colors: ["#ffb6c1", "#add8e6", "#fffacd", "#98fb98", "#e6e6fa"]
+            type: "shape",
+            name: "Carré",
+            draw: (ctx, x, y, size, color) => {
+                ctx.fillStyle = color;
+                ctx.fillRect(x - size, y - size, size * 2, size * 2);
+            }
         },
         {
-            name: "Néon",
-            colors: ["#ff00ff", "#00ffff", "#39ff14", "#ff3131", "#fcf340"]
+            type: "shape",
+            name: "Triangle",
+            draw: (ctx, x, y, size, color) => {
+                ctx.beginPath();
+                ctx.moveTo(x, y - size);
+                ctx.lineTo(x + size, y + size);
+                ctx.lineTo(x - size, y + size);
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+            }
         },
         {
-            name: "Terre",
-            colors: ["#8b4513", "#cd853f", "#d2b48c", "#556b2f", "#006400"]
+            type: "shape",
+            name: "Étoile",
+            draw: (ctx, x, y, size, color) => {
+                const spikes = 5;
+                const outerRadius = size;
+                const innerRadius = size / 2;
+
+                ctx.beginPath();
+                let rot = Math.PI / 2 * 3;
+                let step = Math.PI / spikes;
+
+                ctx.moveTo(x, y - outerRadius);
+                for (let i = 0; i < spikes; i++) {
+                    ctx.lineTo(x + Math.cos(rot) * outerRadius, y + Math.sin(rot) * outerRadius);
+                    rot += step;
+                    ctx.lineTo(x + Math.cos(rot) * innerRadius, y + Math.sin(rot) * innerRadius);
+                    rot += step;
+                }
+                ctx.lineTo(x, y - outerRadius);
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+            }
+        },
+        {
+            type: "emoji",
+            name: "👍",
+            value: "👍"
+        },
+        {
+            type: "emoji",
+            name: "❤️",
+            value: "❤️"
+        },
+        {
+            type: "emoji",
+            name: "🚀",
+            value: "🚀"
+        },
+        {
+            type: "emoji",
+            name: "✨",
+            value: "✨"
         }
     ];
 
@@ -74,31 +128,45 @@ function designInteraction(container, emojiData, onComplete) {
             <h2 class="interaction-title">${emojiData.title}</h2>
             <div class="interaction-description">
                 <p>${emojiData.description}</p>
-                <p>Exprimez votre créativité sur cette toile virtuelle!</p>
+                <p>Créez votre poster digital avec des formes, couleurs et textes!</p>
             </div>
             
-            <div class="canvas-container">
-                <canvas id="drawing-canvas" width="300" height="300"></canvas>
+            <div class="poster-creator">
+                <div class="poster-preview-container">
+                    <canvas id="poster-canvas" width="300" height="400"></canvas>
+                </div>
                 
-                <div class="drawing-tools">
-                    <div class="tools-section">
-                        <div class="section-title">Outils</div>
-                        <div class="tools-buttons" id="tools-buttons">
+                <div class="design-controls">
+                    <div class="control-section">
+                        <h3 class="section-title">Style</h3>
+                        <div class="template-selector" id="template-selector">
                             <!-- Boutons générés dynamiquement -->
                         </div>
                     </div>
                     
-                    <div class="tools-section">
-                        <div class="section-title">Couleurs</div>
-                        <div class="palette-container" id="palette-container">
-                            <!-- Palettes générées dynamiquement -->
+                    <div class="control-section">
+                        <h3 class="section-title">Éléments</h3>
+                        <div class="elements-grid" id="elements-grid">
+                            <!-- Éléments générés dynamiquement -->
                         </div>
                     </div>
-                </div>
-                
-                <div class="canvas-actions">
-                    <button class="action-button" id="clear-button">Effacer tout</button>
-                    <button class="action-button" id="download-button">Télécharger</button>
+                    
+                    <div class="control-section">
+                        <h3 class="section-title">Texte</h3>
+                        <div class="text-editor">
+                            <input type="text" id="poster-text" class="poster-text-input" placeholder="Ajouter un texte..." maxlength="20">
+                            <div class="font-size-control">
+                                <button id="font-smaller" class="size-button">-</button>
+                                <span id="font-size-label">24px</span>
+                                <button id="font-larger" class="size-button">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="poster-actions">
+                        <button id="reset-button" class="action-button reset-button">Réinitialiser</button>
+                        <button id="download-button" class="action-button download-button">Télécharger</button>
+                    </div>
                 </div>
             </div>
             
@@ -124,149 +192,204 @@ function designInteraction(container, emojiData, onComplete) {
             box-sizing: border-box;
         }
         
-        .canvas-container {
+        .poster-creator {
             background-color: white;
-            border-radius: 10px;
+            border-radius: 15px;
             padding: 15px;
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             color: #333;
         }
         
-        #drawing-canvas {
-            width: 100%;
-            height: 300px;
-            background-color: white;
-            border-radius: 5px;
-            border: 1px solid #ddd;
+        .poster-preview-container {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
             margin-bottom: 15px;
-            touch-action: none;
-            cursor: crosshair;
         }
         
-        .drawing-tools {
+        #poster-canvas {
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        
+        .design-controls {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-bottom: 15px;
         }
         
-        .tools-section {
-            background-color: #f5f5f5;
-            border-radius: 8px;
-            padding: 10px;
+        .control-section {
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
         }
         
         .section-title {
+            font-size: 1rem;
             font-weight: 600;
             margin-bottom: 10px;
-            color: #333;
-            font-size: 0.9rem;
+            color: #654ea3;
         }
         
-        .tools-buttons {
+        .template-selector {
             display: flex;
             flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        .template-button {
+            padding: 8px 12px;
+            border: 2px solid #eee;
+            border-radius: 20px;
+            background-color: white;
+            color: #333;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 44px;
+            min-width: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .template-button:hover {
+            transform: translateY(-2px);
+            border-color: #654ea3;
+        }
+        
+        .template-button.active {
+            background-color: #654ea3;
+            color: white;
+            border-color: #654ea3;
+        }
+        
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             justify-content: center;
         }
         
-        .tool-button {
-            width: 40px;
-            height: 40px;
+        .element-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.2rem;
+        }
+        
+        .element-button:hover {
+            transform: scale(1.1);
+            border-color: #654ea3;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .element-button.emoji {
+            font-size: 1.8rem;
+        }
+        
+        .text-editor {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .poster-text-input {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            min-height: 44px;
+        }
+        
+        .poster-text-input:focus {
+            outline: none;
+            border-color: #654ea3;
+        }
+        
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .size-button {
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            border: 2px solid #ddd;
+            border: 1px solid #ddd;
             background-color: white;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             font-size: 1.2rem;
-            transition: all 0.2s;
             min-height: 44px;
             min-width: 44px;
         }
         
-        .tool-button:hover {
-            transform: scale(1.1);
-            border-color: #bbb;
+        .size-button:hover {
+            background-color: #f0f0f0;
         }
         
-        .tool-button.active {
-            border-color: #654ea3;
-            background-color: #f0ebfa;
-        }
-        
-        .palette-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .color-palette {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-        
-        .palette-name {
-            font-size: 0.8rem;
-            margin-bottom: 5px;
+        #font-size-label {
+            width: 50px;
             text-align: center;
+            font-weight: 600;
         }
         
-        .color-swatch {
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            border: 2px solid #ddd;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-height: 25px;
-            min-width: 25px;
-        }
-        
-        .color-swatch:hover {
-            transform: scale(1.2);
-        }
-        
-        .color-swatch.active {
-            border-color: #333;
-            transform: scale(1.2);
-        }
-        
-        .canvas-actions {
+        .poster-actions {
             display: flex;
             justify-content: space-between;
             gap: 10px;
+            margin-top: 15px;
         }
         
         .action-button {
-            padding: 8px 15px;
+            padding: 12px 15px;
             border: none;
             border-radius: 20px;
-            background-color: #f5f5f5;
-            color: #333;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            font-weight: 600;
-            flex: 1;
             min-height: 44px;
+            flex: 1;
         }
         
-        .action-button:hover {
+        .reset-button {
+            background-color: #f1f1f1;
+            color: #666;
+        }
+        
+        .reset-button:hover {
             background-color: #e0e0e0;
+        }
+        
+        .download-button {
+            background-color: #654ea3;
+            color: white;
+        }
+        
+        .download-button:hover {
+            background-color: #563d99;
             transform: translateY(-2px);
-        }
-        
-        #clear-button {
-            background-color: #ff6b6b;
-            color: white;
-        }
-        
-        #download-button {
-            background-color: #4ecdc4;
-            color: white;
         }
         
         .interaction-button-container {
@@ -310,24 +433,27 @@ function designInteraction(container, emojiData, onComplete) {
 
         /* Améliorations pour mobile */
         @media (max-width: 480px) {
-            #drawing-canvas {
-                height: 250px;
+            .elements-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
             }
             
-            .tool-button {
-                width: 44px;
-                height: 44px;
-                font-size: 1rem;
+            .element-button {
+                width: 100%;
+                height: 60px;
             }
             
-            .color-swatch {
-                width: 30px;
-                height: 30px;
+            .template-button {
+                flex: 1;
+                min-width: auto;
+            }
+            
+            .poster-actions {
+                flex-direction: column;
             }
             
             .action-button {
-                min-height: 50px;
-                font-size: 0.9rem;
+                width: 100%;
             }
             
             .interaction-button-container {
@@ -344,334 +470,237 @@ function designInteraction(container, emojiData, onComplete) {
     document.head.appendChild(style);
 
     // Éléments interactifs
-    const canvas = document.getElementById('drawing-canvas');
-    const toolsButtons = document.getElementById('tools-buttons');
-    const paletteContainer = document.getElementById('palette-container');
-    const clearButton = document.getElementById('clear-button');
+    const canvas = document.getElementById('poster-canvas');
+    const ctx = canvas.getContext('2d');
+    const templateSelector = document.getElementById('template-selector');
+    const elementsGrid = document.getElementById('elements-grid');
+    const posterText = document.getElementById('poster-text');
+    const fontSmallerBtn = document.getElementById('font-smaller');
+    const fontLargerBtn = document.getElementById('font-larger');
+    const fontSizeLabel = document.getElementById('font-size-label');
+    const resetButton = document.getElementById('reset-button');
     const downloadButton = document.getElementById('download-button');
     const continueButton = document.getElementById('continue-button');
 
-    // Obtenir le contexte de dessin
-    const ctx = canvas.getContext('2d');
+    // Variables d'état
+    let currentTemplate = posterTemplates[0];
+    let fontSize = 24;
+    let placedElements = [];
+    const canvasRatio = canvas.height / canvas.width;
 
-    // Initialiser le canvas
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Ajuster la taille du canvas et le rapport hauteur/largeur
+    function resizeCanvas() {
+        const containerWidth = canvas.parentElement.clientWidth;
+        const maxWidth = Math.min(300, containerWidth - 30);
 
-    // Variables pour le dessin
-    let isDrawing = false;
-    let lastX = 0;
-    let lastY = 0;
+        canvas.style.width = maxWidth + 'px';
+        canvas.style.height = (maxWidth * canvasRatio) + 'px';
+    }
 
-    // Configuration du dessin
-    const drawingConfig = {
-        tool: drawingTools[0],
-        color: colorPalettes[0].colors[0],
-        size: drawingTools[0].size
-    };
-
-    // Créer les boutons d'outils
-    drawingTools.forEach((tool, index) => {
-        const button = document.createElement('div');
-        button.className = 'tool-button' + (index === 0 ? ' active' : '');
-        button.innerHTML = tool.icon;
-        button.title = tool.name;
+    // Créer les boutons de templates
+    posterTemplates.forEach((template, index) => {
+        const button = document.createElement('button');
+        button.className = 'template-button' + (index === 0 ? ' active' : '');
+        button.textContent = template.name;
         button.dataset.index = index;
 
         button.addEventListener('click', () => {
             // Mettre à jour la classe active
-            document.querySelectorAll('.tool-button').forEach(btn => {
+            document.querySelectorAll('.template-button').forEach(btn => {
                 btn.classList.remove('active');
             });
             button.classList.add('active');
 
-            // Mettre à jour l'outil actif
-            drawingConfig.tool = tool;
-            drawingConfig.size = tool.size;
+            // Mettre à jour le template actif
+            currentTemplate = template;
 
-            // Mettre à jour le curseur pour l'eraser
-            if (tool.type === 'eraser') {
-                canvas.style.cursor = 'cell';
-            } else {
-                canvas.style.cursor = 'crosshair';
-            }
+            // Redessiner le poster
+            drawPoster();
         });
 
-        toolsButtons.appendChild(button);
+        templateSelector.appendChild(button);
     });
 
-    // Créer les palettes de couleurs
-    colorPalettes.forEach((palette, paletteIndex) => {
-        const paletteDiv = document.createElement('div');
-        paletteDiv.className = 'palette';
+    // Créer les boutons d'éléments
+    designElements.forEach((element, index) => {
+        const button = document.createElement('button');
+        button.className = `element-button ${element.type === 'emoji' ? 'emoji' : ''}`;
 
-        const paletteName = document.createElement('div');
-        paletteName.className = 'palette-name';
-        paletteName.textContent = palette.name;
-        paletteDiv.appendChild(paletteName);
+        if (element.type === 'emoji') {
+            button.textContent = element.value;
+        } else {
+            // Créer un mini-canvas pour afficher la forme
+            const miniCanvas = document.createElement('canvas');
+            miniCanvas.width = 30;
+            miniCanvas.height = 30;
+            const miniCtx = miniCanvas.getContext('2d');
 
-        const colorPaletteDiv = document.createElement('div');
-        colorPaletteDiv.className = 'color-palette';
+            element.draw(miniCtx, 15, 15, 10, '#654ea3');
 
-        palette.colors.forEach((color, colorIndex) => {
-            const swatch = document.createElement('div');
-            swatch.className = 'color-swatch';
-            swatch.style.backgroundColor = color;
+            button.appendChild(miniCanvas);
+        }
 
-            // Définir la première couleur de la première palette comme active
-            if (paletteIndex === 0 && colorIndex === 0) {
-                swatch.classList.add('active');
-            }
+        button.dataset.index = index;
 
-            swatch.addEventListener('click', () => {
-                // Mettre à jour la classe active
-                document.querySelectorAll('.color-swatch').forEach(s => {
-                    s.classList.remove('active');
-                });
-                swatch.classList.add('active');
+        button.addEventListener('click', () => {
+            const selectedElement = designElements[index];
 
-                // Mettre à jour la couleur active
-                drawingConfig.color = color;
+            // Ajouter l'élément au centre du canvas
+            const elemX = canvas.width / 2;
+            const elemY = canvas.height / 2;
+            const elemSize = element.type === 'emoji' ? fontSize : 30;
+
+            placedElements.push({
+                type: selectedElement.type,
+                x: elemX,
+                y: elemY,
+                size: elemSize,
+                color: currentTemplate.accent,
+                value: selectedElement.type === 'emoji' ? selectedElement.value : null,
+                draw: selectedElement.draw
             });
 
-            colorPaletteDiv.appendChild(swatch);
+            // Redessiner le poster
+            drawPoster();
         });
 
-        paletteDiv.appendChild(colorPaletteDiv);
-        paletteContainer.appendChild(paletteDiv);
+        elementsGrid.appendChild(button);
     });
 
-    // Fonctions de dessin
-    function startDrawing(e) {
-        isDrawing = true;
+    // Initialiser la taille de la police
+    updateFontSize(fontSize);
 
-        // Récupérer les coordonnées du pointeur
-        const pos = getPointerPosition(e);
-        [lastX, lastY] = [pos.x, pos.y];
+    // Fonction pour mettre à jour la taille de la police
+    function updateFontSize(size) {
+        fontSize = size;
+        fontSizeLabel.textContent = `${fontSize}px`;
 
-        // Commencer un nouveau tracé
-        ctx.beginPath();
+        // Redessiner le poster pour refléter la nouvelle taille de police
+        drawPoster();
+    }
 
-        // Pour les formes et le spray, dessiner immédiatement
-        if (drawingConfig.tool.type === 'shapes') {
-            drawShape(pos.x, pos.y);
-        } else if (drawingConfig.tool.type === 'spray') {
-            drawSpray(pos.x, pos.y);
+    // Événements pour les boutons de taille de police
+    fontSmallerBtn.addEventListener('click', () => {
+        if (fontSize > 12) {
+            updateFontSize(fontSize - 2);
         }
-    }
+    });
 
-    function draw(e) {
-        if (!isDrawing) return;
-
-        // Récupérer les coordonnées du pointeur
-        const pos = getPointerPosition(e);
-
-        // Dessiner selon l'outil sélectionné
-        switch (drawingConfig.tool.type) {
-            case 'brush':
-                drawBrush(pos.x, pos.y);
-                break;
-            case 'pen':
-                drawPen(pos.x, pos.y);
-                break;
-            case 'spray':
-                drawSpray(pos.x, pos.y);
-                break;
-            case 'shapes':
-                // Les formes sont dessinées uniquement lors du clic/toucher
-                break;
-            case 'eraser':
-                erase(pos.x, pos.y);
-                break;
+    fontLargerBtn.addEventListener('click', () => {
+        if (fontSize < 48) {
+            updateFontSize(fontSize + 2);
         }
+    });
 
-        // Mettre à jour les dernières coordonnées
-        [lastX, lastY] = [pos.x, pos.y];
-    }
+    // Événement pour le champ de texte
+    posterText.addEventListener('input', () => {
+        drawPoster();
+    });
 
-    function stopDrawing() {
-        isDrawing = false;
-    }
+    // Événement pour le bouton de réinitialisation
+    resetButton.addEventListener('click', () => {
+        placedElements = [];
+        posterText.value = '';
+        drawPoster();
+    });
 
-    function drawBrush(x, y) {
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
-        ctx.lineWidth = drawingConfig.size;
-        ctx.strokeStyle = drawingConfig.color;
-
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-    }
-
-    function drawPen(x, y) {
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
-        ctx.lineWidth = drawingConfig.size;
-        ctx.strokeStyle = drawingConfig.color;
-
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-    }
-
-    function drawSpray(x, y) {
-        const density = 30;
-        const radius = drawingConfig.size;
-
-        ctx.fillStyle = drawingConfig.color;
-
-        for (let i = 0; i < density; i++) {
-            const offsetX = getRandomInt(-radius, radius);
-            const offsetY = getRandomInt(-radius, radius);
-
-            // Vérifier si le point est dans le cercle
-            if (offsetX * offsetX + offsetY * offsetY <= radius * radius) {
-                ctx.beginPath();
-                ctx.arc(x + offsetX, y + offsetY, 1, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-    }
-
-    function drawShape(x, y) {
-        const shapes = ['circle', 'square', 'triangle', 'star'];
-        const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
-        const size = drawingConfig.size;
-
-        ctx.fillStyle = drawingConfig.color;
-
-        switch (randomShape) {
-            case 'circle':
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.fill();
-                break;
-
-            case 'square':
-                ctx.fillRect(x - size, y - size, size * 2, size * 2);
-                break;
-
-            case 'triangle':
-                ctx.beginPath();
-                ctx.moveTo(x, y - size);
-                ctx.lineTo(x + size, y + size);
-                ctx.lineTo(x - size, y + size);
-                ctx.closePath();
-                ctx.fill();
-                break;
-
-            case 'star':
-                drawStar(x, y, 5, size, size / 2);
-                break;
-        }
-    }
-
-    function drawStar(cx, cy, spikes, outerRadius, innerRadius) {
-        let rot = Math.PI / 2 * 3;
-        let x = cx;
-        let y = cy;
-        const step = Math.PI / spikes;
-
-        ctx.beginPath();
-        ctx.moveTo(cx, cy - outerRadius);
-
-        for (let i = 0; i < spikes; i++) {
-            x = cx + Math.cos(rot) * outerRadius;
-            y = cy + Math.sin(rot) * outerRadius;
-            ctx.lineTo(x, y);
-            rot += step;
-
-            x = cx + Math.cos(rot) * innerRadius;
-            y = cy + Math.sin(rot) * innerRadius;
-            ctx.lineTo(x, y);
-            rot += step;
-        }
-
-        ctx.lineTo(cx, cy - outerRadius);
-        ctx.closePath();
-        ctx.fill();
-    }
-
-    function erase(x, y) {
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.lineJoin = 'round';
-        ctx.lineCap = 'round';
-        ctx.lineWidth = drawingConfig.size;
-
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        // Rétablir le mode de composition normal
-        ctx.globalCompositeOperation = 'source-over';
-    }
-
-    function clearCanvas() {
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function downloadDrawing() {
+    // Événement pour le bouton de téléchargement
+    downloadButton.addEventListener('click', () => {
+        // Créer un lien temporaire pour télécharger l'image
         const link = document.createElement('a');
-        link.download = 'mon-oeuvre-ynov.png';
+        link.download = 'mon-poster-ynov.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
-    }
+    });
 
-    // Utilitaire pour récupérer la position du pointeur
-    function getPointerPosition(e) {
+    // Événement pour le canvas (ajouter des éléments en cliquant)
+    canvas.addEventListener('click', (e) => {
+        // Obtenir les coordonnées du clic dans le canvas
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
         const scaleY = canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
 
-        if (e.touches && e.touches[0]) {
-            // Événement tactile
-            return {
-                x: (e.touches[0].clientX - rect.left) * scaleX,
-                y: (e.touches[0].clientY - rect.top) * scaleY
-            };
-        } else {
-            // Événement souris
-            return {
-                x: (e.clientX - rect.left) * scaleX,
-                y: (e.clientY - rect.top) * scaleY
-            };
+        // Vérifier si un élément est sélectionné dans la grille
+        const activeElementBtn = document.querySelector('.element-button.active');
+        if (activeElementBtn) {
+            const index = parseInt(activeElementBtn.dataset.index);
+            const selectedElement = designElements[index];
+
+            // Ajouter l'élément à l'emplacement du clic
+            const elemSize = selectedElement.type === 'emoji' ? fontSize : 30;
+
+            placedElements.push({
+                type: selectedElement.type,
+                x: x,
+                y: y,
+                size: elemSize,
+                color: currentTemplate.accent,
+                value: selectedElement.type === 'emoji' ? selectedElement.value : null,
+                draw: selectedElement.draw
+            });
+
+            // Redessiner le poster
+            drawPoster();
+
+            // Désélectionner l'élément
+            activeElementBtn.classList.remove('active');
         }
-    }
-
-    // Utilitaire pour générer un nombre aléatoire entier
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    // Événements du canvas
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
+    });
 
     // Support tactile
     canvas.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        startDrawing(e);
-    });
-    canvas.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        draw(e);
-    });
-    canvas.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        stopDrawing();
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        const x = (touch.clientX - rect.left) * scaleX;
+        const y = (touch.clientY - rect.top) * scaleY;
+
+        // Vérifier si un élément est sélectionné dans la grille
+        const activeElementBtn = document.querySelector('.element-button.active');
+        if (activeElementBtn) {
+            const index = parseInt(activeElementBtn.dataset.index);
+            const selectedElement = designElements[index];
+
+            // Ajouter l'élément à l'emplacement du toucher
+            const elemSize = selectedElement.type === 'emoji' ? fontSize : 30;
+
+            placedElements.push({
+                type: selectedElement.type,
+                x: x,
+                y: y,
+                size: elemSize,
+                color: currentTemplate.accent,
+                value: selectedElement.type === 'emoji' ? selectedElement.value : null,
+                draw: selectedElement.draw
+            });
+
+            // Redessiner le poster
+            drawPoster();
+
+            // Désélectionner l'élément
+            activeElementBtn.classList.remove('active');
+        }
     });
 
-    // Événements des boutons
-    clearButton.addEventListener('click', clearCanvas);
-    downloadButton.addEventListener('click', downloadDrawing);
+    // Événement pour cliquer sur un élément (le sélectionner)
+    elementsGrid.addEventListener('click', (e) => {
+        const button = e.target.closest('.element-button');
+        if (button) {
+            // Désélectionner tous les boutons
+            document.querySelectorAll('.element-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
 
+            // Sélectionner le bouton cliqué
+            button.classList.add('active');
+        }
+    });
+
+    // Événement pour le bouton continuer
     continueButton.addEventListener('click', () => {
         // Réafficher les boutons d'action en bas
         if (actionButtons) {
@@ -680,5 +709,58 @@ function designInteraction(container, emojiData, onComplete) {
 
         // Appeler le callback pour terminer l'interaction
         onComplete();
+    });
+
+    // Fonction pour dessiner le poster
+    function drawPoster() {
+        // Effacer le canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Dessiner le fond
+        ctx.fillStyle = currentTemplate.background;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Dessiner une bordure
+        ctx.strokeStyle = currentTemplate.accent;
+        ctx.lineWidth = 10;
+        ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+
+        // Dessiner les éléments placés
+        placedElements.forEach(element => {
+            if (element.type === 'shape') {
+                element.draw(ctx, element.x, element.y, element.size, element.color);
+            } else if (element.type === 'emoji') {
+                ctx.font = `${element.size}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(element.value, element.x, element.y);
+            }
+        });
+
+        // Dessiner le texte
+        const text = posterText.value;
+        if (text) {
+            ctx.font = `bold ${fontSize}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = currentTemplate.color;
+
+            // Ajouter un léger contour pour améliorer la lisibilité
+            ctx.strokeStyle = currentTemplate.background === '#ffffff' ? '#ffffff' : '#000000';
+            ctx.lineWidth = 1;
+
+            // Placer le texte en bas du poster
+            ctx.fillText(text, canvas.width / 2, canvas.height - 50);
+        }
+    }
+
+    // Initialiser le canvas
+    resizeCanvas();
+    drawPoster();
+
+    // Ajuster le canvas en cas de redimensionnement
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        drawPoster();
     });
 }
