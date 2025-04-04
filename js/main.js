@@ -123,13 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openCameraButton.addEventListener('click', openCamera);
     }
 
-    // Ajoutons un événement pour le bouton "Voir ma carte"
-    if (viewCardButton) {
-        viewCardButton.addEventListener('click', () => {
-            showCardScreen();
-        });
-    }
-
     // Vérifier si un emoji est spécifié dans l'URL (pour les QR codes)
     const emojiFromUrl = getEmojiFromUrl();
     console.log("Emoji from URL:", emojiFromUrl);
@@ -209,6 +202,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Événement pour le bouton "Voir ma carte"
+    if (viewCardButton) {
+        viewCardButton.addEventListener('click', function(e) {
+            e.preventDefault(); // Empêcher le comportement par défaut
+            displayCardScreen();
+        });
+    }
+
     // Événement du bouton d'aide
     if (helpButton) {
         helpButton.addEventListener('click', () => {
@@ -224,37 +225,86 @@ document.addEventListener('DOMContentLoaded', () => {
             completeScreen.classList.add('fade-out');
             setTimeout(() => {
                 completeScreen.style.display = 'none';
+                completeScreen.classList.remove('fade-out');
             }, 500);
         });
     }
 
     // Événement du bouton télécharger
     if (downloadButton) {
-        downloadButton.addEventListener('click', () => {
+        downloadButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Empêcher le comportement par défaut
             downloadCard();
         });
     }
 
     // Événement du bouton partager
     if (shareButton) {
-        shareButton.addEventListener('click', () => {
+        shareButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Empêcher le comportement par défaut
             shareCard();
         });
     }
 
+    // Fonction pour afficher l'écran de la carte d'identité
+    function displayCardScreen() {
+        // Générer ou régénérer la carte d'identité
+        cardGenerator.generateCard();
+
+        // Mettre à jour le message de complétion
+        updateCompletionMessage();
+
+        // Mettre à jour le contenu de la carte
+        const digitalCard = document.getElementById('digital-card');
+        if (digitalCard) {
+            digitalCard.innerHTML = cardGenerator.getCardHTML();
+        }
+
+        // Afficher l'écran de la carte
+        if (completeScreen) {
+            completeScreen.style.display = 'flex';
+            completeScreen.classList.add('fade-in');
+        }
+    }
+
+    // Fonction pour mettre à jour le message de complétion
+    function updateCompletionMessage() {
+        const completionMessage = document.getElementById('completion-message');
+        if (!completionMessage) return;
+
+        const foundCount = emojiManager.getFoundCount();
+        const totalCount = Object.keys(appConfig.emojiData).length;
+
+        if (foundCount === totalCount) {
+            completionMessage.textContent = `Félicitations! Vous avez découvert tous les ${totalCount} emojis secrets!`;
+        } else {
+            completionMessage.textContent = `Vous avez découvert ${foundCount} emojis sur ${totalCount}.`;
+        }
+    }
+
     // Fonction pour télécharger la carte
     function downloadCard() {
-        html2canvas(document.getElementById('digital-card')).then(canvas => {
+        const digitalCard = document.getElementById('digital-card');
+        if (!digitalCard) return;
+
+        html2canvas(digitalCard).then(canvas => {
+            // Créer un lien de téléchargement temporaire
             const link = document.createElement('a');
             link.download = 'carte-ynov-campus.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
+        }).catch(err => {
+            console.error("Erreur lors de la génération de l'image:", err);
+            alert("Une erreur s'est produite lors de la génération de l'image.");
         });
     }
 
     // Fonction pour partager la carte
     function shareCard() {
-        html2canvas(document.getElementById('digital-card')).then(canvas => {
+        const digitalCard = document.getElementById('digital-card');
+        if (!digitalCard) return;
+
+        html2canvas(digitalCard).then(canvas => {
             canvas.toBlob(blob => {
                 // Si l'API Web Share est disponible
                 if (navigator.share) {
@@ -274,6 +324,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.open(canvas.toDataURL('image/png'));
                 }
             });
+        }).catch(err => {
+            console.error("Erreur lors de la génération de l'image:", err);
+            alert("Une erreur s'est produite lors de la génération de l'image.");
         });
     }
 
@@ -404,49 +457,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     font-size: 0.85rem;
                 }
             }
-            
-            @media (max-width: 350px) {
-                .interaction-card {
-                    padding: 12px;
-                }
-                
-                .interaction-title {
-                    font-size: 1.1rem;
-                }
-                
-                .help-steps li {
-                    font-size: 0.85rem;
-                    margin-bottom: 5px;
-                }
-            }
-            
-            @media (max-height: 600px) {
-                .interaction-card {
-                    max-height: 85vh;
-                }
-                
-                .interaction-title {
-                    margin-bottom: 10px;
-                }
-                
-                .help-steps li {
-                    margin-bottom: 5px;
-                }
-            }
-            
-            @media (max-height: 480px) and (orientation: landscape) {
-                .qr-instructions {
-                    flex-direction: row;
-                    align-items: center;
-                    gap: 10px;
-                    text-align: left;
-                }
-                
-                .qr-phone-img {
-                    width: 60px;
-                    margin-bottom: 0;
-                }
-            }
         `;
 
         document.head.appendChild(style);
@@ -466,47 +476,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.head.removeChild(style);
             }, 500);
         });
-    }
-
-    // Fonction pour afficher l'écran de la carte
-    function showCardScreen() {
-        // Générer la carte si elle n'a pas déjà été générée
-        if (!cardGenerator.getCardHTML()) {
-            cardGenerator.generateCard();
-        }
-
-        // Mise à jour du message en fonction du nombre d'emojis trouvés
-        updateCompletionMessage();
-
-        // Afficher l'écran de félicitations
-        const digitalCard = document.getElementById('digital-card');
-        if (digitalCard) {
-            digitalCard.innerHTML = cardGenerator.getCardHTML();
-        } else {
-            console.error("Élément digital-card non trouvé");
-        }
-
-        if (completeScreen) {
-            completeScreen.style.display = 'flex';
-            completeScreen.classList.add('fade-in');
-        } else {
-            console.error("Élément complete-screen non trouvé");
-        }
-    }
-
-    // Fonction pour mettre à jour le message en fonction du nombre d'emojis trouvés
-    function updateCompletionMessage() {
-        const completionMessage = document.getElementById('completion-message');
-        if (!completionMessage) return;
-
-        const foundCount = emojiManager.getFoundCount();
-        const totalCount = Object.keys(appConfig.emojiData).length; // 9 emojis au total
-
-        if (foundCount === totalCount) {
-            completionMessage.textContent = `Félicitations! Vous avez découvert tous les ${totalCount} emojis secrets!`;
-        } else {
-            completionMessage.textContent = `Vous avez découvert ${foundCount} emojis sur ${totalCount}.`;
-        }
     }
 
     // Écouteur pour la détection d'emoji
@@ -532,12 +501,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Mettre à jour les icônes d'emoji
-        const emojiIcons = document.querySelectorAll('.emoji-icon');
-        emojiIcons.forEach(icon => {
-            const emojiId = icon.getAttribute('data-emoji');
+        const emojiItems = document.querySelectorAll('.emoji-item[data-emoji]');
+        emojiItems.forEach(item => {
+            const emojiId = item.getAttribute('data-emoji');
             if (emojiId && emojiManager.isFound(emojiId)) {
-                icon.classList.add('emoji-found');
-                console.log("Marquage de l'emoji", emojiId, "comme trouvé dans l'UI");
+                item.classList.add('found');
+            } else {
+                item.classList.remove('found');
             }
         });
 
@@ -559,8 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emojiManager.getFoundCount() >= appConfig.minEmojisRequired && !emojiManager.isCardGenerated()) {
             console.log("Conditions remplies pour générer la carte");
 
-            // Générer la carte
-            cardGenerator.generateCard();
+            // Marquer comme générée
             emojiManager.setCardGenerated(true);
 
             // Afficher le bouton "Voir ma carte"
@@ -569,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Afficher l'écran de félicitations
-            showCardScreen();
+            displayCardScreen();
         }
     }
 
@@ -586,6 +555,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cardGenerator,
         showHelp,
         openCamera,
-        showCardScreen
+        displayCardScreen
     };
 });
