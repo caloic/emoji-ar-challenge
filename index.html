@@ -217,64 +217,163 @@
             animation: bounce 1s infinite alternate;
         }
 
-        .action-buttons {
+        /* Menu hamburger styles */
+        .hamburger-menu {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-        }
-
-        .action-button {
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
             background-color: rgba(255, 255, 255, 0.2);
-            border: none;
-            width: 60px;
-            height: 60px;
+            backdrop-filter: blur(10px);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.8rem;
-            color: white;
             cursor: pointer;
-            transition: all 0.3s;
+            z-index: 200;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
-        .action-button:hover, .action-button:focus {
+        .hamburger-menu:hover {
             background-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-5px);
+            transform: scale(1.05);
         }
 
-        .action-button.primary {
+        .hamburger-icon {
+            width: 20px;
+            height: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background-color: white;
+            border-radius: 2px;
+            opacity: 1;
+            left: 0;
+            transform: rotate(0deg);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-icon span:nth-child(1) {
+            top: 0;
+        }
+
+        .hamburger-icon span:nth-child(2), .hamburger-icon span:nth-child(3) {
+            top: 7px;
+        }
+
+        .hamburger-icon span:nth-child(4) {
+            top: 14px;
+        }
+
+        .hamburger-menu.active .hamburger-icon span:nth-child(1),
+        .hamburger-menu.active .hamburger-icon span:nth-child(4) {
+            top: 7px;
+            width: 0;
+            left: 50%;
+        }
+
+        .hamburger-menu.active .hamburger-icon span:nth-child(2) {
+            transform: rotate(45deg);
+        }
+
+        .hamburger-menu.active .hamburger-icon span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 150;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .menu-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 30px;
+            padding: 12px 25px;
+            min-width: 200px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover, .menu-item:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .menu-item.highlight {
             background-color: #ffcc00;
             color: #333;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-item.highlight:hover, .menu-item.highlight:focus {
+            background-color: #ffd700;
+        }
+
+        .menu-item-icon {
+            font-size: 1.2rem;
         }
 
         .qr-instructions {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 20px 0;
+            margin: 15px 0;
             text-align: center;
         }
 
         .qr-phone-img {
-            width: 120px;
+            width: 80px;
             height: auto;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             opacity: 0.8;
         }
 
         .qr-steps {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.4;
+        }
+
+        .qr-steps p {
+            margin-bottom: 5px;
         }
 
         /* Styles pour le bouton de carte d'identité */
@@ -433,6 +532,34 @@
     </style>
 </head>
 <body>
+<!-- Menu hamburger -->
+<div class="hamburger-menu" id="hamburger-menu">
+    <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</div>
+
+<!-- Menu overlay -->
+<div class="menu-overlay" id="menu-overlay">
+    <div class="menu-items">
+        <button class="menu-item" id="menu-help-button">
+            <span class="menu-item-icon">❓</span>
+            <span>Aide</span>
+        </button>
+        <button class="menu-item" id="menu-camera-button">
+            <span class="menu-item-icon">📷</span>
+            <span>Scanner un QR code</span>
+        </button>
+        <button class="menu-item highlight" id="menu-card-button" style="display: none;">
+            <span class="menu-item-icon">🪪</span>
+            <span>Ma carte digitale</span>
+        </button>
+    </div>
+</div>
+
 <!-- Écran d'introduction -->
 <div class="intro-overlay" id="intro-screen">
     <div class="intro-content">
@@ -576,12 +703,6 @@
     </div>
 </div>
 
-<!-- Boutons d'action fixes - MODIFIÉ : suppression du bouton inutile -->
-<div class="action-buttons" id="action-buttons" style="display: none;">
-    <button class="action-button" id="help-button" aria-label="Aide">❓</button>
-    <button class="action-button primary" id="camera-hint-button" aria-label="Scanner un QR code">📷</button>
-</div>
-
 <!-- Scripts de l'application -->
 <script src="js/utils.js"></script>
 <script src="js/ar-controller.js"></script>
@@ -611,19 +732,39 @@
         // Éléments DOM
         const introScreen = document.getElementById('intro-screen');
         const progressScreen = document.getElementById('progress-screen');
-        const actionButtons = document.getElementById('action-buttons');
         const helpModal = document.getElementById('help-modal');
-        const helpButton = document.getElementById('help-button');
         const closeHelpButton = document.getElementById('close-help');
-        const cameraHintButton = document.getElementById('camera-hint-button');
         const startButton = document.getElementById('start-button');
+
+        // Éléments du menu hamburger
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const menuHelpButton = document.getElementById('menu-help-button');
+        const menuCameraButton = document.getElementById('menu-camera-button');
+        const menuCardButton = document.getElementById('menu-card-button');
 
         // Initialisation du gestionnaire d'emojis et contrôleur depuis main.js
         // Ils seront disponibles via window.app
 
+        // Gestion du menu hamburger
+        hamburgerMenu.addEventListener('click', function() {
+            hamburgerMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+        });
+
+        // Fermer le menu quand on clique sur un élément du menu
+        menuOverlay.addEventListener('click', function(e) {
+            if (e.target === menuOverlay) {
+                hamburgerMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            }
+        });
+
         // Fonction pour ouvrir le modal d'aide
         function openHelpModal() {
             helpModal.classList.add('active');
+            hamburgerMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
         }
 
         // Fonction pour fermer le modal d'aide
@@ -635,6 +776,19 @@
         function showCameraInstructions() {
             // Message unifié pour tous les appareils
             alert("Pour scanner un QR code :\n\n1. Quittez cette application\n2. Ouvrez l'appareil photo de votre téléphone\n3. Pointez vers un QR code\n4. Appuyez sur la notification qui apparaît\n5. Revenez à cette application pour voir votre progression");
+
+            // Fermer le menu après avoir montré les instructions
+            hamburgerMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+        }
+
+        // Fonction pour afficher la carte digitale
+        function showDigitalCard() {
+            if (typeof window.app !== 'undefined' && window.app.displayCardScreen) {
+                window.app.displayCardScreen();
+                hamburgerMenu.classList.remove('active');
+                menuOverlay.classList.remove('active');
+            }
         }
 
         // Afficher l'écran de progression
@@ -642,10 +796,31 @@
             console.log("Affichage de l'écran de progression");
             introScreen.style.display = 'none';
             progressScreen.style.display = 'block';
-            actionButtons.style.display = 'flex';
 
             // Mettre à jour l'affichage des emojis trouvés
             updateEmojiDisplay();
+
+            // Vérifier si nous sommes sur une page avec un emoji pour afficher le bouton carte dans le menu
+            checkForEmojiInUrl();
+        }
+
+        // Vérifier si l'URL contient un emoji
+        function checkForEmojiInUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const emojiParam = urlParams.get('emoji');
+
+            if (emojiParam) {
+                menuCardButton.style.display = 'flex';
+            } else {
+                menuCardButton.style.display = 'none';
+            }
+
+            // Vérifier également si l'utilisateur a trouvé assez d'emojis
+            if (typeof window.app !== 'undefined' && window.app.emojiManager) {
+                if (window.app.emojiManager.getFoundCount() >= 5) {
+                    menuCardButton.style.display = 'flex';
+                }
+            }
         }
 
         // Mettre à jour l'affichage des emojis trouvés
@@ -664,6 +839,11 @@
                         item.classList.remove('found');
                     }
                 });
+
+                // Mettre à jour la visibilité du bouton de carte dans le menu
+                if (window.app.emojiManager.getFoundCount() >= 5) {
+                    menuCardButton.style.display = 'flex';
+                }
             } else {
                 console.warn("window.app ou window.app.emojiManager n'est pas encore disponible");
             }
@@ -671,9 +851,10 @@
 
         // Événements
         startButton.addEventListener('click', showProgressScreen);
-        helpButton.addEventListener('click', openHelpModal);
+        menuHelpButton.addEventListener('click', openHelpModal);
         closeHelpButton.addEventListener('click', closeHelpModal);
-        cameraHintButton.addEventListener('click', showCameraInstructions);
+        menuCameraButton.addEventListener('click', showCameraInstructions);
+        menuCardButton.addEventListener('click', showDigitalCard);
 
         // Écouter les changements d'emoji trouvés
         document.addEventListener('emojiFound', updateEmojiDisplay);
