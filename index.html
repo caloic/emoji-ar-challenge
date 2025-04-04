@@ -295,6 +295,17 @@
             margin-top: 30px;
         }
 
+        /* Styles pour le bouton de carte */
+        .view-card-button-container {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .view-card-button-container .primary-button {
+            animation: pulse 2s infinite;
+        }
+
         @keyframes bounce {
             0%, 100% {
                 transform: translateY(0);
@@ -391,6 +402,13 @@
         <div class="scan-arrow">⬇️</div>
     </div>
 
+    <div class="view-card-button-container" id="view-card-button-container" style="display: none;">
+        <button class="primary-button" id="view-card-button">
+            <span>Voir ma carte</span>
+            <span>🪪</span>
+        </button>
+    </div>
+
     <div class="copyright">© 2025 Loïc CANO - B2 Informatique - Montpellier Ynov Campus </div>
 </div>
 
@@ -406,8 +424,8 @@
 
 <!-- Écran de félicitations et carte d'identité digitale -->
 <div class="complete-screen" id="complete-screen" style="display: none;">
-    <h1 class="congrats-title">Félicitations!</h1>
-    <p>Vous avez découvert au moins 5 emojis secrets.</p>
+    <h1 class="congrats-title">Votre carte d'identité digitale</h1>
+    <p id="completion-message">Félicitations! Vous avez découvert au moins 5 emojis secrets.</p>
     <p>Voici votre carte d'identité digitale Ynov!</p>
 
     <div class="digital-card" id="digital-card">

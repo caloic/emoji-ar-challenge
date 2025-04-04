@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const continueButton = document.getElementById('continue-button');
     const downloadButton = document.getElementById('download-button');
     const shareButton = document.getElementById('share-button');
+    const viewCardButton = document.getElementById('view-card-button');
+    const viewCardButtonContainer = document.getElementById('view-card-button-container');
 
     // Cache le progressBar au début
     if (progressBar) {
@@ -119,6 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const openCameraButton = document.getElementById('open-camera-button');
     if (openCameraButton) {
         openCameraButton.addEventListener('click', openCamera);
+    }
+
+    // Ajoutons un événement pour le bouton "Voir ma carte"
+    if (viewCardButton) {
+        viewCardButton.addEventListener('click', () => {
+            showCardScreen();
+        });
     }
 
     // Vérifier si un emoji est spécifié dans l'URL (pour les QR codes)
@@ -459,6 +468,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Fonction pour afficher l'écran de la carte
+    function showCardScreen() {
+        // Générer la carte si elle n'a pas déjà été générée
+        if (!cardGenerator.getCardHTML()) {
+            cardGenerator.generateCard();
+        }
+
+        // Mise à jour du message en fonction du nombre d'emojis trouvés
+        updateCompletionMessage();
+
+        // Afficher l'écran de félicitations
+        const digitalCard = document.getElementById('digital-card');
+        if (digitalCard) {
+            digitalCard.innerHTML = cardGenerator.getCardHTML();
+        } else {
+            console.error("Élément digital-card non trouvé");
+        }
+
+        if (completeScreen) {
+            completeScreen.style.display = 'flex';
+            completeScreen.classList.add('fade-in');
+        } else {
+            console.error("Élément complete-screen non trouvé");
+        }
+    }
+
+    // Fonction pour mettre à jour le message en fonction du nombre d'emojis trouvés
+    function updateCompletionMessage() {
+        const completionMessage = document.getElementById('completion-message');
+        if (!completionMessage) return;
+
+        const foundCount = emojiManager.getFoundCount();
+        const totalCount = Object.keys(appConfig.emojiData).length; // 9 emojis au total
+
+        if (foundCount === totalCount) {
+            completionMessage.textContent = `Félicitations! Vous avez découvert tous les ${totalCount} emojis secrets!`;
+        } else {
+            completionMessage.textContent = `Vous avez découvert ${foundCount} emojis sur ${totalCount}.`;
+        }
+    }
+
     // Écouteur pour la détection d'emoji
     document.addEventListener('emojiFound', (event) => {
         const { emojiId } = event.detail;
@@ -490,6 +540,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("Marquage de l'emoji", emojiId, "comme trouvé dans l'UI");
             }
         });
+
+        // Afficher le bouton "Voir ma carte" si l'utilisateur a trouvé au moins 5 emojis
+        if (viewCardButtonContainer) {
+            if (emojiManager.getFoundCount() >= appConfig.minEmojisRequired) {
+                viewCardButtonContainer.style.display = 'block';
+            } else {
+                viewCardButtonContainer.style.display = 'none';
+            }
+        }
     }
 
     // Vérifier si l'utilisateur a trouvé assez d'emojis
@@ -504,22 +563,13 @@ document.addEventListener('DOMContentLoaded', () => {
             cardGenerator.generateCard();
             emojiManager.setCardGenerated(true);
 
-            // Afficher l'écran de félicitations
-            const digitalCard = document.getElementById('digital-card');
-            if (digitalCard) {
-                digitalCard.innerHTML = cardGenerator.getCardHTML();
-                console.log("Contenu de la carte généré");
-            } else {
-                console.error("Élément digital-card non trouvé");
+            // Afficher le bouton "Voir ma carte"
+            if (viewCardButtonContainer) {
+                viewCardButtonContainer.style.display = 'block';
             }
 
-            if (completeScreen) {
-                completeScreen.style.display = 'flex';
-                completeScreen.classList.add('fade-in');
-                console.log("Écran de félicitations affiché");
-            } else {
-                console.error("Élément complete-screen non trouvé");
-            }
+            // Afficher l'écran de félicitations
+            showCardScreen();
         }
     }
 
@@ -535,6 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
         arController,
         cardGenerator,
         showHelp,
-        openCamera
+        openCamera,
+        showCardScreen
     };
 });
